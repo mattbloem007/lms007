@@ -1,11 +1,18 @@
 const express = require('express');
 var mysql      = require('mysql');
 var bodyParser = require('body-parser')
+const path = require('path')
+
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use(express.static( `${__dirname}/client/build` ) );
+
+app.get('*', (req, res)=>{
+  res.sendFile(path.join(__dirname, 'client/build/index.html'));
+})
 
 var connection = mysql.createConnection({
   host     : 'localhost',
