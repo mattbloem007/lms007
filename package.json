@@ -1,0 +1,19 @@
+{
+  "name": "example-create-react-app-express",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "postbuild": "cd client && yarn && yarn run build"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.2",
+    "json-stringify-safe": "^5.0.1",
+    "mysql": "^2.15.0"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0"
+  }
+}
