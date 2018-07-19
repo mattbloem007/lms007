@@ -7513,20 +7513,20 @@ semantic-ui-css@^2.3.1:
   dependencies:
     jquery x.*
 
-semantic-ui-react@^0.81.0:
-  version "0.81.0"
-  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.81.0.tgz#40fd57fe4998694c37d4ad4c0f590adc3a19851e"
+semantic-ui-react@^0.82.0:
+  version "0.82.0"
+  resolved "https://registry.yarnpkg.com/semantic-ui-react/-/semantic-ui-react-0.82.0.tgz#e7145308348520bf2baf0c63a6bfe6bbd830ccdf"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.49"
     classnames "^2.2.5"
-    fbjs "^0.8.16"
     keyboard-key "^1.0.1"
     lodash "^4.17.10"
     prop-types "^15.6.1"
+    shallowequal "^1.0.2"
 
-semantic-ui@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/semantic-ui/-/semantic-ui-2.3.1.tgz#ff33ac086e9a9daf63ab2b729f15b436d67bb859"
+semantic-ui@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/semantic-ui/-/semantic-ui-2.3.3.tgz#7bc5fcf8bd2453253d381a22088837392baff98f"
   dependencies:
     better-console "*"
     del "^3.0.0"
@@ -7670,6 +7670,10 @@ sha.js@^2.4.0, sha.js@^2.4.8:
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
+
+shallowequal@^1.0.2:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.1.0.tgz#188d521de95b9087404fd4dcb68b13df0ae4e7f8"
 
 shebang-command@^1.2.0:
   version "1.2.0"
