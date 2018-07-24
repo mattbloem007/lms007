@@ -33,7 +33,8 @@ var pool  = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'lms'
+  database : 'lms',
+  port     : port
 });
 
 
