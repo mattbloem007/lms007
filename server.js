@@ -10,9 +10,9 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.get('*', (req, res)=>{
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
-})
+// app.get('*', (req, res)=>{
+//   res.sendFile(path.join(__dirname+'/client/build/index.html'));
+// })
 
 // var connection = mysql.createConnection({
 //   host     : '41.185.8.125',
@@ -33,8 +33,7 @@ var pool  = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'lms',
-  port     : port
+  database : 'lms'
 });
 
 
@@ -61,29 +60,52 @@ var pool  = mysql.createPool({
 
 app.get('/api/lms_client', (req, res) => {
   pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    console.log("Connection made");
     // Use the connection
     connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
       // And done with the connection.
       connection.release();
 
       // Handle error after the release.
-      if (error) throw error;
-
+      if (err) throw err;
+      
       console.log('The solution is: ', rows);
       res.send({ express: rows });
+
     });
   });
 });
 
 app.get('/api/lms_logistics', (req, res) => {
   pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
     // Use the connection
     connection.query('SELECT `venue`,`batchno`,`facilitator`,`assessor`,`moderator` FROM `lms_logistics`', function (err, rows, fields) {
+
       // And done with the connection.
       connection.release();
 
       // Handle error after the release.
-      if (error) throw error;
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+
+    });
+  });
+});
+
+app.get('/api/lms_dates', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    connection.query('SELECT `facilitator_date`, `assessment_date`, `moderation_date` FROM `lms_dates`', function (err, rows, fields) {
+      // And done with the connection.
+      connection.release();
+
+      // Handle error after the release.
+      if (err) throw err;
 
       console.log('The solution is: ', rows);
       res.send({ express: rows });
@@ -91,27 +113,22 @@ app.get('/api/lms_logistics', (req, res) => {
   });
 });
 
-// app.get('/api/lms_dates', (req, res) => {
-//   connection.query('SELECT `facilitator_date`, `assessment_date`, `moderation_date` FROM `lms_dates`', function (err, rows, fields) {
-//   if (err) {
-//     throw err;
-//   }
-//
-//   console.log('The solution is: ', rows);
-//   res.send({ express: rows });
-//   });
-// });
-//
-// app.get('/api/lms_learner', (req, res) => {
-//   connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
-//   if (err) {
-//     throw err;
-//   }
-//
-//   console.log('The solution is: ', rows);
-//   res.send({ express: rows });
-//   });
-// });
+app.get('/api/lms_learner', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
+      // And done with the connection.
+      connection.release();
+
+      // Handle error after the release.
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+    });
+  });
+});
 
 // app.post('/data', function(req, res) {
 //   var jsondata = req.body;
