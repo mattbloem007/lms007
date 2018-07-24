@@ -25,7 +25,8 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'lms'
+  database : 'lms',
+  port     : port
 });
 
 connection.connect(function(err){
