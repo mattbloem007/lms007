@@ -65,13 +65,14 @@ app.get('/api/lms_client', (req, res) => {
     // Use the connection
     connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
       // And done with the connection.
-      connection.release();
+
 
       // Handle error after the release.
       if (err) throw err;
-      
+
       console.log('The solution is: ', rows);
       res.send({ express: rows });
+      connection.release();
 
     });
   });
