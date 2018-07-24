@@ -37,19 +37,7 @@ var pool  = mysql.createPool({
   port     : port
 });
 
-pool.getConnection(function(err, connection) {
-  // Use the connection
-  connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
-    // And done with the connection.
-    connection.release();
 
-    // Handle error after the release.
-    if (error) throw error;
-
-    console.log('The solution is: ', rows);
-    res.send({ express: rows });
-  });
-});
 
 // connection.connect(function(err){
 // if(!err) {
@@ -72,48 +60,58 @@ pool.getConnection(function(err, connection) {
 // });
 
 app.get('/api/lms_client', (req, res) => {
-  connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
-  if (err) {
-    throw err;
-  }
+  pool.getConnection(function(err, connection) {
+    // Use the connection
+    connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
+      // And done with the connection.
+      connection.release();
 
-  console.log('The solution is: ', rows);
-  res.send({ express: rows });
+      // Handle error after the release.
+      if (error) throw error;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+    });
   });
 });
 
 app.get('/api/lms_logistics', (req, res) => {
-  connection.query('SELECT `venue`,`batchno`,`facilitator`,`assessor`,`moderator` FROM `lms_logistics`', function (err, rows, fields) {
-  if (err) {
-    throw err;
-  }
+  pool.getConnection(function(err, connection) {
+    // Use the connection
+    connection.query('SELECT `venue`,`batchno`,`facilitator`,`assessor`,`moderator` FROM `lms_logistics`', function (err, rows, fields) {
+      // And done with the connection.
+      connection.release();
 
-  console.log('The solution is: ', rows);
-  res.send({ express: rows });
+      // Handle error after the release.
+      if (error) throw error;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+    });
   });
 });
 
-app.get('/api/lms_dates', (req, res) => {
-  connection.query('SELECT `facilitator_date`, `assessment_date`, `moderation_date` FROM `lms_dates`', function (err, rows, fields) {
-  if (err) {
-    throw err;
-  }
-
-  console.log('The solution is: ', rows);
-  res.send({ express: rows });
-  });
-});
-
-app.get('/api/lms_learner', (req, res) => {
-  connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
-  if (err) {
-    throw err;
-  }
-
-  console.log('The solution is: ', rows);
-  res.send({ express: rows });
-  });
-});
+// app.get('/api/lms_dates', (req, res) => {
+//   connection.query('SELECT `facilitator_date`, `assessment_date`, `moderation_date` FROM `lms_dates`', function (err, rows, fields) {
+//   if (err) {
+//     throw err;
+//   }
+//
+//   console.log('The solution is: ', rows);
+//   res.send({ express: rows });
+//   });
+// });
+//
+// app.get('/api/lms_learner', (req, res) => {
+//   connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
+//   if (err) {
+//     throw err;
+//   }
+//
+//   console.log('The solution is: ', rows);
+//   res.send({ express: rows });
+//   });
+// });
 
 // app.post('/data', function(req, res) {
 //   var jsondata = req.body;
