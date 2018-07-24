@@ -21,7 +21,15 @@ app.get('*', (req, res)=>{
 //   database : 'xiconco1_lms'
 // });
 
-var connection = mysql.createConnection({
+// var connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : '',
+//   database : 'lms',
+//   port     : port
+// });
+
+var pool  = mysql.createPool({
   host     : 'localhost',
   user     : 'root',
   password : '',
@@ -29,13 +37,27 @@ var connection = mysql.createConnection({
   port     : port
 });
 
-connection.connect(function(err){
-if(!err) {
-    console.log("Database is connected ... nn");
-} else {
-    console.log("Error connecting database ... nn", err);
-}
+pool.getConnection(function(err, connection) {
+  // Use the connection
+  connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
+    // And done with the connection.
+    connection.release();
+
+    // Handle error after the release.
+    if (error) throw error;
+
+    console.log('The solution is: ', rows);
+    res.send({ express: rows });
+  });
 });
+
+// connection.connect(function(err){
+// if(!err) {
+//     console.log("Database is connected ... nn");
+// } else {
+//     console.log("Error connecting database ... nn", err);
+// }
+// });
 
 // app.get("/",function(req,res){
 // connection.query('SELECT * from lms_info LIMIT 2', function(err, rows, fields) {
