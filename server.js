@@ -14,11 +14,18 @@ app.get('*', (req, res)=>{
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 })
 
+// var connection = mysql.createConnection({
+//   host     : '41.185.8.125',
+//   user     : 'xiconco1_mikeb',
+//   password : 'X4k474ssPz',
+//   database : 'xiconco1_lms'
+// });
+
 var connection = mysql.createConnection({
-  host     : '41.185.8.125',
-  user     : 'xiconco1_mikeb',
-  password : 'X4k474ssPz',
-  database : 'xiconco1_lms'
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'lms'
 });
 
 connection.connect(function(err){
