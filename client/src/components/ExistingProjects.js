@@ -29,6 +29,7 @@ class ExistingProjects extends Component {
 
   callApi = async (table) => {
     const response = await fetch('/api/' + table);
+    console.log(response.text())
     const body = await response.json();
     console.log(body)
     this.setState({ response: body.express, activeTable: table })
