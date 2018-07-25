@@ -34,10 +34,10 @@ var pool  = mysql.createPool({
   connectTimeout  : 60 * 60 * 1000,
   aquireTimeout   : 60 * 60 * 1000,
   timeout         : 60 * 60 * 1000,
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'lms',
+  host     : '41.185.8.125',
+  user     : 'xiconco1_mikeb',
+  password : 'X4k474ssPz',
+  database : 'xiconco1_lms'
   port     : port
 });
 
