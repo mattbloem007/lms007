@@ -14,12 +14,12 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 //   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 // })
 
-// var connection = mysql.createConnection({
-//   host     : '41.185.8.125',
-//   user     : 'xiconco1_mikeb',
-//   password : 'X4k474ssPz',
-//   database : 'xiconco1_lms'
-// });
+var connection = mysql.createConnection({
+  host     : '41.185.8.125',
+  user     : 'xiconco1_mikeb',
+  password : 'X4k474ssPz',
+  database : 'xiconco1_lms'
+});
 
 // var connection = mysql.createConnection({
 //   host     : 'localhost',
@@ -43,13 +43,13 @@ var pool  = mysql.createPool({
 
 
 
-// connection.connect(function(err){
-// if(!err) {
-//     console.log("Database is connected ... nn");
-// } else {
-//     console.log("Error connecting database ... nn", err);
-// }
-// });
+connection.connect(function(err){
+if(!err) {
+    console.log("Database is connected ... nn");
+} else {
+    console.log("Error connecting database ... nn", err);
+}
+});
 
 // app.get("/",function(req,res){
 // connection.query('SELECT * from lms_info LIMIT 2', function(err, rows, fields) {
@@ -64,8 +64,8 @@ var pool  = mysql.createPool({
 // });
 
 app.get('/api/lms_client', (req, res) => {
-  pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected
+//  pool.getConnection(function(err, connection) {
+//    if (err) throw err; // not connected
     console.log("Connection made");
     // Use the connection
     connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
@@ -77,10 +77,10 @@ app.get('/api/lms_client', (req, res) => {
 
       console.log('The solution is: ', rows);
       res.send({ express: rows });
-      connection.release();
+    //  connection.release();
 
     });
-  });
+  //});
 });
 
 app.get('/api/lms_logistics', (req, res) => {
