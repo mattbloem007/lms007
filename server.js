@@ -37,7 +37,7 @@ var pool  = mysql.createPool({
   host     : '41.185.8.125',
   user     : 'xiconco1_mikeb',
   password : 'X4k474ssPz',
-  database : 'xiconco1_lms'
+  database : 'xiconco1_lms',
   port     : port
 });
 
