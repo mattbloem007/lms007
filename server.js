@@ -34,17 +34,17 @@ var connection = mysql.createConnection({
 //   port     : port
 // });
 
-var pool  = mysql.createPool({
-  connectionLimit : 1000,
-  connectTimeout  : 60 * 60 * 1000,
-  aquireTimeout   : 60 * 60 * 1000,
-  timeout         : 60 * 60 * 1000,
-  host     : '41.185.8.125',
-  user     : 'xiconco1_mikeb',
-  password : 'X4k474ssPz',
-  database : 'xiconco1_lms',
-  port     : port
-});
+// var pool  = mysql.createPool({
+//   connectionLimit : 1000,
+//   connectTimeout  : 60 * 60 * 1000,
+//   aquireTimeout   : 60 * 60 * 1000,
+//   timeout         : 60 * 60 * 1000,
+//   host     : '41.185.8.125',
+//   user     : 'xiconco1_mikeb',
+//   password : 'X4k474ssPz',
+//   database : 'xiconco1_lms',
+//   port     : port
+// });
 
 
 
@@ -73,73 +73,73 @@ app.get('/api/lms_client', (req, res) => {
 //    if (err) throw err; // not connected
     console.log("Connection made");
     // Use the connection
-    connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
+    //connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
       // And done with the connection.
 
 
       // Handle error after the release.
-      if (err) throw err;
+    //  if (err) throw err;
 
-      console.log('The solution is: ', rows);
-      res.send({ express: rows });
+      //console.log('The solution is: ', rows);
+    //  res.send({ express: rows });
     //  connection.release();
 
-    });
+  //  });
   //});
 });
 
-app.get('/api/lms_logistics', (req, res) => {
-  pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected
-    // Use the connection
-    connection.query('SELECT `venue`,`batchno`,`facilitator`,`assessor`,`moderator` FROM `lms_logistics`', function (err, rows, fields) {
-
-      // And done with the connection.
-      connection.release();
-
-      // Handle error after the release.
-      if (err) throw err;
-
-      console.log('The solution is: ', rows);
-      res.send({ express: rows });
-
-    });
-  });
-});
-
-app.get('/api/lms_dates', (req, res) => {
-  pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected
-    // Use the connection
-    connection.query('SELECT `facilitator_date`, `assessment_date`, `moderation_date` FROM `lms_dates`', function (err, rows, fields) {
-      // And done with the connection.
-      connection.release();
-
-      // Handle error after the release.
-      if (err) throw err;
-
-      console.log('The solution is: ', rows);
-      res.send({ express: rows });
-    });
-  });
-});
-
-app.get('/api/lms_learner', (req, res) => {
-  pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected
-    // Use the connection
-    connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
-      // And done with the connection.
-      connection.release();
-
-      // Handle error after the release.
-      if (err) throw err;
-
-      console.log('The solution is: ', rows);
-      res.send({ express: rows });
-    });
-  });
-});
+// app.get('/api/lms_logistics', (req, res) => {
+//   pool.getConnection(function(err, connection) {
+//     if (err) throw err; // not connected
+//     // Use the connection
+//     connection.query('SELECT `venue`,`batchno`,`facilitator`,`assessor`,`moderator` FROM `lms_logistics`', function (err, rows, fields) {
+//
+//       // And done with the connection.
+//       connection.release();
+//
+//       // Handle error after the release.
+//       if (err) throw err;
+//
+//       console.log('The solution is: ', rows);
+//       res.send({ express: rows });
+//
+//     });
+//   });
+// });
+//
+// app.get('/api/lms_dates', (req, res) => {
+//   pool.getConnection(function(err, connection) {
+//     if (err) throw err; // not connected
+//     // Use the connection
+//     connection.query('SELECT `facilitator_date`, `assessment_date`, `moderation_date` FROM `lms_dates`', function (err, rows, fields) {
+//       // And done with the connection.
+//       connection.release();
+//
+//       // Handle error after the release.
+//       if (err) throw err;
+//
+//       console.log('The solution is: ', rows);
+//       res.send({ express: rows });
+//     });
+//   });
+// });
+//
+// app.get('/api/lms_learner', (req, res) => {
+//   pool.getConnection(function(err, connection) {
+//     if (err) throw err; // not connected
+//     // Use the connection
+//     connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
+//       // And done with the connection.
+//       connection.release();
+//
+//       // Handle error after the release.
+//       if (err) throw err;
+//
+//       console.log('The solution is: ', rows);
+//       res.send({ express: rows });
+//     });
+//   });
+// });
 
 // app.post('/data', function(req, res) {
 //   var jsondata = req.body;
