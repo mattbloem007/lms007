@@ -48,8 +48,8 @@ class App extends Component {
     for (var ref in refs) {
       rep[ref] = refs[ref];
     }
-    console.log(rep)
-    fetch('/data',{
+    let req = '/data/' + rep["table"];
+    fetch(req, {
       method: 'POST',
       body: JSON.stringify(rep),
       headers: {"Content-Type": "application/json"}
@@ -80,7 +80,8 @@ class App extends Component {
       rep[ref] = refs[ref];
     }
      //this.rep = update(this.rep, {$merge: rep});
-      fetch('/data',{
+     let req = '/data/' + rep["table"];
+      fetch(req,{
         method: 'POST',
         body: JSON.stringify(rep),
         headers: {"Content-Type": "application/json"}
