@@ -57,22 +57,22 @@ class App extends Component {
       rep[ref] = refs[ref];
     }
     let req = '/data/' + rep["table"];
-  //   fetch(req, {
-  //     method: 'POST',
-  //     body: JSON.stringify(rep),
-  //     headers: {"Content-Type": "application/json"}
-  //   })
-  //   .then(function(response){
-  //     return response.json()
-  //   }).then(function(body){
-  //     console.log(body);
-  // });
-    // if(this.rep == undefined) {
-    //   this.rep = rep;
-    // }
-    // else {
-    //   this.rep = update(this.rep, {$merge: rep});
-    // }
+    fetch(req, {
+      method: 'POST',
+      body: JSON.stringify(rep),
+      headers: {"Content-Type": "application/json"}
+    })
+    .then(function(response){
+      return response.json()
+    }).then(function(body){
+      console.log(body);
+  });
+    if(this.rep == undefined) {
+      this.rep = rep;
+    }
+    else {
+      this.rep = update(this.rep, {$merge: rep});
+    }
     this.setState(prevState => ({
       ...prevState,
       activeStep: form,
@@ -90,37 +90,37 @@ class App extends Component {
     }
      //this.rep = update(this.rep, {$merge: rep});
      let req = '/data/' + rep["table"];
-    //   fetch(req,{
-    //     method: 'POST',
-    //     body: JSON.stringify(rep),
-    //     headers: {"Content-Type": "application/json"}
-    //   })
-    //   .then(function(response){
-    //     return response.json()
-    //   }).then(function(body){
-    //     console.log(body);
-    // });
+      fetch(req,{
+        method: 'POST',
+        body: JSON.stringify(rep),
+        headers: {"Content-Type": "application/json"}
+      })
+      .then(function(response){
+        return response.json()
+      }).then(function(body){
+        console.log(body);
+    });
 
-  //  this.setState({ activeStep: "client" })
+   this.setState({ activeStep: "client" })
 
   }
 
-  // componentDidMount() {
-  //   this.callApi()
-  //     .then(res => this.setState({ response: res.express }))
-  //     .then(() => console.log(this.state.response))
-  //     .catch(err => console.log(err));
-  // }
-  //
-  // callApi = async () => {
-  //   const response = await fetch('/api/hello');
-  //   const body = await response.json();
-  //   console.log(body)
-  //
-  //   if (response.status !== 200) throw Error(body.message);
-  //
-  //   return body;
-  // };
+  componentDidMount() {
+    this.callApi()
+      .then(res => this.setState({ response: res.express }))
+      .then(() => console.log(this.state.response))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch('/api/hello');
+    const body = await response.json();
+    console.log(body)
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  };
 
   render() {
     let segment, currentForm;
