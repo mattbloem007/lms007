@@ -1,31 +1,25 @@
 import React from 'react';
 import { Step } from 'semantic-ui-react'
 
-const Steps = ({}) => {
+const Steps = ({activeArray, isCompleted}) => {
   return(
     <Step.Group>
-    <Step>
+    <Step active={activeArray.isClientActive}>
       <Step.Content>
-        <Step.Title>Client</Step.Title>
-        <Step.Description>Register a Client</Step.Description>
+        <Step.Title>Project</Step.Title>
+        <Step.Description>Register a Project</Step.Description>
       </Step.Content>
     </Step>
-    <Step active>
+    <Step active={activeArray.isLearnerActive}>
       <Step.Content>
-        <Step.Title>Logistics</Step.Title>
-        <Step.Description>Enter Logistics Information</Step.Description>
+        <Step.Title>Learner Information</Step.Title>
+        <Step.Description>Register a Learner</Step.Description>
       </Step.Content>
     </Step>
-  <Step disabled>
+  <Step active={activeArray.isAssessorActive}>
     <Step.Content>
-      <Step.Title>Dates</Step.Title>
-      <Step.Description>Enter the Dates</Step.Description>
-    </Step.Content>
-  </Step>
-  <Step disabled>
-    <Step.Content>
-      <Step.Title>Learner Information</Step.Title>
-      <Step.Description>Enter a Learner's Information</Step.Description>
+      <Step.Title>Assessors and Moderators</Step.Title>
+      <Step.Description></Step.Description>
     </Step.Content>
   </Step>
 </Step.Group>

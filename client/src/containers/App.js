@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import update from 'immutability-helper';
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu, Button, Step } from 'semantic-ui-react';
 import * as mysql from 'mysql';
 
 
@@ -10,8 +10,9 @@ import MenuItem from '../components/MenuItem';
 import RegisterClient from '../components/registerClient';
 import Logistics from '../components/Logistics';
 import Dates from '../components/Dates';
-import Steps from '../components/Steps';
+//import Steps from '../components/Steps';
 import ExistingProjects from '../components/ExistingProjects';
+import { days, months } from '../common';
 
 class App extends Component {
 
@@ -23,13 +24,12 @@ class App extends Component {
     this.state = { activeItem: "Register Project",
                    activeStep: "client",
                    activeInfo: "client",
+                   completed: false,
+                   clientActive: true,
+                   learnerActive: false,
+                   assessorActive: false,
                    menuItems: [{id: 0, text: "Register Project"},
                                {id: 1, text: "Existing Projects"}],
-                   days: ['1','2','3','4','5', '6', '7','8','9','10',
-                          '11','12','13','14','15','16','17','18','19','20',
-                          '21','22','23','24','25','26','27','28','29','30','31'],
-                   months: ['Month', 'January', 'February', 'March', 'April', 'May', 'June',
-                            'July', 'August', 'September', 'October', 'November', 'December'],
                    users: [],
                    response: []
 
@@ -41,6 +41,14 @@ class App extends Component {
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
+  handleBack = (e, form) => {
+    e.preventDefault();
+    this.setState(prevState => ({
+      ...prevState,
+      activeStep: form
+    }))
+  }
+
 
   handleNextClick = (form, refs) => {
     let rep = {};
@@ -49,16 +57,16 @@ class App extends Component {
       rep[ref] = refs[ref];
     }
     let req = '/data/' + rep["table"];
-    fetch(req, {
-      method: 'POST',
-      body: JSON.stringify(rep),
-      headers: {"Content-Type": "application/json"}
-    })
-    .then(function(response){
-      return response.json()
-    }).then(function(body){
-      console.log(body);
-  });
+  //   fetch(req, {
+  //     method: 'POST',
+  //     body: JSON.stringify(rep),
+  //     headers: {"Content-Type": "application/json"}
+  //   })
+  //   .then(function(response){
+  //     return response.json()
+  //   }).then(function(body){
+  //     console.log(body);
+  // });
     // if(this.rep == undefined) {
     //   this.rep = rep;
     // }
@@ -67,7 +75,8 @@ class App extends Component {
     // }
     this.setState(prevState => ({
       ...prevState,
-      activeStep: form
+      activeStep: form,
+      completed: true
     }))
     //console.log(this.rep)
 
@@ -81,18 +90,18 @@ class App extends Component {
     }
      //this.rep = update(this.rep, {$merge: rep});
      let req = '/data/' + rep["table"];
-      fetch(req,{
-        method: 'POST',
-        body: JSON.stringify(rep),
-        headers: {"Content-Type": "application/json"}
-      })
-      .then(function(response){
-        return response.json()
-      }).then(function(body){
-        console.log(body);
-    });
+    //   fetch(req,{
+    //     method: 'POST',
+    //     body: JSON.stringify(rep),
+    //     headers: {"Content-Type": "application/json"}
+    //   })
+    //   .then(function(response){
+    //     return response.json()
+    //   }).then(function(body){
+    //     console.log(body);
+    // });
 
-    this.setState({ activeStep: "client" })
+  //  this.setState({ activeStep: "client" })
 
   }
 
@@ -119,25 +128,59 @@ class App extends Component {
       case "Register Project":
         switch (this.state.activeStep) {
           case "client":
-            currentForm = (<RegisterClient nextClicked={this.handleNextClick}/>)
+            currentForm = (<RegisterClient nextClicked={this.handleNextClick} />)
+            this.state.clientActive = true
+            this.state.assessorActive = false
+            this.state.learnerActive = false
           break;
           case "logistics":
-            currentForm = (<Logistics nextClicked={this.handleNextClick} />)
+            currentForm = (<Logistics nextClicked={this.handleNextClick} handleBack={this.handleBack} />)
+            this.state.assessorActive = true
+            this.state.clientActive = false
+            this.state.learnerActive = false
           break;
 
           case "dates":
-            currentForm = (<Dates days={this.state.days} months={this.state.months} nextClicked={this.handleNextClick} />)
+            currentForm = (<Dates nextClicked={this.handleNextClick} handleBack={this.handleBack} />)
           break;
 
           case "learner":
-            currentForm = (<RegisterLearner days={this.state.days} months={this.state.months} handleSubmit={this.handleSubmit} />)
+            currentForm = (<RegisterLearner handleSubmit={this.handleSubmit} handleBack={this.handleBack}/>)
+            this.state.learnerActive = true;
+            this.state.assessorActive = false
+            this.state.clientActive = false
           break;
           default:
 
         }
+        let activeArray = [ {
+                              isClientActive: this.state.clientActive,
+                              isAssessorActive: this.state.assessorActive,
+                              isLearnerActive: this.state.learnerActive
+                            }
+                          ];
         segment = (
                     <div className="ui segment">
-                      <Steps />
+                      <Step.Group>
+                      <Step active={this.state.clientActive}>
+                        <Step.Content>
+                          <Step.Title>Project</Step.Title>
+                          <Step.Description>Register a Project</Step.Description>
+                        </Step.Content>
+                      </Step>
+                      <Step active={this.state.assessorActive}>
+                        <Step.Content>
+                          <Step.Title>Learner Information</Step.Title>
+                          <Step.Description>Register a Learner</Step.Description>
+                        </Step.Content>
+                      </Step>
+                    <Step active={this.state.learnerActive}>
+                      <Step.Content>
+                        <Step.Title>Assessors and Moderators</Step.Title>
+                        <Step.Description></Step.Description>
+                      </Step.Content>
+                    </Step>
+                  </Step.Group>
                       {currentForm}
                     </div>
         );

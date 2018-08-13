@@ -12,7 +12,10 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.2",
     "json-stringify-safe": "^5.0.1",
-    "mysql": "^2.15.0"
+    "lodash": "^4.17.10",
+    "mysql": "^2.15.0",
+    "react-validation": "^3.0.7",
+    "validator": "^10.5.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

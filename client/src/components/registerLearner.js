@@ -1,162 +1,351 @@
 import React, { Component } from 'react'
+import { Input, Form, Dropdown, Button } from 'semantic-ui-react';
+import { isEmpty, isNumeric, isLength, isAlpha, isMobilePhone, isEmail, isAfter } from 'validator';
+import { days, months, countryOptions, languageOptions, courseOptions, titleOptions, yesNoOption, genderOptions, EquityOptions } from '../common'
+
 
 class registerLearner extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+                  idError: false,
+                  equityError: false,
+                  nationalityError: false,
+                  genderError: false,
+                  languageError: false,
+                  employedError: false,
+                  surnameError: false,
+                  firstnameError: false,
+                  titleError: false,
+                  yearError: false,
+                  monthError: false,
+                  dayError: false,
+                  ayearError: false,
+                  amonthError: false,
+                  adayError: false,
+                  strAddressError: false,
+                  postCodeError: false,
+                  postCode2Error: false,
+                  postCode3Error: false,
+                  homenoError: false,
+                  postAddressError: false,
+                  workAddressError: false,
+                  cellnoError: false,
+                  employerError: false,
+                  worknoError: false,
+                  faxnoError: false,
+                  emailError: false,
+                  clubError: false,
+                  courseError: false,
+                  year2Error: false,
+                  employed: false,
+                  info:  {
+                              national_id: "",
+                              alt_id: "",
+                              equity: "",
+                              nationality: "",
+                              gender: "",
+                              language: "",
+                              employed: "",
+                              disability: "",
+                              surname: "",
+                              firstname: "",
+                              secondname: "",
+                              title: "",
+                              day: "",
+                              month: "",
+                              year: "",
+                              aday: "",
+                              amonth: "",
+                              ayear: "",
+                              strAddress: "",
+                              strAddress2: "",
+                              strAddress3: "",
+                              postCode: "",
+                              homeno: "",
+                              postAddress: "",
+                              postAddress2: "",
+                              postCode2: "",
+                              cellno: "",
+                              employer: "",
+                              workaddr: "",
+                              workaddr2: "",
+                              postCode3: "",
+                              faxno: "",
+                              workno: "",
+                              email: "",
+                              prev_surname: "",
+                              assessment_date: "",
+                              club: ""
+                             }
+
+                }
   }
 
-  handleSubmit = () => {
+
+
+  validateInput = (e) => {
+    e.preventDefault();
+    let errors = false;
+
+    if (isEmpty(this.state.info.national_id) || isLength(this.state.info.national_id) < 13 || !isNumeric(this.state.info.national_id)) {
+        this.setState({ idError: true });
+        errors = true;
+    }
+    if(isEmpty(this.state.info.equity)) {
+      this.setState({ equityError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.nationality)){
+      this.setState({ nationalityError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.gender)){
+      this.setState({ genderError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.language)){
+      this.setState({ languageError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.employed)){
+      this.setState({ employedError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.surname) && !isAlpha(this.state.info.surname)){
+      this.setState({ surnameError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.firstname) && !isAlpha(this.state.info.firstname)){
+      this.setState({ firstnameError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.title)){
+      this.setState({ titleError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.year) || isLength(this.state.info.year) < 4 || isAfter(this.state.info.year)){
+      this.setState({ yearError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.month)){
+      this.setState({ monthError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.day)){
+      this.setState({ dayError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.ayear) || isLength(this.state.info.ayear) < 4 || isAfter(this.state.info.ayear)){
+      this.setState({ ayearError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.amonth)){
+      this.setState({ amonthError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.aday)){
+      this.setState({ adayError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.strAddress)) {
+      this.setState({ strAddressError: true });
+      errors = true;
+    }
+
+    if(isEmpty(this.state.info.postCode) || !isNumeric(this.state.info.postCode)) {
+      this.setState({ postCodeError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.postAddress)) {
+      this.setState({ postAddressError: true });
+      errors = true;
+    }
+
+    if(isEmpty(this.state.info.postCode2) || !isNumeric(this.state.info.postCode2)) {
+      this.setState({ postCode2Error: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.workaddr)) {
+      this.setState({ workAddressError: true });
+      errors = true;
+    }
+
+    if(isEmpty(this.state.info.postCode3) || !isNumeric(this.state.info.postCode3))
+     {
+      this.setState({ postCode3Error: true });
+      errors = true;
+    }
+    if(!isMobilePhone(this.state.info.homeno)){
+      this.setState({ homenoError: true });
+      errors = true;
+    }
+    if(!isMobilePhone(this.state.info.cellno)){
+      this.setState({ cellnoError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.employer)){
+      this.setState({ employerError: true });
+      errors = true;
+    }
+    if(!isMobilePhone(this.state.info.faxno)){
+      this.setState({ faxnoError: true });
+      errors = true;
+    }
+    if(!isMobilePhone(this.state.info.workno)){
+      this.setState({ worknoError: true });
+      errors = true;
+    }
+    if(!isEmail(this.state.info.email)){
+      this.setState({ emailError: true });
+      errors = true;
+    }
+    if(isEmpty(this.state.info.club)){
+      this.setState({ clubError: true });
+      errors = true;
+    }
+
+    if(errors === false) {
+      this.handleNext("learner");
+    }
+
+  }
+
+  handleEmployer = (e, data) => {
+    if (data.value == "Yes") {
+      this.setState(prevState => ({employed: true, info: {...prevState.info, employed: data.value}}))
+    }
+    else {
+      this.setState(prevState => ({employed: false, info: {...prevState.info, employed: data.value}}))
+    }
+
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
 
     let info = {
-                national_id: this.refs.id.value,
-                alt_id: this.refs.altid.value,
-                equity: this.refs.equity.value,
-                nationality: this.refs.nationality.value,
-                gender: this.refs.gender.value,
-                language: this.refs.lang.value,
-                employed: this.refs.employed.value,
-                disability: this.refs.disability.value,
-                surname: this.refs.surname.value,
-                firstname: this.refs.firstname.value,
-                secondname: this.refs.secname.value,
-                title: this.refs.title.value,
-                dob: this.refs.year.value + "-" + this.refs.month.value + "-" + this.refs.day.value,
-                homeaddr: this.refs.addr.value + ", " + this.refs.addr2.value + ", " + this.refs.addr3.value,
-                postaddr: this.refs.paddr.value +", " + this.refs.paddr2.value + ", " + this.refs.paddr3.value,
-                cellno: this.refs.cellno.value,
-                employer: this.refs.employer.value,
-                workaddr: this.refs.waddr.value +", " + this.refs.waddr2.value + ", " + this.refs.waddr3.value,
-                faxno: this.refs.faxno.value,
-                workno: this.refs.wphno.value,
-                email: this.refs.email.value,
-                prev_surname: this.refs.prevsur.value,
-                assessment_date: this.refs.ayear.value + "-" + this.refs.amonth.value + "-" + this.refs.aday.value,
+                national_id: this.state.info.national_id,
+                alt_id: this.state.info.alt_id,
+                equity: this.state.info.equity,
+                nationality: this.state.info.nationality,
+                gender: this.state.info.gender,
+                language: this.state.info.language,
+                employed: this.state.info.employed,
+                disability: this.state.info.disability,
+                surname: this.state.info.surname,
+                firstname: this.state.info.firstname,
+                secondname: this.state.info.secname,
+                title: this.state.info.title,
+                dob: this.state.info.year + "-" + this.state.info.month + "-" + this.state.info.day,
+                homeaddr: this.state.info.strAddress + ", " + this.state.info.strAddress2 + ", " + this.state.info.postCode,
+                postaddr: this.state.info.postAddress +", " + this.state.info.postAddress2 + ", " + this.state.info.postCode2,
+                homeno: this.state.info.homeno,
+                cellno: this.state.info.cellno,
+                employer: this.state.info.employer,
+                workaddr: this.state.info.workaddr +", " + this.state.info.workaddr2 + ", " + this.state.info.postCode3,
+                faxno: this.state.info.faxno,
+                workno: this.state.info.wphno,
+                email: this.state.info.email,
+                prev_surname: this.state.info.prev_surname,
+                assessment_date: this.state.info.ayear + "-" + this.state.info.amonth + "-" + this.state.info.aday,
               //  assessor: this.refs.assessor.value,
                 //moderator: this.refs.moderator.value,
                 //facilitator: this.refs.facilitator.value,
-                club: this.refs.club.value,
-                programme: this.refs.programme.value,
-                qualification: this.refs.qualification.value,
-                skill_programme: this.refs.skill.value,
-                short_course: this.refs.shortcourse.value,
-                unitstd: this.refs.unitstandard.value
+                club: this.state.info.club
                }
 
     this.props.handleSubmit(info);
   }
 
+  handleBack = (e, form) => {
+    e.preventDefault();
+    this.props.handleBack(e, form);
+  }
+
   render() {
 
-    const { days, months } = this.props;
-
     return (
-  <form className="ui form">
+  <Form className="ui form">
     <h4 className="ui dividing header">Learner Information</h4>
     <div className="field">
       <label>National ID Number</label>
       <div className="two fields">
         <div className="field">
-          <input type="text" name="id" placeholder="National ID Number" ref="id"/>
+          <Input name="id" placeholder="National ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} error={this.state.idError} />
         </div>
         <div className="field">
-          <input type="text" name="altid" placeholder="Alternative ID Type" ref="altid"/>
+          <Input name="altid" placeholder="Alternative ID Type" ref="altid" />
         </div>
       </div>
     </div>
     <div className="three fields">
       <div className="field">
         <label>Equity</label>
-          <select className="ui fluid dropdown" ref="equity">
-            <option></option>
-            <option value="">African</option>
-            <option value="">Coloures</option>
-            <option value="">Indian</option>
-              <option value="">White</option>
-              <option value="">Other</option>
-          </select>
+          <Dropdown placeholder="Select Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} fluid search selection options={EquityOptions}/>
       </div>
       <div className="field">
         <label>Nationality</label>
-        <input type="text" name="Nationality" placeholder="Nationality" ref="nationality"/>
+          <Dropdown placeholder='Select Nationality' onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, nationality: data.value}}))}} fluid search selection options={countryOptions} />
       </div>
       <div className="field">
         <label>Gender</label>
-        <select className="ui fluid dropdown" ref="gender">
-          <option></option>
-          <option>Male</option>
-          <option>Female</option>
-        </select>
+        <Dropdown placeholder="Select Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}}  fluid search selection options={genderOptions} error={this.state.genderError} />
       </div>
     </div>
       <div className="field">
-          <label>Home Language</label>
-          <select className="ui fluid dropdown" ref="lang">
-            <option></option>
-            <option>English</option>
-            <option>Afrikaans</option>
-            <option>Southern Sotho</option>
-            <option>Tsonga</option>
-            <option>Tswana</option>
-            <option>Swati</option>
-            <option>Zulu</option>
-            <option>Northern Sotho</option>
-            <option>Ndebele</option>
-            <option>Xhosa</option>
-            <option>Venda</option>
-            <option>Other</option>
-          </select>
+          <label>First Language</label>
+          <Dropdown placeholder="Select Language" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, language: data.value}}))}} fluid search selection options={languageOptions} error={this.state.languageError} />
       </div>
     <div className="two fields">
       <div className="field">
         <label>Employed</label>
-        <select className="ui fluid dropdown" ref="employed">
-          <option value=""></option>
-          <option value="AL">Yes</option>
-          <option value="AK">No</option>
-        </select>
+        <Dropdown placeholder="Select" onChange={this.handleEmployer} fluid search selection options={yesNoOption} error={this.state.employedError}/>
+        {
+          this.state.employed ?
+          <div className="field">
+            <label>Name of Employer</label>
+            <Input  name="employer" placeholder="Name of Employer" ref="employer" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, employer: data.value}}))}} error={this.state.employerError}/>
+          </div>
+              :
+           <div></div>
+        }
       </div>
       <div className="field">
         <label>Disability</label>
-          <input type="text" name="disability" placeholder="Disability" ref="disability"/>
+          <Input name="disability" placeholder="Disability" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, disability: data.value}}))}} />
       </div>
     </div>
     <div className="field">
       <label>Surname</label>
-      <input type="text" name="surname" placeholder="Surname" ref="surname"/>
+      <Input name="surname" placeholder="Surname" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} error={this.state.surnameError}/>
     </div>
     <div className="field">
       <label>First Name</label>
-      <input type="text" name="firstname" placeholder="First Name" ref="firstname"/>
+      <Input name="firstname" placeholder="First Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, firstname: data.value}}))}} error={this.state.firstnameError}/>
     </div>
     <div className="field">
       <label>Second Name</label>
-      <input type="text" name="secondname" placeholder="Second Name" ref="secname"/>
+      <Input name="secondname" placeholder="Second Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, secondname: data.value}}))}}/>
     </div>
     <div className="two fields">
       <div className="field">
         <label>Title</label>
-        <input type="text" name="title" placeholder="Title" ref="title"/>
+          <Dropdown placeholder="Select Title" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, title: data.value}}))}} fluid search selection options={titleOptions} error={this.state.titleError}/>
       </div>
       <div className="field">
         <label>Birth Date</label>
           <div className="three fields">
             <div className="field">
-              <select name="day" className="ui fluid dropdown" ref="day">
-                {
-                  days.map((day) => <option key={day}>{day}</option>)
-                }
-              </select>
+              <Dropdown placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.state.dayError}/>
             </div>
             <div className="field">
-              <select className="ui fluid search dropdown" name="month" ref="month">
-                {
-                  months.map((month) => <option key={month}>{month}</option>)
-                }
-              </select>
+              <Dropdown placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.state.monthError}/>
             </div>
             <div className="field">
-              <input type="text" name="year" maxLength="4" placeholder="Year" ref="year"/>
+              <Input name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.state.yearError}/>
             </div>
           </div>
       </div>
@@ -165,116 +354,99 @@ class registerLearner extends Component {
       <label>Home Address</label>
       <div className="fields">
         <div className="twelve wide field">
-          <input type="text" name="address" placeholder="Street Address" ref="addr"/>
+          <Input name="address" placeholder="Street Address" ref="addr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress: data.value}}))}} error={this.state.strAddressError} />
         </div>
         <div className="four wide field">
-          <input type="text" name="address2" placeholder="Apt #" ref="addr2"/>
+          <Input name="address2" placeholder="Apt #" ref="addr2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress2: data.value}}))}}/>
         </div>
       </div>
     </div>
     <div className="two fields">
       <div className="field">
         <label>Postal Code</label>
-        <input type="text" name="postal" placeholder="Postal Code" ref="addr3"/>
+        <Input name="postal" placeholder="Postal Code" ref="addr3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.state.postCodeError}/>
       </div>
       <div className="field">
         <label>Home Phone Number</label>
-        <input type="text" name="homeno" placeholder="Home Phone Number" ref="hphone"/>
+        <Input name="homeno" placeholder="Home Phone Number" ref="homeno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, homeno: data.value}}))}} error={this.state.homenoError}/>
       </div>
     </div>
     <div className="field">
       <label>Postal Address</label>
       <div className="fields">
         <div className="twelve wide field">
-          <input type="text" name="paddress" placeholder="Postal Address" ref="paddr"/>
+          <Input type="text" name="paddress" placeholder="Postal Address" ref="paddr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postAddress: data.value}}))}} error={this.state.postAddressError}/>
         </div>
         <div className="four wide field">
-          <input type="text" name="address2" placeholder="Apt #" ref="paddr2"/>
+          <Input name="address2" placeholder="Apt #" ref="paddr2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postAddress2: data.value}}))}}/>
         </div>
       </div>
     </div>
     <div className="two fields">
       <div className="field">
         <label>Postal Code</label>
-        <input type="text" name="postal" placeholder="Postal Code" ref="paddr3"/>
+        <Input name="postal" placeholder="Postal Code" ref="paddr3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode2: data.value}}))}} error={this.state.postCodeError2}/>
       </div>
       <div className="field">
         <label>Cell Phone Number</label>
-        <input type="text" name="cellno" placeholder="Cell Phone Number" ref="cellno"/>
+        <Input name="cellno" placeholder="Cell Phone Number" ref="cellno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, cellno: data.value}}))}} error={this.state.cellnoError}/>
       </div>
-    </div>
-    <div className="field">
-      <label>Name of Employer</label>
-      <input type="text" name="employer" placeholder="Name of Employer" ref="employer"/>
     </div>
     <div className="field">
       <label>Work Address</label>
       <div className="fields">
         <div className="twelve wide field">
-          <input type="text" name="workaddress" placeholder="Work Address" ref="waddr"/>
+          <Input name="workaddress" placeholder="Work Address" ref="waddr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workaddr: data.value}}))}} error={this.state.workAddressError}/>
         </div>
         <div className="four wide field">
-          <input type="text" name="address2" placeholder="Apt #" ref="waddr2"/>
+          <Input name="address2" placeholder="Apt #" ref="waddr2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workaddr2: data.value}}))}}/>
         </div>
         <div className="field">
           <label>Postal Code</label>
-          <input type="text" name="postal" placeholder="Postal Code" ref="waddr3"/>
+          <Input type="text" name="postal" placeholder="Postal Code" ref="waddr3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode3: data.value}}))}} error={this.state.postCode3Error}/>
         </div>
       </div>
     </div>
     <div className="two fields">
       <div className="field">
         <label>Fax Number</label>
-        <input type="text" name="faxno" placeholder="Fax Number" ref="faxno"/>
+        <Input name="faxno" placeholder="Fax Number" ref="faxno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, faxno: data.value}}))}} error={this.state.faxnoError}/>
       </div>
       <div className="field">
         <label>Work Phone Number</label>
-        <input type="text" name="workno" placeholder="Work Phone Number" ref="wphno"/>
+        <Input name="workno" placeholder="Work Phone Number" ref="workno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workno: data.value}}))}} error={this.state.worknoError}/>
       </div>
     </div>
     <div className="field">
       <label>E-mail Address</label>
-      <input type="text" name="email" placeholder="E-mail Address" ref="email"/>
+      <Input name="email" placeholder="E-mail Address" ref="email" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, email: data.value}}))}} error={this.state.emailError}/>
     </div>
     <div className="field">
       <label>Previous Surname</label>
-      <input type="text" name="prevsurname" placeholder="Previous Surname" ref="prevsur"/>
+      <Input name="prevsurname" placeholder="Previous Surname" ref="prevsur" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, prev_surname: data.value}}))}}/>
     </div>
     <div className="field">
-      <label>Unit Standard</label>
-      <select className="ui fluid search dropdown" name="Unit Standard" ref="unitstd">
-        {
-          months.map((month) => <option key={month}>{month}</option>)
-        }
-      </select>
+      <label>Course</label>
+      <Dropdown placeholder="Select Course" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, course: data.value}}))}} fluid search selection options={courseOptions} error={this.state.courseError}/>
     </div>
     <div className="field">
-      <label>Indicate wen summative assessment will be completed</label>
+      <label>Indicate when summative assessment will be completed</label>
         <div className="three fields">
           <div className="field">
-            <select name="day" className="ui fluid dropdown" ref="aday">
-              {
-                days.map((day) => <option key={day}>{day}</option>)
-              }
-            </select>
+            <Dropdown placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, aday: data.value}}))}} fluid search selection options={days} error={this.state.adayError}/>
           </div>
           <div className="field">
-            <select className="ui fluid search dropdown" name="month" ref="amonth">
-              {
-                months.map((month) => <option key={month}>{month}</option>)
-              }
-            </select>
+            <Dropdown placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, amonth: data.value}}))}} fluid search selection options={months} error={this.state.amonthError}/>
+
           </div>
           <div className="field">
-            <input type="text" name="year" maxLength="4" placeholder="Year" ref="ayear"/>
+            <Input name="year" maxLength="4" placeholder="YYYY" ref="ayear" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ayear: data.value}}))}} error={this.state.ayearError}/>
           </div>
         </div>
     </div>
     <div className="field">
       <label>Assessor</label>
-      <select className="ui fluid dropdown" ref="assessor">
-        <option></option>
-      </select>
+      <input type="text" name="assessor" placeholder="Assessor" ref="assessor"/>
     </div>
     <div className="field">
       <label>Moderator</label>
@@ -286,32 +458,11 @@ class registerLearner extends Component {
     </div>
     <div className="field">
       <label>Club</label>
-        <input type="text" name="club" placeholder="Club" ref="club"/>
+        <Input name="club" placeholder="Club" ref="club" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.state.clubError}/>
     </div>
-    <div className="fields">
-      <div className="field">
-        <label>Type of Programme</label>
-          <input type="text" name="programme" placeholder="Type of Programme" ref="programme"/>
-      </div>
-      <div className="field">
-        <label>Qualification</label>
-          <input type="text" name="qualification" placeholder="Qualification" ref="qualification"/>
-      </div>
-      <div className="field">
-        <label>Skill Programme</label>
-          <input type="text" name="skill" placeholder="Skill Programme" ref="skill"/>
-      </div>
-      <div className="field">
-        <label>Short Course</label>
-          <input type="text" name="shortcourse" placeholder="Short Course" ref="shortcourse"/>
-      </div>
-      <div className="field">
-        <label>Unit Standard</label>
-          <input type="text" name="unitstandard" placeholder="Unit Standard" ref="unitstandard"/>
-      </div>
-    </div>
-    <div onClick={this.handleSubmit} className="ui button" tabIndex="0">Submit Learner</div>
-  </form>
+    <Button onClick={(e) => this.handleBack(e, "dates")}>Back</Button>
+    <div onClick={this.validateInput} className="ui button" tabIndex="0">Save Learner</div>
+  </Form>
     )
   }
 

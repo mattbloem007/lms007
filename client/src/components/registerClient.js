@@ -1,20 +1,84 @@
 import React, { Component }from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Dropdown, Input } from 'semantic-ui-react';
+import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 
 class RegisterClient extends Component{
 
   constructor(props) {
     super(props);
+
+    this.state = {
+                  projectError: false,
+                  nameError: false,
+                  telError: false,
+                  addressError: false,
+                  address2Error: false,
+                  postCodeError: false,
+                  contactError: false,
+                  municipalityError: false,
+                  info: {
+                          project: "",
+                          name: "",
+                          tel: "",
+                          address: "",
+                          address2: "",
+                          postCode: "",
+                          contact: "",
+                          municipality: ""
+                         }
+
+                 }
+  }
+
+  validateInput = (e) => {
+    e.preventDefault();
+    let errors = false;
+
+    if (isEmpty(this.state.info.project)) {
+      this.setState({ projectError: true });
+      errors = true;
+    }
+
+    if (isEmpty(this.state.info.name)) {
+      this.setState({ nameError: true });
+      errors = true;
+    }
+
+    if (!isMobilePhone(this.state.info.tel)) {
+      this.setState({ telError: true });
+      errors = true;
+    }
+
+    if (isEmpty(this.state.info.address)) {
+      this.setState({ addressError: true });
+      errors = true;
+    }
+    if (isEmpty(this.state.info.postCode) || !isNumeric(this.state.info.postCode)) {
+      this.setState({ postCodeError: true });
+      errors = true;
+    }
+    if (isEmpty(this.state.info.contact)) {
+      this.setState({ contactError: true });
+      errors = true;
+    }
+    if (isEmpty(this.state.info.municipality)) {
+      this.setState({ municipalityError: true });
+      errors = true;
+    }
+
+    if(errors == false) {
+      this.handleNext("learner");
+    }
   }
 
   handleNext = (form) => {
     let info = {
-            project_name: this.refs.project_name.value,
-            name: this.refs.client_name.value,
-            telephone: this.refs.client_telephone.value,
-            address: this.refs.client_address.value + ", " + this.refs.aptaddr.value + ", " + this.refs.post.value,
-            contact: this.refs.client_contact.value,
-            municipality: this.refs.client_municipality.value};
+            project_name: this.state.info.project,
+            name: this.state.info.name,
+            telephone: this.state.info.tel,
+            address: this.state.info.address + ", " + this.state.info.address + ", " + this.state.info.postCode,
+            contact: this.state.info.contact,
+            municipality: this.state.info.municipality};
     this.props.nextClicked(form, info);
   }
 
@@ -24,15 +88,15 @@ class RegisterClient extends Component{
         <div className="fields">
           <div className="field">
             <label>Project Name</label>
-            <input type="text" name="project_name" placeholder="Project Name" ref="project_name"/>
+            <Input name="project_name" placeholder="Project Name" ref="project_name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, project: data.value}}))}} error={this.state.projectError}/>
           </div>
           <div className="field">
             <label>Name</label>
-            <input type="text" name="client_name" placeholder="Name" ref="client_name"/>
+            <Input name="client_name" placeholder="Name" ref="client_name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.state.nameError}/>
           </div>
           <div className="field">
             <label>Telephone</label>
-            <input type="text" name="client_telephone" placeholder="Telephone Number" ref="client_telephone"/>
+            <Input name="client_telephone" placeholder="Telephone Number" ref="client_telephone" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, tel: data.value}}))}} error={this.state.telError}/>
           </div>
         </div>
         <div className="fields">
@@ -40,27 +104,27 @@ class RegisterClient extends Component{
             <label>Address</label>
             <div className="fields">
               <div className="twelve wide field">
-                <input type="text" name="client_address" placeholder="Street Address" ref="client_address"/>
+                <Input name="client_address" placeholder="Street Address" ref="client_address" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address: data.value}}))}}error={this.state.addressError}/>
               </div>
               <div className="four wide field">
-                <input type="text" name="aptaddr" placeholder="Apt #" ref="aptaddr"/>
+                <Input type="text" name="aptaddr" placeholder="Apt #" ref="aptaddr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address2: data.value}}))}} />
               </div>
             </div>
             <div className="field">
               <label>Postal Code</label>
-              <input type="text" name="post" placeholder="Postal Code" ref="post"/>
+              <Input type="text" name="post" placeholder="Postal Code" ref="post" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.state.postCodeError}/>
             </div>
             <div className="field">
               <label>Contact Person</label>
-              <input type="text" name="client_contact" placeholder="Contact Person" ref="client_contact"/>
+              <Input name="client_contact" placeholder="Contact Person" ref="client_contact" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, contact: data.value}}))}} error={this.state.contactError}/>
             </div>
             <div className="field">
               <label>Municipality</label>
-              <input type="text" name="client_municipality" placeholder="Municipality" ref="client_municipality"/>
+              <Input name="client_municipality" placeholder="Municipality" ref="client_municipality" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, municipality: data.value}}))}} error={this.state.municipalityError}/>
             </div>
           </div>
         </div>
-        <Button onClick={() => this.handleNext("logistics")}>Next</Button>
+        <Button onClick={this.validateInput}>Save</Button>
       </div>
     )
   }
