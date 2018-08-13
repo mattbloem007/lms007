@@ -17,8 +17,8 @@ class RegisterClient extends Component{
                   contactError: false,
                   municipalityError: false,
                   info: {
-                          project: "",
-                          name: "",
+                          project: "Project Name",
+                          name: "Name",
                           tel: "",
                           address: "",
                           address2: "",
@@ -88,11 +88,11 @@ class RegisterClient extends Component{
         <div className="fields">
           <div className="field">
             <label>Project Name</label>
-            <Input name="project_name" placeholder="Project Name" ref="project_name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, project: data.value}}))}} error={this.state.projectError}/>
+            <Input name="project_name" placeholder={this.state.info.project} ref="project_name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, project: data.value}}))}} error={this.state.projectError}/>
           </div>
           <div className="field">
             <label>Name</label>
-            <Input name="client_name" placeholder="Name" ref="client_name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.state.nameError}/>
+            <Input name="client_name" placeholder={this.state.info.name} ref="client_name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.state.nameError}/>
           </div>
           <div className="field">
             <label>Telephone</label>

@@ -15,6 +15,7 @@
     "lodash": "^4.17.10",
     "mysql": "^2.15.0",
     "react-validation": "^3.0.7",
+    "semantic-ui-react": "^0.82.2",
     "validator": "^10.5.0"
   },
   "devDependencies": {

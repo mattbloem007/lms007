@@ -460,7 +460,6 @@ class registerLearner extends Component {
       <label>Club</label>
         <Input name="club" placeholder="Club" ref="club" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.state.clubError}/>
     </div>
-    <Button onClick={(e) => this.handleBack(e, "dates")}>Back</Button>
     <div onClick={this.validateInput} className="ui button" tabIndex="0">Save Learner</div>
   </Form>
     )

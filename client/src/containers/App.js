@@ -147,8 +147,8 @@ class App extends Component {
           case "learner":
             currentForm = (<RegisterLearner handleSubmit={this.handleSubmit} handleBack={this.handleBack}/>)
             this.state.learnerActive = true;
-            this.state.assessorActive = false
-            this.state.clientActive = false
+            this.state.assessorActive = false;
+            this.state.clientActive = false;
           break;
           default:
 
@@ -168,13 +168,13 @@ class App extends Component {
                           <Step.Description>Register a Project</Step.Description>
                         </Step.Content>
                       </Step>
-                      <Step active={this.state.assessorActive}>
+                      <Step active={this.state.learnerActive}>
                         <Step.Content>
                           <Step.Title>Learner Information</Step.Title>
                           <Step.Description>Register a Learner</Step.Description>
                         </Step.Content>
                       </Step>
-                    <Step active={this.state.learnerActive}>
+                    <Step active={this.state.assessorActive}>
                       <Step.Content>
                         <Step.Title>Assessors and Moderators</Step.Title>
                         <Step.Description></Step.Description>

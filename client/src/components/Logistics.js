@@ -99,7 +99,6 @@ class Logistics extends Component {
             <Input placeholder="Moderator" ref="moderator" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, moderator: data.value}}))}} error={this.state.moderatorError}/>
           </div>
         </div>
-        <Button onClick={(e) => this.handleBack(e, "client")}>Back</Button>
         <Button onClick={this.validateInput}>Save</Button>
       </div>
     )
