@@ -1,6 +1,10 @@
 import React, { Component }from 'react';
-import { Button, Dropdown, Input } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import * as clientActions from '../actions/clientActions';
+import * as flowActions from '../actions/flowActions';
 
 class RegisterClient extends Component{
 
@@ -8,17 +12,8 @@ class RegisterClient extends Component{
     super(props);
 
     this.state = {
-                  projectError: false,
-                  nameError: false,
-                  telError: false,
-                  addressError: false,
-                  address2Error: false,
-                  postCodeError: false,
-                  contactError: false,
-                  municipalityError: false,
                   info: {
-                          project: "Project Name",
-                          name: "Name",
+                          name: "",
                           tel: "",
                           address: "",
                           address2: "",
@@ -32,102 +27,78 @@ class RegisterClient extends Component{
 
   validateInput = (e) => {
     e.preventDefault();
-    let errors = false;
-
-    if (isEmpty(this.state.info.project)) {
-      this.setState({ projectError: true });
-      errors = true;
-    }
-
-    if (isEmpty(this.state.info.name)) {
-      this.setState({ nameError: true });
-      errors = true;
-    }
-
-    if (!isMobilePhone(this.state.info.tel)) {
-      this.setState({ telError: true });
-      errors = true;
-    }
-
-    if (isEmpty(this.state.info.address)) {
-      this.setState({ addressError: true });
-      errors = true;
-    }
-    if (isEmpty(this.state.info.postCode) || !isNumeric(this.state.info.postCode)) {
-      this.setState({ postCodeError: true });
-      errors = true;
-    }
-    if (isEmpty(this.state.info.contact)) {
-      this.setState({ contactError: true });
-      errors = true;
-    }
-    if (isEmpty(this.state.info.municipality)) {
-      this.setState({ municipalityError: true });
-      errors = true;
-    }
-
-    if(errors == false) {
-      this.handleNext("learner");
-    }
-  }
-
-  handleNext = (form) => {
     let info = {
-            project_name: this.state.info.project,
             name: this.state.info.name,
-            telephone: this.state.info.tel,
+            tel: this.state.info.tel,
             address: this.state.info.address + ", " + this.state.info.address + ", " + this.state.info.postCode,
             contact: this.state.info.contact,
-            municipality: this.state.info.municipality};
-    this.props.nextClicked(form, info);
+            municipality: this.state.info.municipality
+    }
+
+    this.props.clientActions.validateInput(this.state.info);
+  }
+
+  back = () => {
+    this.props.flowActions.changeActiveStep("client")
   }
 
   render() {
     return(
-      <div className="ui form">
-        <div className="fields">
-          <div className="field">
-            <label>Project Name</label>
-            <Input name="project_name" placeholder={this.state.info.project} ref="project_name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, project: data.value}}))}} error={this.state.projectError}/>
-          </div>
-          <div className="field">
-            <label>Name</label>
-            <Input name="client_name" placeholder={this.state.info.name} ref="client_name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.state.nameError}/>
-          </div>
-          <div className="field">
-            <label>Telephone</label>
-            <Input name="client_telephone" placeholder="Telephone Number" ref="client_telephone" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, tel: data.value}}))}} error={this.state.telError}/>
-          </div>
-        </div>
-        <div className="fields">
-          <div className="field">
-            <label>Address</label>
-            <div className="fields">
-              <div className="twelve wide field">
-                <Input name="client_address" placeholder="Street Address" ref="client_address" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address: data.value}}))}}error={this.state.addressError}/>
-              </div>
-              <div className="four wide field">
-                <Input type="text" name="aptaddr" placeholder="Apt #" ref="aptaddr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address2: data.value}}))}} />
-              </div>
-            </div>
-            <div className="field">
-              <label>Postal Code</label>
-              <Input type="text" name="post" placeholder="Postal Code" ref="post" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.state.postCodeError}/>
-            </div>
-            <div className="field">
-              <label>Contact Person</label>
-              <Input name="client_contact" placeholder="Contact Person" ref="client_contact" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, contact: data.value}}))}} error={this.state.contactError}/>
-            </div>
-            <div className="field">
-              <label>Municipality</label>
-              <Input name="client_municipality" placeholder="Municipality" ref="client_municipality" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, municipality: data.value}}))}} error={this.state.municipalityError}/>
-            </div>
-          </div>
-        </div>
-        <Button onClick={this.validateInput}>Save</Button>
-      </div>
+      <Form>
+        <Form.Group>
+          <Form.Field>
+            <Form.Input defaultValue={this.props.name} label="Name" name="client_name" placeholder="Enter Client Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
+        </Form.Field>
+          <Form.Field>
+          <Form.Input label="Telephone" defaultValue={this.props.tel} name="client_telephone" placeholder="Telephone Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, tel: data.value}}))}} error={this.props.telError}/>
+      </Form.Field>
+        </Form.Group>
+        <Form.Group>
+          <Form.Field>
+            <Form.Field>
+              <Form.Field>
+                <Form.Input label="Address" defaultValue={this.props.address} placeholder="Street Address" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address: data.value}}))}}error={this.props.addressError}/>
+            </Form.Field>
+              <Form.Field>
+                <Form.Input type="text" name="aptaddr" defaultValue={this.props.address2} placeholder="Address Line 2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address2: data.value}}))}} />
+            </Form.Field>
+          </Form.Field>
+            <Form.Field>
+            <Form.Input label="Postal Code" type="text" name="post" defaultValue={this.props.postCode} placeholder="Postal Code"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.props.postCodeError}/>
+        </Form.Field>
+            <Form.Field>
+            <Form.Input label="Contact Person" name="client_contact" placeholder="Contact Person" defaultValue={this.props.contact} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, contact: data.value}}))}} error={this.props.contactError}/>
+        </Form.Field>
+            <Form.Field>
+            <Form.Input label="Municipality" name="client_municipality" placeholder="Municipality" defaultValue={this.props.municipality} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, municipality: data.value}}))}} error={this.props.municipalityError}/>
+        </Form.Field>
+      </Form.Field>
+        </Form.Group>
+        <Form.Button onClick={this.back}>Back</Form.Button>
+        <Form.Button onClick={this.validateInput}>Save</Form.Button>
+    </Form>
     )
   }
 
 }
-export default RegisterClient;
+const mapStateToProps = (state) => ({
+  nameError: state.client.nameError,
+  telError: state.client.telError,
+  addressError: state.client.addressError,
+  address2Error: state.client.address2Error,
+  postCodeError: state.client.postCodeError,
+  contactError: state.client.contactError,
+  municipalityError: state.client.municipalityError,
+  name: state.client.name,
+  tel: state.client.tel,
+  address: state.client.address,
+  address2: state.client.address2,
+  postCode: state.client.postCode,
+  contact: state.client.contact,
+  municipality: state.client.municipality,
+})
+const mapDispatchToProps = (dispatch) => ({
+  clientActions: bindActionCreators(clientActions, dispatch),
+  flowActions: bindActionCreators(flowActions, dispatch)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterClient);

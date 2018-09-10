@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
 import { Icon, Table, Menu, Container } from 'semantic-ui-react'
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import * as tableActions from '../actions/tableActions'
 
 import ClientTable from './ClientTable'
 import LogisticsTable from './LogisticsTable'
 import DatesTable from './DatesTable'
 import LearnerTable from './LearnerTable'
+import BatchTable from './batchTable'
+import Learner from '../components/chooseLearner'
+import RegisterLearner from '../components/registerLearner';
+
 
 class ExistingProjects extends Component {
 
@@ -12,9 +19,7 @@ class ExistingProjects extends Component {
     super(props);
 
     this.state = {
-                  response: [],
-                  activeTable: "lms_client"
-                //  headings: ["project_name", "client_name", "client_telephone", "client_address", "client_contact", "client_municipality", "log_venue", "log_batch_no", "log_facilitator", "log_assessor", "log_moderator", "dates_facilitator", "dates_assessment", "dates_moderation", "learner_id", "learner_alt_id", "learner_equity", "learner_nationality", "learner_gender", "learner_lang", "learner_employed", "learner_disability", "learner_surname", "learner_firstname", "learner_secondname", "learner_title", "learner_dob", "learner_homeaddr", "learner_postaladdr", "learner_cellno", "learner_employer", "learner_workaddr", "learner_faxno", "learner_workno", "learner_email", "learner_prevsurname", "learner_assessment_date", "learner_assessor", "learner_moderator", "learner_facilitator" , "learner_club", "learner_programme", "course_qualification", "course_skill_programme", "course_shortcourse", "course_unitstd"]
+                  response: []
     }
   }
 
@@ -42,16 +47,21 @@ class ExistingProjects extends Component {
 
   render() {
     let currentForm;
-    switch (this.state.activeTable) {
-      case "lms_client":
-        currentForm = (<ClientTable footerClicked={this.handleFooterClicked} info={this.state.response} />)
+    console.log(this.props.activeTable)
+    switch (this.props.activeTable) {
+      case "batch":
+        currentForm = (<BatchTable />)
       break;
-      case "lms_logistics":
-        currentForm = (<LogisticsTable footerClicked={this.handleFooterClicked} info={this.state.response}/>)
+      case "learner":
+        currentForm = (<Learner />)
+      break
+
+      case "rLearner":
+        currentForm = (<RegisterLearner />)
       break;
 
-      case "lms_dates":
-        currentForm = (<DatesTable footerClicked={this.handleFooterClicked} info={this.state.response} />)
+      case "learnerTable":
+        currentForm = (<LearnerTable />)
       break;
 
       case "lms_learner":
@@ -69,5 +79,10 @@ class ExistingProjects extends Component {
   }
 
 }
-
-export default ExistingProjects;
+const mapStateToProps = state => ({
+  activeTable: state.table.activeTable
+})
+const mapDispatchToProps = dispatch => ({
+  tableActions: bindActionCreators(tableActions, dispatch)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(ExistingProjects);

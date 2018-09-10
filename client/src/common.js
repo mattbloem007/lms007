@@ -1,5 +1,36 @@
 import _ from 'lodash'
 
+export const idType = [
+  {text: 'National ID', value:'National ID'},
+  {text: 'Passport', value:'Passport'},
+  {text: 'Birth certificate number', value:'Birth certificate number'},
+  {text:'Drivers licence', value: 'Drivers licence'},
+  {text:'Employee Number', value:'Employee Number'},
+  {text:'ETQA Record number', value:'ETQA Record number'},
+  {text:'HSRC Registration', value:'HSRC Registration'},
+  {text:'Refugee number', value: 'Refugee number'},
+  {text:'Student number', value: 'Student number'},
+  {text:'Temporary ID number', value:'Temporary ID number'},
+  {text:'Unknown', value: 'Unknown'}
+]
+
+export const status = [
+  {text: 'Competent', value:'Competent'},
+  {text: 'Not yet competent', value:'Not yet competent'},
+  {text: 'Not Submitted', value:'Not Submitted'}
+]
+
+export const education = [
+  {text: 'Doctoral Degree, PhD', value:'Doctoral Degree, PhD'},
+  {text: 'Masters Degree', value:'Masters Degree'},
+  {text: '4-year Degree', value:'4-year Degree'},
+  {text:'National Diploma and/or Higher Certificate', value: 'National Diploma and/or Higher Certificate'},
+  {text:'Grade 12, Matriculation Exemption NTC 4', value:'Grade 12, Matriculation Exemption NTC 4'},
+  {text:'Grade 11, NTC 3', value:'Grade 11, NTC 3'},
+  {text:'Grade 10, NTC 2', value:'Grade 10, NTC 2'},
+  {text:'Grade 9, School Leaving Certificate, NTC 1, ABET level 4', value: 'Grade 9, School Leaving Certificate, NTC 1, ABET level 4'}
+]
+
 export const days = [
   {text: '1', value:'1'},
   {text: '2', value:'2'},
@@ -429,7 +460,24 @@ export const EquityOptions = [
 ]
 export const genderOptions = [
   {text: 'Male', value: 'Male'},
-  {text: 'Female', value: 'Female'}
+  {text: 'Female', value: 'Female'},
+  {text: 'Unknown', value: 'Unknown'}
+]
+
+export const disability = [
+  {text: '01 Behaviour and Emotional', value:'01 Behaviour and Emotional'},
+  {text: '02 Hearing', value:'02 Hearing'},
+  {text: '03 Manual Dexterity', value:'03 Manual Dexterity'},
+  {text:'04 Memory or ability to concentrate, learn or understand (learning disablity)', value: '04 Memory or ability to concentrate, learn or understand (learning disablity)'},
+  {text:'05 Mobility and Gross Motor', value:'05 Mobility and Gross Motor'},
+  {text:'06 Perception of Physical Danger', value:'06 Perception of Physical Danger'},
+  {text:'07 Personal, Self-Care and Continence', value:'07 Personal, Self-Care and Continence'},
+  {text:'08 Progressive Conditions and Physical Health (such as HIV, cancer, multiple sclerosis, fits etc)', value: '08 Progressive Conditions and Physical Health (such as HIV, cancer, multiple sclerosis, fits etc)'},
+  {text:'09 Sight', value: '09 Sight'},
+  {text:'10 Speech', value:'10 Speech'},
+  {text:'XX Other', value: 'XX Other'},
+  {text:'NN No disability', value: 'NN No disability'},
+  {text:'ZZ Not Stated (Person asked but declined to provide a response)', value:'ZZ Not Stated (Person asked but declined to provide a response)'}
 ]
 
 export const yesNoOption = [

@@ -70,13 +70,147 @@ var pool  = mysql.createPool({
 //     }
 //   });
 // });
+app.get('/api/lms_batch', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT * FROM `lms_batch`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+
+app.get('/api/client', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name` FROM `lms_client`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+
+app.get('/api/facilitator', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name` FROM `lms_facilitator`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.get('/api/assessor', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name` FROM `lms_assessor`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.get('/api/moderator', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name` FROM `lms_moderator`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.get('/api/learner', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `national_id` FROM `lms_learner`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/learner_batch', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `learner_ID` FROM `lms_learner_batch` WHERE batch_no = ?', [req.body.batch_no], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({express: rows})
+      connection.release();
+    })
+  })
+
+})
+app.post('/api/learner_batch2', (req, res) => {
+  let learners = [];
+  let learnersInfo = [];
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(jsondata)
+    connection.query('SELECT * FROM `lms_learner` WHERE national_id = ?', [jsondata.learner_ID], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({express: rows})
+      connection.release();
+    })
+  })
+
+})
 
 app.get('/api/lms_client', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err; // not connected
     console.log("Connection made");
     // Use the connection
-    connection.query('SELECT `project_name`, `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
+    connection.query('SELECT `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function (err, rows, fields) {
       // And done with the connection.
 
 
@@ -144,6 +278,63 @@ app.get('/api/lms_learner', (req, res) => {
   });
 });
 
+app.post('/data/lms_learner_batch', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+        for(var x in jsondata[i]) {
+          values.push(jsondata[i][x])
+        }
+        console.log(values)
+        connection.query("IF NOT EXISTS (SELECT * FROM lms_learner_batch WHERE learner_ID = ? AND batch_no = ?) THEN INSERT INTO `lms_learner_batch` (`learner_ID`, `batch_no`) VALUES (?); END IF", [values[0], values[1], values], function(err, result){
+          if(err) console.log(err);
+
+          console.log("1 record inserted");
+            });
+        values.splice(0,2);
+
+      }
+    console.log(values)
+
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_batch', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+      if (i != "day" && i != "month" && i != "year" && i != "modules" && i != "learnerID"){
+        if (i == "date") {
+          let date = new Date(jsondata[i])
+          values.push(date)
+        }
+        else {
+          values.push(jsondata[i]);
+        }
+
+      }
+    }
+    console.log(values)
+      connection.query("INSERT INTO `lms_batch` (`date`,`client_name`,`project`,`programme`,`credit`,`facilitator`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
 app.post('/data/lms_client', function(req, res) {
   pool.getConnection(function(err, connection) {
     if (err) throw err; // not connected
@@ -152,13 +343,137 @@ app.post('/data/lms_client', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "table"){
+      if (i != "address2" && i != "postCode"){
         values.push(jsondata[i]);
       }
-
     }
+    console.log(values)
+      connection.query("INSERT INTO `lms_client` (`name`, `telephone`, `address`, `contact`, `municipality`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
 
-      connection.query("INSERT INTO `lms_client` (`project_name`, `name`, `telephone`, `address`, `contact`, `municipality`) VALUES (?)", [values], function(err, result){
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_facilitator', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+      if (i != "day" && i != "month" && i != "year"){
+        if (i == "expiry_date") {
+          let date = new Date(jsondata[i])
+          values.push(date)
+        }
+        else {
+          values.push(jsondata[i]);
+        }
+
+      }
+    }
+    console.log(values)
+      connection.query("INSERT INTO `lms_facilitator` (`name`,`ID`,`Reg_no`,`SETA`,`Expiry Date`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_assessor', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+      if (i != "day" && i != "month" && i != "year"){
+        if (i == "expiry_date") {
+          let date = new Date(jsondata[i])
+          values.push(date)
+        }
+        else {
+          values.push(jsondata[i]);
+        }
+
+      }
+    }
+    console.log(values)
+      connection.query("INSERT INTO `lms_assessor` (`name`,`ID`,`Reg_no`,`SETA`,`Expiry Date`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_moderator', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+      if (i != "day" && i != "month" && i != "year"){
+        if (i == "expiry_date") {
+          let date = new Date(jsondata[i])
+          values.push(date)
+        }
+        else {
+          values.push(jsondata[i]);
+        }
+
+      }
+    }
+    console.log(values)
+      connection.query("INSERT INTO `lms_moderator` (`name`,`ID`,`Reg_no`,`SETA`,`Expiry Date`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_learner', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+      if (i != "day" && i != "month" && i != "year"
+          && i != "aday" && i != "amonth" && i != "ayear"
+          && i != "strAddress2" && i != "strAddress3"
+          && i != "postCode" && i != "postAddress2" && i != "postCode2"
+          && i != "workaddr2" && i != "postCode3" && i != "learnerIDs"
+        ) {
+        if (i == "dob" || i == "assessment_date") {
+          let date = new Date(jsondata[i])
+          values.push(date)
+        }
+        else {
+          values.push(jsondata[i]);
+        }
+
+      }
+    }
+    console.log(values)
+      connection.query("INSERT INTO `lms_learner`(`id_type`, `national_id`, `last_school`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `workaddr`, `faxno`, `workno`, `email`, `prev_surname`, `assessment_date`, `club`, `course`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");

@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
-import { Input, Form, Dropdown, Button } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import * as learnerActions from '../actions/learnerActions';
+import * as tableActions from '../actions/tableActions';
 import { isEmpty, isNumeric, isLength, isAlpha, isMobilePhone, isEmail, isAfter } from 'validator';
-import { days, months, countryOptions, languageOptions, courseOptions, titleOptions, yesNoOption, genderOptions, EquityOptions } from '../common'
+import { disability, days, months, countryOptions, languageOptions, courseOptions, titleOptions, yesNoOption, genderOptions, EquityOptions, idType, status, education } from '../common'
 
 
 class registerLearner extends Component {
@@ -10,75 +14,49 @@ class registerLearner extends Component {
     super(props);
 
     this.state = {
-                  idError: false,
-                  equityError: false,
-                  nationalityError: false,
-                  genderError: false,
-                  languageError: false,
-                  employedError: false,
-                  surnameError: false,
-                  firstnameError: false,
-                  titleError: false,
-                  yearError: false,
-                  monthError: false,
-                  dayError: false,
-                  ayearError: false,
-                  amonthError: false,
-                  adayError: false,
-                  strAddressError: false,
-                  postCodeError: false,
-                  postCode2Error: false,
-                  postCode3Error: false,
-                  homenoError: false,
-                  postAddressError: false,
-                  workAddressError: false,
-                  cellnoError: false,
-                  employerError: false,
-                  worknoError: false,
-                  faxnoError: false,
-                  emailError: false,
-                  clubError: false,
-                  courseError: false,
-                  year2Error: false,
-                  employed: false,
                   info:  {
-                              national_id: "",
-                              alt_id: "",
-                              equity: "",
-                              nationality: "",
-                              gender: "",
-                              language: "",
-                              employed: "",
-                              disability: "",
-                              surname: "",
-                              firstname: "",
-                              secondname: "",
-                              title: "",
-                              day: "",
-                              month: "",
-                              year: "",
-                              aday: "",
-                              amonth: "",
-                              ayear: "",
-                              strAddress: "",
-                              strAddress2: "",
-                              strAddress3: "",
-                              postCode: "",
-                              homeno: "",
-                              postAddress: "",
-                              postAddress2: "",
-                              postCode2: "",
-                              cellno: "",
-                              employer: "",
-                              workaddr: "",
-                              workaddr2: "",
-                              postCode3: "",
-                              faxno: "",
-                              workno: "",
-                              email: "",
-                              prev_surname: "",
-                              assessment_date: "",
-                              club: ""
+                    id_type: "",
+                    national_id: "",
+                    last_school: "",
+                    statssa: "",
+                    education: "",
+                    ass_status: "",
+                    equity: "",
+                    nationality: "",
+                    gender: "",
+                    language: "",
+                    employed: "",
+                    disability: "",
+                    surname: "",
+                    firstname: "",
+                    secondname: "",
+                    title: "",
+                    day: "",
+                    month: "",
+                    year: "",
+                    aday: "",
+                    amonth: "",
+                    ayear: "",
+                    dob: "",
+                    strAddress: "",
+                    strAddress2: "",
+                    strAddress3: "",
+                    postCode: "",
+                    homeno: "",
+                    postAddress: "",
+                    postAddress2: "",
+                    postCode2: "",
+                    cellno: "",
+                    employer: "",
+                    workaddr: "",
+                    workaddr2: "",
+                    postCode3: "",
+                    faxno: "",
+                    workno: "",
+                    email: "",
+                    prev_surname: "",
+                    assessment_date: "",
+                    club: ""
                              }
 
                 }
@@ -86,131 +64,8 @@ class registerLearner extends Component {
 
 
 
-  validateInput = (e) => {
-    e.preventDefault();
-    let errors = false;
-
-    if (isEmpty(this.state.info.national_id) || isLength(this.state.info.national_id) < 13 || !isNumeric(this.state.info.national_id)) {
-        this.setState({ idError: true });
-        errors = true;
-    }
-    if(isEmpty(this.state.info.equity)) {
-      this.setState({ equityError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.nationality)){
-      this.setState({ nationalityError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.gender)){
-      this.setState({ genderError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.language)){
-      this.setState({ languageError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.employed)){
-      this.setState({ employedError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.surname) && !isAlpha(this.state.info.surname)){
-      this.setState({ surnameError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.firstname) && !isAlpha(this.state.info.firstname)){
-      this.setState({ firstnameError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.title)){
-      this.setState({ titleError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.year) || isLength(this.state.info.year) < 4 || isAfter(this.state.info.year)){
-      this.setState({ yearError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.month)){
-      this.setState({ monthError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.day)){
-      this.setState({ dayError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.ayear) || isLength(this.state.info.ayear) < 4 || isAfter(this.state.info.ayear)){
-      this.setState({ ayearError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.amonth)){
-      this.setState({ amonthError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.aday)){
-      this.setState({ adayError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.strAddress)) {
-      this.setState({ strAddressError: true });
-      errors = true;
-    }
-
-    if(isEmpty(this.state.info.postCode) || !isNumeric(this.state.info.postCode)) {
-      this.setState({ postCodeError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.postAddress)) {
-      this.setState({ postAddressError: true });
-      errors = true;
-    }
-
-    if(isEmpty(this.state.info.postCode2) || !isNumeric(this.state.info.postCode2)) {
-      this.setState({ postCode2Error: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.workaddr)) {
-      this.setState({ workAddressError: true });
-      errors = true;
-    }
-
-    if(isEmpty(this.state.info.postCode3) || !isNumeric(this.state.info.postCode3))
-     {
-      this.setState({ postCode3Error: true });
-      errors = true;
-    }
-    if(!isMobilePhone(this.state.info.homeno)){
-      this.setState({ homenoError: true });
-      errors = true;
-    }
-    if(!isMobilePhone(this.state.info.cellno)){
-      this.setState({ cellnoError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.employer)){
-      this.setState({ employerError: true });
-      errors = true;
-    }
-    if(!isMobilePhone(this.state.info.faxno)){
-      this.setState({ faxnoError: true });
-      errors = true;
-    }
-    if(!isMobilePhone(this.state.info.workno)){
-      this.setState({ worknoError: true });
-      errors = true;
-    }
-    if(!isEmail(this.state.info.email)){
-      this.setState({ emailError: true });
-      errors = true;
-    }
-    if(isEmpty(this.state.info.club)){
-      this.setState({ clubError: true });
-      errors = true;
-    }
-
-    if(errors === false) {
-      this.handleNext("learner");
-    }
-
+  validateInput = () => {
+    this.props.learnerActions.validateInput(this.state.info)
   }
 
   handleEmployer = (e, data) => {
@@ -223,46 +78,9 @@ class registerLearner extends Component {
 
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
 
-    let info = {
-                national_id: this.state.info.national_id,
-                alt_id: this.state.info.alt_id,
-                equity: this.state.info.equity,
-                nationality: this.state.info.nationality,
-                gender: this.state.info.gender,
-                language: this.state.info.language,
-                employed: this.state.info.employed,
-                disability: this.state.info.disability,
-                surname: this.state.info.surname,
-                firstname: this.state.info.firstname,
-                secondname: this.state.info.secname,
-                title: this.state.info.title,
-                dob: this.state.info.year + "-" + this.state.info.month + "-" + this.state.info.day,
-                homeaddr: this.state.info.strAddress + ", " + this.state.info.strAddress2 + ", " + this.state.info.postCode,
-                postaddr: this.state.info.postAddress +", " + this.state.info.postAddress2 + ", " + this.state.info.postCode2,
-                homeno: this.state.info.homeno,
-                cellno: this.state.info.cellno,
-                employer: this.state.info.employer,
-                workaddr: this.state.info.workaddr +", " + this.state.info.workaddr2 + ", " + this.state.info.postCode3,
-                faxno: this.state.info.faxno,
-                workno: this.state.info.wphno,
-                email: this.state.info.email,
-                prev_surname: this.state.info.prev_surname,
-                assessment_date: this.state.info.ayear + "-" + this.state.info.amonth + "-" + this.state.info.aday,
-              //  assessor: this.refs.assessor.value,
-                //moderator: this.refs.moderator.value,
-                //facilitator: this.refs.facilitator.value,
-                club: this.state.info.club
-               }
-
-    this.props.handleSubmit(info);
-  }
-
-  handleBack = (e, form) => {
-    e.preventDefault();
-    this.props.handleBack(e, form);
+  back = () => {
+    this.props.tableActions.changeActiveTable("learner")
   }
 
   render() {
@@ -270,200 +88,210 @@ class registerLearner extends Component {
     return (
   <Form className="ui form">
     <h4 className="ui dividing header">Learner Information</h4>
-    <div className="field">
-      <label>National ID Number</label>
-      <div className="two fields">
-        <div className="field">
-          <Input name="id" placeholder="National ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} error={this.state.idError} />
-        </div>
-        <div className="field">
-          <Input name="altid" placeholder="Alternative ID Type" ref="altid" />
-        </div>
-      </div>
-    </div>
-    <div className="three fields">
-      <div className="field">
-        <label>Equity</label>
-          <Dropdown placeholder="Select Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} fluid search selection options={EquityOptions}/>
-      </div>
-      <div className="field">
-        <label>Nationality</label>
-          <Dropdown placeholder='Select Nationality' onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, nationality: data.value}}))}} fluid search selection options={countryOptions} />
-      </div>
-      <div className="field">
-        <label>Gender</label>
-        <Dropdown placeholder="Select Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}}  fluid search selection options={genderOptions} error={this.state.genderError} />
-      </div>
-    </div>
-      <div className="field">
-          <label>First Language</label>
-          <Dropdown placeholder="Select Language" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, language: data.value}}))}} fluid search selection options={languageOptions} error={this.state.languageError} />
-      </div>
-    <div className="two fields">
-      <div className="field">
-        <label>Employed</label>
-        <Dropdown placeholder="Select" onChange={this.handleEmployer} fluid search selection options={yesNoOption} error={this.state.employedError}/>
+  <Form.Group>
+    <Form.Group>
+          <Form.Select label="ID Type" placeholder="ID Type" options={idType} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, id_type: data.value}}))}} error={this.props.idTypeError} />
+          <Form.Input label="National ID Number" name="id" placeholder="National ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} error={this.props.idError} />
+    </Form.Group>
+    </Form.Group>
+    <Form.Group>
+      <Form.Field>
+        <Form.Select label="Equity" placeholder="Select Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} fluid search selection options={EquityOptions}/>
+      </Form.Field>
+      <Form.Field>
+        <Form.Select label="Nationality" placeholder='Select Nationality' onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, nationality: data.value}}))}} fluid search selection options={countryOptions} />
+      </Form.Field>
+      <Form.Field>
+      <Form.Select label="Gender" placeholder="Select Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}}  fluid search selection options={genderOptions} error={this.props.genderError} />
+    </Form.Field>
+    <Form.Field>
+    <Form.Select label="Last School (EMIS Number)" placeholder="Select Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}}  fluid search selection options={genderOptions} error={this.props.lastSchoolError} />
+  </Form.Field>
+  <Form.Field>
+    <Form.Input label="Statssa Area" placeholder="Statssa Area" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, statssa: data.value}}))}} />
+  </Form.Field>
+  <Form.Field>
+  <Form.Select label="Highest Education" placeholder="Select Highest Education" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, education: data.value}}))}}  fluid search selection options={education} error={this.props.lastSchoolError} />
+</Form.Field>
+
+  </Form.Group>
+      <Form.Field>
+        <Form.Select label="First Language" placeholder="Select Language" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, language: data.value}}))}} fluid search selection options={languageOptions} error={this.props.languageError} />
+    </Form.Field>
+    <Form.Group>
+      <Form.Field>
+      <Form.Select label="Employed" placeholder="Select" onChange={this.handleEmployer} fluid search selection options={yesNoOption} error={this.props.employedError}/>
         {
-          this.state.employed ?
-          <div className="field">
-            <label>Name of Employer</label>
-            <Input  name="employer" placeholder="Name of Employer" ref="employer" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, employer: data.value}}))}} error={this.state.employerError}/>
-          </div>
+          this.props.employed ?
+          <Form.Field>
+            <Form.Input label="Name of Employer" name="employer" placeholder="Name of Employer" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, employer: data.value}}))}} error={this.props.employerError}/>
+          </Form.Field>
               :
            <div></div>
         }
-      </div>
-      <div className="field">
-        <label>Disability</label>
-          <Input name="disability" placeholder="Disability" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, disability: data.value}}))}} />
-      </div>
-    </div>
-    <div className="field">
-      <label>Surname</label>
-      <Input name="surname" placeholder="Surname" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} error={this.state.surnameError}/>
-    </div>
-    <div className="field">
-      <label>First Name</label>
-      <Input name="firstname" placeholder="First Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, firstname: data.value}}))}} error={this.state.firstnameError}/>
-    </div>
-    <div className="field">
-      <label>Second Name</label>
-      <Input name="secondname" placeholder="Second Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, secondname: data.value}}))}}/>
-    </div>
-    <div className="two fields">
-      <div className="field">
-        <label>Title</label>
-          <Dropdown placeholder="Select Title" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, title: data.value}}))}} fluid search selection options={titleOptions} error={this.state.titleError}/>
-      </div>
-      <div className="field">
-        <label>Birth Date</label>
-          <div className="three fields">
-            <div className="field">
-              <Dropdown placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.state.dayError}/>
-            </div>
-            <div className="field">
-              <Dropdown placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.state.monthError}/>
-            </div>
-            <div className="field">
-              <Input name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.state.yearError}/>
-            </div>
-          </div>
-      </div>
-    </div>
-    <div className="field">
-      <label>Home Address</label>
-      <div className="fields">
-        <div className="twelve wide field">
-          <Input name="address" placeholder="Street Address" ref="addr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress: data.value}}))}} error={this.state.strAddressError} />
-        </div>
-        <div className="four wide field">
-          <Input name="address2" placeholder="Apt #" ref="addr2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress2: data.value}}))}}/>
-        </div>
-      </div>
-    </div>
-    <div className="two fields">
-      <div className="field">
-        <label>Postal Code</label>
-        <Input name="postal" placeholder="Postal Code" ref="addr3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.state.postCodeError}/>
-      </div>
-      <div className="field">
-        <label>Home Phone Number</label>
-        <Input name="homeno" placeholder="Home Phone Number" ref="homeno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, homeno: data.value}}))}} error={this.state.homenoError}/>
-      </div>
-    </div>
-    <div className="field">
-      <label>Postal Address</label>
-      <div className="fields">
-        <div className="twelve wide field">
-          <Input type="text" name="paddress" placeholder="Postal Address" ref="paddr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postAddress: data.value}}))}} error={this.state.postAddressError}/>
-        </div>
-        <div className="four wide field">
-          <Input name="address2" placeholder="Apt #" ref="paddr2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postAddress2: data.value}}))}}/>
-        </div>
-      </div>
-    </div>
-    <div className="two fields">
-      <div className="field">
-        <label>Postal Code</label>
-        <Input name="postal" placeholder="Postal Code" ref="paddr3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode2: data.value}}))}} error={this.state.postCodeError2}/>
-      </div>
-      <div className="field">
-        <label>Cell Phone Number</label>
-        <Input name="cellno" placeholder="Cell Phone Number" ref="cellno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, cellno: data.value}}))}} error={this.state.cellnoError}/>
-      </div>
-    </div>
-    <div className="field">
-      <label>Work Address</label>
-      <div className="fields">
-        <div className="twelve wide field">
-          <Input name="workaddress" placeholder="Work Address" ref="waddr" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workaddr: data.value}}))}} error={this.state.workAddressError}/>
-        </div>
-        <div className="four wide field">
-          <Input name="address2" placeholder="Apt #" ref="waddr2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workaddr2: data.value}}))}}/>
-        </div>
-        <div className="field">
-          <label>Postal Code</label>
-          <Input type="text" name="postal" placeholder="Postal Code" ref="waddr3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode3: data.value}}))}} error={this.state.postCode3Error}/>
-        </div>
-      </div>
-    </div>
-    <div className="two fields">
-      <div className="field">
-        <label>Fax Number</label>
-        <Input name="faxno" placeholder="Fax Number" ref="faxno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, faxno: data.value}}))}} error={this.state.faxnoError}/>
-      </div>
-      <div className="field">
-        <label>Work Phone Number</label>
-        <Input name="workno" placeholder="Work Phone Number" ref="workno" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workno: data.value}}))}} error={this.state.worknoError}/>
-      </div>
-    </div>
-    <div className="field">
-      <label>E-mail Address</label>
-      <Input name="email" placeholder="E-mail Address" ref="email" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, email: data.value}}))}} error={this.state.emailError}/>
-    </div>
-    <div className="field">
-      <label>Previous Surname</label>
-      <Input name="prevsurname" placeholder="Previous Surname" ref="prevsur" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, prev_surname: data.value}}))}}/>
-    </div>
-    <div className="field">
-      <label>Course</label>
-      <Dropdown placeholder="Select Course" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, course: data.value}}))}} fluid search selection options={courseOptions} error={this.state.courseError}/>
-    </div>
-    <div className="field">
-      <label>Indicate when summative assessment will be completed</label>
-        <div className="three fields">
-          <div className="field">
-            <Dropdown placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, aday: data.value}}))}} fluid search selection options={days} error={this.state.adayError}/>
-          </div>
-          <div className="field">
-            <Dropdown placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, amonth: data.value}}))}} fluid search selection options={months} error={this.state.amonthError}/>
-
-          </div>
-          <div className="field">
-            <Input name="year" maxLength="4" placeholder="YYYY" ref="ayear" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ayear: data.value}}))}} error={this.state.ayearError}/>
-          </div>
-        </div>
-    </div>
-    <div className="field">
-      <label>Assessor</label>
-      <input type="text" name="assessor" placeholder="Assessor" ref="assessor"/>
-    </div>
-    <div className="field">
-      <label>Moderator</label>
-        <input type="text" name="moderator" placeholder="Moderator" ref="moderator"/>
-    </div>
-    <div className="field">
-      <label>Facilitator</label>
-        <input type="text" name="facilitator" placeholder="Facilitator" ref="facilitator" />
-    </div>
-    <div className="field">
-      <label>Club</label>
-        <Input name="club" placeholder="Club" ref="club" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.state.clubError}/>
-    </div>
-    <div onClick={this.validateInput} className="ui button" tabIndex="0">Save Learner</div>
+      </Form.Field>
+      </Form.Group>
+      <Form.Field>
+        <Form.Select label="Disability" placeholder="Disability" options={disability} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, disability: data.value}}))}} />
+      </Form.Field>
+    <Form.Field>
+      <Form.Input label="Surname" name="surname" placeholder="Surname" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} error={this.props.surnameError}/>
+    </Form.Field>
+    <Form.Field>
+    <Form.Input label="First Name" name="firstname" placeholder="First Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, firstname: data.value}}))}} error={this.props.firstnameError}/>
+    </Form.Field>
+    <Form.Field>
+    <Form.Input label="Second Name" name="secondname" placeholder="Second Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, secondname: data.value}}))}}/>
+    </Form.Field>
+    <Form.Group>
+      <Form.Field>
+      <Form.Select label="Title" placeholder="Select Title" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, title: data.value}}))}} fluid search selection options={titleOptions} error={this.props.titleError}/>
+      </Form.Field>
+      </Form.Group>
+      <Form.Group>
+            <Form.Field >
+              <Form.Select label="Birth Date" placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.props.dayError}/>
+            </Form.Field>
+            <Form.Field>
+              <Form.Select placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.props.monthError}/>
+          </Form.Field>
+            <Form.Field>
+              <Form.Input name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.props.yearError}/>
+            </Form.Field>
+      </Form.Group>
+      <Form.Group >
+        <Form.Field>
+          <Form.Input label="Home Address" name="address" placeholder="Home Address Line 1"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress: data.value}}))}} error={this.props.strAddressError} />
+        </Form.Field>
+        <Form.Field>
+          <Form.Input name="address2" placeholder="Address Line 2"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress2: data.value}}))}}/>
+        </Form.Field>
+        <Form.Field>
+          <Form.Input label="Postal Code" name="postal" placeholder="Postal Code" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.props.postCodeError}/>
+        </Form.Field>
+      </Form.Group>
+    <Form.Group>
+      <Form.Field>
+      <Form.Input label="Home Phone Number" name="homeno" placeholder="Home Phone Number"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, homeno: data.value}}))}} error={this.props.homenoError}/>
+      </Form.Field>
+    </Form.Group>
+    <Form.Group>
+        <Form.Field>
+          <Form.Input label="Postal Address" type="text" placeholder="Postal Address Line 1"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postAddress: data.value}}))}} error={this.props.postAddressError}/>
+        </Form.Field>
+        <Form.Field>
+          <Form.Input name="address2" placeholder="Postal Address Line 2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postAddress2: data.value}}))}}/>
+        </Form.Field>
+        <Form.Field>
+        <Form.Input label="Postal Code" name="postal" placeholder="Postal Code" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode2: data.value}}))}} error={this.props.postCodeError2}/>
+        </Form.Field>
+      </Form.Group>
+    <Form.Group>
+      <Form.Field>
+      <Form.Input label="Cell Phone Number" name="cellno" placeholder="Cell Phone Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, cellno: data.value}}))}} error={this.props.cellnoError}/>
+      </Form.Field>
+    </Form.Group>
+    <Form.Group>
+      <Form.Field>
+          <Form.Input label="Work Address" name="workaddress" placeholder="Work Address Line 1"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workaddr: data.value}}))}} error={this.props.workAddressError}/>
+        </Form.Field>
+        <Form.Field>
+          <Form.Input name="address2" placeholder="Work Address Line 2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workaddr2: data.value}}))}}/>
+        </Form.Field>
+        <Form.Field>
+        <Form.Input label="Postal Code" type="text" name="postal" placeholder="Postal Code" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode3: data.value}}))}} error={this.props.postCode3Error}/>
+        </Form.Field>
+      </Form.Group>
+    <Form.Group>
+      <Form.Field>
+      <Form.Input label="Fax Number" name="faxno" placeholder="Fax Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, faxno: data.value}}))}} error={this.props.faxnoError}/>
+      </Form.Field>
+      <Form.Field>
+      <Form.Input label="Work Phone Number" name="workno" placeholder="Work Phone Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, workno: data.value}}))}} error={this.props.worknoError}/>
+      </Form.Field>
+    </Form.Group>
+    <Form.Field>
+    <Form.Input label="E-mail Address" name="email" placeholder="E-mail Address" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, email: data.value}}))}} error={this.props.emailError}/>
+    </Form.Field>
+    <Form.Field>
+    <Form.Input label="Previous Surname" name="prevsurname" placeholder="Previous Surname" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, prev_surname: data.value}}))}}/>
+    </Form.Field>
+    <Form.Field>
+    <Form.Select label="Course" placeholder="Select Course" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, course: data.value}}))}} fluid search selection options={courseOptions} error={this.props.courseError}/>
+    </Form.Field>
+    <Form.Group>
+          <Form.Field >
+            <Form.Select label="Indicate when summative assessment will be completed" placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, aday: data.value}}))}} fluid search selection options={days} error={this.props.adayError}/>
+          </Form.Field>
+          <Form.Field>
+            <Form.Select placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, amonth: data.value}}))}} fluid search selection options={months} error={this.props.amonthError}/>
+          </Form.Field>
+          <Form.Field>
+            <Form.Input name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ayear: data.value}}))}} error={this.props.ayearError}/>
+          </Form.Field>
+        </Form.Group>
+    <Form.Field>
+      <Form.Select label="Assessment Status" placeholder="Select Assessment Status" options={status} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ass_status: data.value}}))}} fluid search selection error={this.props.amonthError}/>
+    </Form.Field>
+    <Form.Field>
+      <Form.Input label="Assessor" type="text" name="assessor" placeholder="Assessor" />
+    </Form.Field>
+    <Form.Field>
+    <Form.Input label="Moderator" type="text" name="moderator" placeholder="Moderator" />
+    </Form.Field>
+    <Form.Field>
+        <Form.Input label="Facilitator" type="text" name="facilitator" placeholder="Facilitator"  />
+    </Form.Field>
+    <Form.Field>
+    <Form.Input label="Club" name="club" placeholder="Club"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.props.clubError}/>
+    </Form.Field>
+    <Form.Group widths='equal'>
+      <Form.Button onClick={this.back} className="ui button" tabIndex="0">Back</Form.Button>
+      <Form.Button onClick={this.validateInput} className="ui button" tabIndex="0">Save Learner</Form.Button>
+    </Form.Group>
   </Form>
     )
   }
 
 }
-export default registerLearner;
+const mapStateToProps = state => ({
+  idTypeError: state.learner.idTypeError,
+  idError: state.learner.idError,
+  equityError: state.learner.equityError,
+  nationalityError: state.learner.nationalityError,
+  genderError: state.learner.genderError,
+  lastSchoolError: state.learner.lastSchoolError,
+  languageError: state.learner.languageError,
+  employedError: state.learner.employedError,
+  surnameError: state.learner.surnameError,
+  firstnameError: state.learner.firstnameError,
+  titleError: state.learner.titleError,
+  yearError: state.learner.yearError,
+  monthError: state.learner.monthError,
+  dayError: state.learner.dayError,
+  ayearError: state.learner.ayearError,
+  amonthError: state.learner.amonthError,
+  adayError: state.learner.adayError,
+  strAddressError: state.learner.strAddressError,
+  postCodeError: state.learner.postCodeError,
+  postCode2Error: state.learner.postCode2Error,
+  postCode3Error: state.learner.postCode3Error,
+  homenoError: state.learner.homenoError,
+  postAddressError: state.learner.postAddressError,
+  workAddressError: state.learner.workAddressError,
+  cellnoError: state.learner.cellnoError,
+  employerError: state.learner.employerError,
+  worknoError: state.learner.worknoError,
+  faxnoError: state.learner.faxnoError,
+  emailError: state.learner.emailError,
+  clubError: state.learner.clubError,
+  courseError: state.learner.courseError,
+  year2Error: state.learner.year2Error,
+  employed: state.learner.employed,
+  errors: state.learner.errors
+})
+const mapDispatchToProps = dispatch => ({
+  learnerActions: bindActionCreators(learnerActions, dispatch),
+  tableActions: bindActionCreators(tableActions, dispatch)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(registerLearner);
