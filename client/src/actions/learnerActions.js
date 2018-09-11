@@ -292,6 +292,7 @@ export const validateInput1 = (info, errs) => {
         if(state.learner.errors == false) {
           //dispatch(updateBatchLearner(info))
           dispatch(uploadBatchLearner(info))
+          dispatch(changeActiveTable("batch"))
         }
   }
 
