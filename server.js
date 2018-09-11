@@ -313,7 +313,7 @@ app.post('/data/lms_batch', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "day" && i != "month" && i != "year" && i != "modules" && i != "learnerID"){
+      if (i != "day" && i != "month" && i != "year" && i != "modules" && i != "learnerIDs" && i != "modules" && i != "batchs"){
         if (i == "date") {
           let date = new Date(jsondata[i])
           values.push(date)
