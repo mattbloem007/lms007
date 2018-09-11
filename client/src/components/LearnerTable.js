@@ -18,6 +18,7 @@ class LearnerTable extends Component {
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
+    this.props.tableActions.clearBatchLearners()
   }
 
   render() {

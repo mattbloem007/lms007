@@ -1,7 +1,8 @@
-import { ACTIVE_TABLE, ADD_LEARNERS, RECEIVE_BATCH_LEARNERS, RECEIVE_BATCH_LEARNERIDS } from './actionTypes'
+import { ACTIVE_TABLE, ADD_LEARNERS, RECEIVE_BATCH_LEARNERS, RECEIVE_BATCH_LEARNERIDS, CLEAR_BATCH_LEARNERS } from './actionTypes'
 
 export const changeActiveTable = activeTable => ({ type: ACTIVE_TABLE, payload: activeTable });
 export const addLearners = (activeTable, batchNo) => ({ type: ADD_LEARNERS, payload: activeTable, batch: batchNo })
+export const clearBatchLearners = () => ({ type: CLEAR_BATCH_LEARNERS })
 export function receiveInfo(json) {
   return {
     type: RECEIVE_BATCH_LEARNERIDS,

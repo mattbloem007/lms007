@@ -1,4 +1,4 @@
-import { ACTIVE_TABLE, ADD_LEARNERS, RECEIVE_BATCH_LEARNERS, RECEIVE_BATCH_LEARNERIDS } from '../actions/actionTypes'
+import { ACTIVE_TABLE, ADD_LEARNERS, RECEIVE_BATCH_LEARNERS, RECEIVE_BATCH_LEARNERIDS, CLEAR_BATCH_LEARNERS } from '../actions/actionTypes'
 
 const tableState = {
   activeTable: "batch",
@@ -28,6 +28,8 @@ const tableReducer = (state = tableState, action) => {
       }
     case RECEIVE_BATCH_LEARNERIDS:
       return {...state, batchLearnerIDs: action.payload}
+    case CLEAR_BATCH_LEARNERS:
+        return {...state, batchLearners: []}
     default:
       return state
   }
