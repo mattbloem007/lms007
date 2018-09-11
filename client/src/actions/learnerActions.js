@@ -1,6 +1,7 @@
 import { FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength, isAfter, isEmail } from 'validator';
 import { changeActiveStep } from './flowActions'
+import { changeActiveTable } from './tableActions'
 
 // export const receiveInfo = json => (console.log(json)
 // { type: RECEIVE, payload: json }
