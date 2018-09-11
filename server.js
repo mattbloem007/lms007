@@ -290,7 +290,8 @@ app.post('/data/lms_learner_batch', function(req, res) {
           values.push(jsondata[i][x])
         }
         console.log(values)
-        connection.query("IF NOT EXISTS (SELECT * FROM lms_learner_batch WHERE learner_ID = ? AND batch_no = ?) THEN INSERT INTO `lms_learner_batch` (`learner_ID`, `batch_no`) VALUES (?); END IF", [values[0], values[1], values], function(err, result){
+        //IF NOT EXISTS (SELECT * FROM lms_learner_batch WHERE learner_ID = ? AND batch_no = ?) THEN
+        connection.query("INSERT INTO `lms_learner_batch` (`learner_ID`, `batch_no`) VALUES (?)", [values], function(err, result){
           if(err) console.log(err);
 
           console.log("1 record inserted");
