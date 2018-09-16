@@ -11,12 +11,13 @@ class BatchTable extends Component {
     super(props);
 
     this.state = {
-                    headings: ["Batch Number", "Date", "Client Name", "Project", "Programme", "Credit", "Facilitator", ""]
+                    headings: ["Batch Number", "Date", "Client Name", "Project", "Programme", "Credit Bearing", "Facilitator", "Assessor", "Moderator", "Date Assessed", "Date Moderated", "Programme Type", ""]
                  }
   }
 
   componentDidMount() {
     this.props.batchActions.fetchBatch();
+
   }
 
   addLearners = y => {
@@ -27,6 +28,10 @@ class BatchTable extends Component {
   showBatchLearners = (batch_no) => {
     this.props.tableActions.fetchBatchLearnerIDs(batch_no)
     this.props.tableActions.changeActiveTable("learnerTable")
+  }
+
+  downloadExcel = () => {
+    this.props.tableActions.downloadExcel(this.props.batchs)
   }
 
   render() {
@@ -57,6 +62,15 @@ class BatchTable extends Component {
             })
           }
         </Table.Body>
+        <Table.Footer fullWidth>
+    <Table.Row>
+      <Table.HeaderCell colSpan='13'>
+        <Button onClick={this.downloadExcel} floated='left' icon labelPosition='left' primary size='small'>
+          <Icon name='download' /> Export To Excel
+        </Button>
+      </Table.HeaderCell>
+    </Table.Row>
+  </Table.Footer>
     </Table>
     )
   }

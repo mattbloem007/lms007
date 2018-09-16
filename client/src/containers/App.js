@@ -15,6 +15,8 @@ import RegisterClient from '../components/registerClient';
 import Client from '../components/chooseClient';
 import Programme from '../components/chooseProgramme'
 import RegisterFacilitator from '../components/registerFacilitator'
+import RegisterAssessor from '../components/registerAssessor'
+import RegisterModerator from '../components/registerModerator'
 import Logistics from '../components/Logistics';
 import Dates from '../components/Dates';
 import Home from './Home';
@@ -66,6 +68,14 @@ class App extends Component {
 
           case "addFac":
             currentForm = (<RegisterFacilitator />)
+          break;
+
+          case "addAss":
+            currentForm = (<RegisterAssessor />)
+          break;
+
+          case "addMod":
+            currentForm = (<RegisterModerator />)
           break;
 
           case "rLearner":

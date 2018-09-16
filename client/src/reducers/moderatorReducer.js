@@ -1,4 +1,4 @@
-import { VALIDATE_MODERATOR, SAVE_MODERATOR } from '../actions/actionTypes';
+import { VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR } from '../actions/actionTypes';
 
 const moderatorState = {
   name: "",
@@ -6,6 +6,9 @@ const moderatorState = {
   reg_no: "",
   seta: "",
   expiry_date: "",
+  day: "",
+  month: "",
+  year: "",
   nameError: false,
   IDError: false,
   reg_noError: false,
@@ -19,6 +22,8 @@ const moderatorReducer = (state = moderatorState, action) => {
       return {...state, ...action.payload}
     case SAVE_MODERATOR:
       return {...state, ...action.payload}
+    case RESET_MODERATOR:
+      return moderatorState
     default:
       return state;
   }

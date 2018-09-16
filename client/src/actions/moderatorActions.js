@@ -1,82 +1,112 @@
-import {  VALIDATE_MODERATOR, SAVE_MODERATOR } from './actionTypes'
+import {  VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
+import { changeActiveStep } from './flowActions'
+import { changeActiveTable } from './tableActions'
 
 export const validateComplete = errs => ({ type: VALIDATE_MODERATOR, payload: errs})
-export function save(info) {
 
-   let newInfo = {};
-   for(var key in info) {
-     if (info[key] != "") {
-       newInfo = {...newInfo, [key]: info[key]}
-     }
-   }
-   console.log(newInfo)
-  return {
-    type: SAVE_MODERATOR,
-    payload: newInfo
+export const updateModerator = (info) => {
+  return (dispatch, getState) => {
+    let newInfo = {};
+    for(var key in info) {
+      if (info[key] != "") {
+        newInfo = {...newInfo, [key]: info[key]}
+      }
+    }
+    if (newInfo.month != undefined || newInfo.day != undefined || newInfo.year != undefined) {
+      const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
+      newInfo = {...newInfo, expiry_date: date}
+    }
+    console.log(newInfo)
+    dispatch(save(newInfo))
+    const state = getState();
+    dispatch(validateInput(state.moderator))
   }
 }
-
+export const save = newInfo => ({ type: SAVE_MODERATOR, payload: newInfo })
+export const resetModerator = () => ({ type: RESET_MODERATOR })
 
 export const validateInput = (info, errs) => {
   return (dispatch, getState) => {
     console.log(info)
     if (isEmpty(info.name)) {
-      errs = {...errs, nameError: true, errors: true}
+      errs = {...errs, nameError: true}
     }
     else {
-      errs = {...errs, nameError: false, errors: false}
+      errs = {...errs, nameError: false}
     }
 
-    if (isEmpty(info.ID) && isLength(info.ID) < 13 && !isNumeric(info.ID)) {
-      errs = {...errs, IDError: true, errors: true}
+    if (!isNumeric(info.ID)) {
+      errs = {...errs, IDError: true}
     }
     else {
-      errs = {...errs, IDError: false, errors: false}
+      errs = {...errs, IDError: false}
     }
 
     if (isEmpty(info.reg_no)) {
-      errs = {...errs, reg_noError: true, errors: true}
+      errs = {...errs, reg_noError: true}
     }
     else {
-      errs = {...errs, reg_noError: false, errors: false}
+      errs = {...errs, reg_noError: false}
     }
 
     if (isEmpty(info.seta)) {
-      errs = {...errs, setaError: true, errors: true}
+      errs = {...errs, setaError: true}
     }
     else {
-      errs = {...errs, setaError: false, errors: false}
+      errs = {...errs, setaError: false}
     }
 
     if(isEmpty(info.day)) {
-      errs = {...errs, dayError: true, errors: true}
+      errs = {...errs, dayError: true}
     }
     else {
-      errs = {...errs, dayError: false, errors: false}
+      errs = {...errs, dayError: false}
     }
 
     if(isEmpty(info.month)) {
-      errs = {...errs, monthError: true, errors: true}
+      errs = {...errs, monthError: true}
     }
     else {
-      errs = {...errs, monthError: false, errors: false}
+      errs = {...errs, monthError: false}
     }
 
     if(isEmpty(info.year)) {
-      errs = {...errs, yearError: true, errors: true}
+      errs = {...errs, yearError: true}
     }
     else {
-      errs = {...errs, yearError: false, errors: false}
+      errs = {...errs, yearError: false}
     }
-    const date = info.month + " " + info.day +", " + info.year
-    info = {...info, expiry_date: date}
-    dispatch(validateComplete(errs));
 
-    let state = getState();
-    if (state.moderator.errors == false) {
-      dispatch(save(info))
-      dispatch(uploadModerator(info))
+    let errors = false;
+
+    for (var x in errs) {
+      if (errs[x]) {
+        errors = true;
+        break;
+      }
+    }
+
+    let newInfo = {
+      name: info.name,
+      ID: info.ID,
+      reg_no: info.reg_no,
+      seta: info.seta,
+      expiry_date: info.expiry_date
+    }
+
+    dispatch(validateComplete(errs));
+    const state = getState()
+
+    if (errors == false) {
+      dispatch(uploadModerator(newInfo))
+      dispatch(resetModerator())
+      if (state.flow.activeStep == "client") {
+        dispatch(changeActiveStep("client"))
+      }
+      else {
+        dispatch(changeActiveTable("learner"))
+      }
     }
   }
 }

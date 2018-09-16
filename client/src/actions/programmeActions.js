@@ -1,6 +1,7 @@
 import { UPDATE_PROGRAMME, RECEIVE_FACILITATORS, UPDATE_BATCH, VALIDATE_PROGRAMME } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
+import _ from 'lodash'
 
 export const updateProgrammeInfo = credit => ({ type: UPDATE_PROGRAMME, payload: credit });
 export function updateBatchClient(info) {
@@ -76,8 +77,9 @@ export const uploadBatch = (info) => {
 export function receiveInfo(json) {
   console.log(json.express)
   let clientsArr = [];
-  for (const key of Object.keys(json.express)) {
-    clientsArr = [...clientsArr, Object.assign({text: json.express[key].name, value: json.express[key].name})]
+  let sorted = _.orderBy(json.express, ['name'],['asc']);
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].name, value: sorted[key].name})]
   }
   console.log(clientsArr)
 //  clientsArr = [...clientsArr, ...clientObj]

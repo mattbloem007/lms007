@@ -14,6 +14,33 @@ export const idType = [
   {text:'Unknown', value: 'Unknown'}
 ]
 
+export const SETA = [
+  {text: 'AGRISETA', value:'AGRISETA'},
+  {text: 'BANKSETA', value:'BANKSETA'},
+  {text: 'CATHSSETA', value:'CATHSSETA'},
+  {text: 'CETA', value:'CETA'},
+  {text: 'CHIETA', value:'CHIETA'},
+  {text: 'ETDP', value:'ETDP'},
+  {text: 'EWSETA', value:'EWSETA'},
+  {text: 'FASSET', value:'FASSET'},
+  {text: 'FOODBEV', value:'FOODBEV'},
+  {text: 'FP&MSETA', value:'FP&MSETA'},
+  {text: 'HWSETA', value:'HWSETA'},
+  {text: 'INSETA', value:'INSETA'},
+  {text: 'LGSETA', value:'LGSETA'},
+  {text: 'MERSETA', value:'MERSETA'},
+  {text: 'MICT', value:'MICT'},
+  {text: 'MQA', value:'MQA'},
+  {text: 'PSETA', value:'PSETA'},
+  {text: 'SASSETA', value:'SASSETA'},
+  {text: 'SERVICES SETA', value:'SERVICES SETA'},
+  {text: 'TETA', value:'TETA'},
+  {text: 'W & RSETA', value:'W & RSETA'}
+
+]
+
+
+
 export const status = [
   {text: 'Competent', value:'Competent'},
   {text: 'Not yet competent', value:'Not yet competent'},
@@ -65,7 +92,6 @@ export const days = [
   {text:'31', value:'31'}
 ]
   export const months = [
-    {text:'Month', value: 'Month'},
     {text:'January',value: 'January'},
     {text:'February', value: 'February'},
     {text:'March', value:'March'},
@@ -80,100 +106,8 @@ export const days = [
     {text:'December', value: 'December'}
   ]
 
-export const stateOptions = [
-  { key: 'AL', value: 'AL', text: 'Alabama' },
-  { key: 'AK', value: 'AK', text: 'Alaska' },
-  { key: 'AZ', value: 'AZ', text: 'Arizona' },
-  { key: 'AR', value: 'AR', text: 'Arkansas' },
-  { key: 'CA', value: 'CA', text: 'California' },
-  { key: 'CO', value: 'CO', text: 'Colorado' },
-  { key: 'CT', value: 'CT', text: 'Connecticut' },
-  { key: 'DE', value: 'DE', text: 'Delaware' },
-  { key: 'DC', value: 'DC', text: 'District Of Columbia' },
-  { key: 'FL', value: 'FL', text: 'Florida' },
-  { key: 'GA', value: 'GA', text: 'Georgia' },
-  { key: 'HI', value: 'HI', text: 'Hawaii' },
-  { key: 'ID', value: 'ID', text: 'Idaho' },
-  { key: 'IL', value: 'IL', text: 'Illinois' },
-  { key: 'IN', value: 'IN', text: 'Indiana' },
-  { key: 'IA', value: 'IA', text: 'Iowa' },
-  { key: 'KS', value: 'KS', text: 'Kansas' },
-  { key: 'KY', value: 'KY', text: 'Kentucky' },
-  { key: 'LA', value: 'LA', text: 'Louisiana' },
-  { key: 'ME', value: 'ME', text: 'Maine' },
-  { key: 'MD', value: 'MD', text: 'Maryland' },
-  { key: 'MA', value: 'MA', text: 'Massachusetts' },
-  { key: 'MI', value: 'MI', text: 'Michigan' },
-  { key: 'MN', value: 'MN', text: 'Minnesota' },
-  { key: 'MS', value: 'MS', text: 'Mississippi' },
-  { key: 'MO', value: 'MO', text: 'Missouri' },
-  { key: 'MT', value: 'MT', text: 'Montana' },
-  { key: 'NE', value: 'NE', text: 'Nebraska' },
-  { key: 'NV', value: 'NV', text: 'Nevada' },
-  { key: 'NH', value: 'NH', text: 'New Hampshire' },
-  { key: 'NJ', value: 'NJ', text: 'New Jersey' },
-  { key: 'NM', value: 'NM', text: 'New Mexico' },
-  { key: 'NY', value: 'NY', text: 'New York' },
-  { key: 'NC', value: 'NC', text: 'North Carolina' },
-  { key: 'ND', value: 'ND', text: 'North Dakota' },
-  { key: 'OH', value: 'OH', text: 'Ohio' },
-  { key: 'OK', value: 'OK', text: 'Oklahoma' },
-  { key: 'OR', value: 'OR', text: 'Oregon' },
-  { key: 'PA', value: 'PA', text: 'Pennsylvania' },
-  { key: 'RI', value: 'RI', text: 'Rhode Island' },
-  { key: 'SC', value: 'SC', text: 'South Carolina' },
-  { key: 'SD', value: 'SD', text: 'South Dakota' },
-  { key: 'TN', value: 'TN', text: 'Tennessee' },
-  { key: 'TX', value: 'TX', text: 'Texas' },
-  { key: 'UT', value: 'UT', text: 'Utah' },
-  { key: 'VT', value: 'VT', text: 'Vermont' },
-  { key: 'VA', value: 'VA', text: 'Virginia' },
-  { key: 'WA', value: 'WA', text: 'Washington' },
-  { key: 'WV', value: 'WV', text: 'West Virginia' },
-  { key: 'WI', value: 'WI', text: 'Wisconsin' },
-  { key: 'WY', value: 'WY', text: 'Wyoming' },
-]
-
-export const friendOptions = [
-  {
-    key: 'Jenny Hess',
-    text: 'Jenny Hess',
-    value: 'Jenny Hess',
-    image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
-  },
-  {
-    key: 'Elliot Fu',
-    text: 'Elliot Fu',
-    value: 'Elliot Fu',
-    image: { avatar: true, src: '/images/avatar/small/elliot.jpg' },
-  },
-  {
-    key: 'Stevie Feliciano',
-    text: 'Stevie Feliciano',
-    value: 'Stevie Feliciano',
-    image: { avatar: true, src: '/images/avatar/small/stevie.jpg' },
-  },
-  {
-    key: 'Christian',
-    text: 'Christian',
-    value: 'Christian',
-    image: { avatar: true, src: '/images/avatar/small/christian.jpg' },
-  },
-  {
-    key: 'Matt',
-    text: 'Matt',
-    value: 'Matt',
-    image: { avatar: true, src: '/images/avatar/small/matt.jpg' },
-  },
-  {
-    key: 'Justen Kitsune',
-    text: 'Justen Kitsune',
-    value: 'Justen Kitsune',
-    image: { avatar: true, src: '/images/avatar/small/justen.jpg' },
-  },
-]
-
 export const countryOptions = [
+  { key: 'za', value: 'South Africa', flag: 'za', text: 'South Africa' },
   { key: 'af', value: 'Afghanistan', flag: 'af', text: 'Afghanistan' },
   { key: 'ax', value: 'Aland Islands', flag: 'ax', text: 'Aland Islands' },
   { key: 'al', value: 'Albania', flag: 'al', text: 'Albania' },
@@ -374,7 +308,6 @@ export const countryOptions = [
   { key: 'si', value: 'Slovenia', flag: 'si', text: 'Slovenia' },
   { key: 'sb', value: 'Solomon Islands', flag: 'sb', text: 'Solomon Islands' },
   { key: 'so', value: 'Somalia', flag: 'so', text: 'Somalia' },
-  { key: 'za', value: 'South Africa', flag: 'za', text: 'South Africa' },
   { key: 'kr', value: 'South Korea', flag: 'kr', text: 'South Korea' },
   { key: 'es', value: 'Spain', flag: 'es', text: 'Spain' },
   { key: 'lk', value: 'Sri Lanka', flag: 'lk', text: 'Sri Lanka' },

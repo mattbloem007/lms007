@@ -1,16 +1,12 @@
-import { VALIDATE_FACILITATOR, SAVE_FACILITATOR } from '../actions/actionTypes';
+import { VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR } from '../actions/actionTypes';
 
 const facilitatorState = {
   name: "",
   ID: "",
-  reg_no: "",
-  seta: "",
-  expiry_date: "",
+  cellno: "",
   nameError: false,
   IDError: false,
-  reg_noError: false,
-  setaError: false,
-  errors: false
+  cellnoError: false
 }
 
 const facilitatorReducer = (state = facilitatorState, action) => {
@@ -19,6 +15,8 @@ const facilitatorReducer = (state = facilitatorState, action) => {
       return {...state, ...action.payload}
     case SAVE_FACILITATOR:
       return {...state, ...action.payload}
+    case RESET_FACILITATOR:
+      return facilitatorState
     default:
       return state;
   }

@@ -12,6 +12,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.2",
     "json-stringify-safe": "^5.0.1",
+    "json2xls": "^0.1.2",
     "lodash": "^4.17.10",
     "mysql": "^2.15.0",
     "nodemon": "^1.18.4",

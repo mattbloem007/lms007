@@ -1,16 +1,46 @@
-import { FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
+import { SAVE_COMPLETE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK, RECEIVE_FACILITATORS, RECEIVE_ASSESSORS, RECEIVE_MODERATORS, FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength, isAfter, isEmail } from 'validator';
 import { changeActiveStep } from './flowActions'
 import { changeActiveTable } from './tableActions'
+import { months } from '../common'
+import _ from 'lodash'
 
-// export const receiveInfo = json => (console.log(json)
-// { type: RECEIVE, payload: json }
-// );
+export const resetLearnerState = () => ({ type: RESET_LEARNER })
+export const saveComplete = (saved) => ({ type: SAVE_COMPLETE, payload: saved })
+export const loadLearner = json => {
+  return dispatch => {
+    let homeAddr = [];
+    let strAddr = [];
+    for (var i = 0; i< json.express[0].homeaddr.split(",").length; i++) {
+      homeAddr[i] = json.express[0].homeaddr.split(",")[i];
+    }
+    for (var i = 0; i< json.express[0].postaddr.split(",").length; i++) {
+      strAddr[i] = json.express[0].postaddr.split(",")[i];
+    }
+    let dob = new Date(json.express[0].dob);
+
+    dispatch(save({
+      ...json.express[0],
+      type: "edit",
+      strAddress: json.express[0].homeaddr,
+      postCode: homeAddr[homeAddr.length - 1],
+      postCode2: strAddr[strAddr.length - 1],
+      postAddress: json.express[0].postaddr,
+      day: dob.getDate().toString(),
+      month:months[dob.getMonth()].text,
+      year: dob.getFullYear().toString()
+    }))
+    dispatch(changeActiveTable("rLearner"))
+  }
+  //console.log(json.express[0])
+}
+
 export function receiveInfo(json) {
   console.log(json.express)
   let learnersArr = [];
-  for (const key of Object.keys(json.express)) {
-    learnersArr = [...learnersArr, Object.assign({text: json.express[key].national_id, value: json.express[key].national_id})]
+  let sorted = _.orderBy(json.express, ['surname'],['asc']);
+  for (const key of Object.keys(sorted)) {
+    learnersArr = [...learnersArr, Object.assign({text: sorted[key].national_id + "-" + sorted[key].firstname + " " + sorted[key].surname, value: sorted[key].national_id+ "-" + sorted[key].firstname + " " + sorted[key].surname })]
   }
   console.log(learnersArr)
 //  learnersArr = [...learnersArr, ...learnerObj]
@@ -20,260 +50,315 @@ export function receiveInfo(json) {
     payload: learnersArr
   }
 }
-export function updateBatchLearner(info) {
 
-   let newInfo = {};
-   for(var key in info) {
-     if (info[key] != "") {
-       newInfo = {...newInfo, [key]: info[key]}
-     }
-   }
-   console.log(newInfo)
-  return {
-    type: UPDATE_BATCH,
-    payload: newInfo
+export const updateLearner = (info) => {
+  return (dispatch, getState) => {
+    let newInfo = {};
+    for(var key in info) {
+      if (info[key] != "") {
+        newInfo = {...newInfo, [key]: info[key]}
+      }
+    }
+    if (newInfo.day != undefined || newInfo.aday != undefined) {
+      const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
+      let strAddress = newInfo.strAddress;
+      let postAddress = "";
+      if (newInfo.addrCheck == true) {
+        postAddress = newInfo.strAddress;
+      }
+      else {
+        postAddress = newInfo.postAddress
+      }
+      if (newInfo.strAddress2 != "" && newInfo.strAddress2 != undefined) {
+        strAddress =  strAddress + ", " + newInfo.strAddress2
+        if (newInfo.strAddress3 != "" && newInfo.strAddress3 != undefined) {
+          strAddress = strAddress + ", " + newInfo.strAddress3
+        }
+        if (newInfo.strAddress4 != "" && newInfo.strAddress4 != undefined) {
+          strAddress = strAddress + ", " + newInfo.strAddress4
+        }
+      }
+      if(newInfo.postAddress2 != "" && newInfo.postAddress2 != undefined) {
+          postAddress =  strAddress + ", " + newInfo.postAddress2
+        if (newInfo.postAddress3 != "" && newInfo.postAddress3 != undefined) {
+          postAddress = postAddress + ", " + newInfo.postAddress3
+        }
+        if (newInfo.postAddress4 != "" && newInfo.postAddress4 != undefined) {
+          postAddress = postAddress + ", " + newInfo.postAddress4
+        }
+
+      }
+        strAddress = strAddress +", " + newInfo.postCode
+        if (newInfo.addrCheck == true) {
+          postAddress = postAddress + ", " + newInfo.postCode
+        }
+        else {
+          postAddress = postAddress + ", " + newInfo.postCode2
+        }
+
+      const dob = newInfo.month + " " + newInfo.day + ", " + newInfo.year
+
+    //  const assessment_date = newInfo.amonth + ", " + newInfo.aday + ", " + newInfo.ayear
+      newInfo = {...newInfo, dob: dob, physicalAddress: strAddress, postalAddress: postAddress}//, assessment_date: assessment_date}
+    }
+
+    console.log(newInfo)
+    dispatch(save(newInfo))
+    const state = getState();
+    dispatch(validateInput(state.learner))
+  }
+}
+
+export const updateBatchLearner = (info) => {
+  return (dispatch, getState) => {
+    let newInfo = {};
+    for(var key in info) {
+      if (info[key] != "") {
+        newInfo = {...newInfo, [key]: info[key]}
+      }
+    }
+    console.log(newInfo)
+    dispatch(updateBatch(newInfo))
+    const state = getState();
+    dispatch(validateInput1(state.batch.learnerIDs))
   }
 }
 export const validateComplete = errs => ({ type: VALIDATE_LEARNER, payload: errs})
 export const save = info => ({type: SAVE_LEARNER, payload: info})
+export const updateBatch = info => ({ type: UPDATE_BATCH, payload: info })
 export const validateInput = (info, errs) => {
   return (dispatch, getState) => {
     console.log(info)
 
     if (isEmpty(info.id_type)) {
-      errs = {...errs, idTypeError: true, errors: true}
+      errs = {...errs, idTypeError: true}
     }
     else {
-      errs = {...errs, idTypeError: false, errors: false}
+      errs = {...errs, idTypeError: false}
     }
 
     if (isEmpty(info.last_school)) {
-      errs = {...errs, lastSchoolError: true, errors: true}
+      errs = {...errs, lastSchoolError: true}
     }
     else {
-      errs = {...errs, lastSchoolError: false, errors: false}
+      errs = {...errs, lastSchoolError: false}
     }
 
-    if (isEmpty(info.national_id) || isLength(info.national_id) < 13 || !isNumeric(info.national_id)) {
-      errs = {...errs, idError: true, errors: true}
+    if (!isNumeric(info.national_id)) {
+      errs = {...errs, idError: true}
     }
 
     else {
-      errs = {...errs, idError: false, errors: false}
+      errs = {...errs, idError: false}
     }
 
     if(isEmpty(info.equity)) {
-      errs = {...errs, equityError: true, errors: true}
+      errs = {...errs, equityError: true}
     }
     else {
-      errs = {...errs, equityError: false, errors: false}
+      errs = {...errs, equityError: false}
     }
 
     if(isEmpty(info.nationality)){
-      errs = {...errs, nationalityError: true, errors: true}
+      errs = {...errs, nationalityError: true}
     }
     else {
-      errs = {...errs, nationalityError: false, errors: false}
+      errs = {...errs, nationalityError: false}
     }
 
     if(isEmpty(info.gender)){
-      errs = {...errs, genderError: true, errors: true}
+      errs = {...errs, genderError: true}
     }
     else {
-      errs = {...errs, genderError: false, errors: false}
+      errs = {...errs, genderError: false}
     }
 
     if(isEmpty(info.language)){
-      errs = {...errs, languageError: true, errors: true}
+      errs = {...errs, languageError: true}
     }
     else {
-      errs = {...errs, languageError: false, errors: false}
+      errs = {...errs, languageError: false}
     }
 
     if(isEmpty(info.employed)){
-      errs = {...errs, employedError: true, errors: true}
+      errs = {...errs, employedError: true}
     }
     else {
-      errs = {...errs, employedError: false, errors: false}
+      errs = {...errs, employedError: false}
     }
 
     if(isEmpty(info.surname) && !isAlpha(info.surname)){
-      errs = {...errs, surnameError: true, errors: true}
+      errs = {...errs, surnameError: true}
     }
     else {
-      errs = {...errs, surnameError: false, errors: false}
+      errs = {...errs, surnameError: false}
     }
 
     if(isEmpty(info.firstname) && !isAlpha(info.firstname)){
-      errs = {...errs, firstnameError: true, errors: true}
+      errs = {...errs, firstnameError: true}
     }
     else {
-      errs = {...errs, firstnameError: false, errors: false}
+      errs = {...errs, firstnameError: false}
     }
 
     if(isEmpty(info.title)){
-      errs = {...errs, titleError: true, errors: true}
+      errs = {...errs, titleError: true}
     }
     else {
-      errs = {...errs, titleError: false, errors: false}
+      errs = {...errs, titleError: false}
     }
 
-    if(isEmpty(info.year) || isLength(info.year) < 4 || isAfter(info.year)){
-      errs = {...errs, yearError: true, errors: true}
+    if(isEmpty(info.year)){
+      errs = {...errs, yearError: true}
     }
     else {
-      errs = {...errs, yearError: false, errors: false}
+      errs = {...errs, yearError: false}
     }
 
     if(isEmpty(info.month)){
-      errs = {...errs, monthError: true, errors: true}
+      errs = {...errs, monthError: true}
     }
     else {
-      errs = {...errs, monthError: false, errors: false}
+      errs = {...errs, monthError: false}
     }
 
     if(isEmpty(info.day)){
-      errs = {...errs, dayError: true, errors: true}
+      errs = {...errs, dayError: true}
     }
     else {
-      errs = {...errs, dayError: false, errors: false}
-    }
-
-    if(isEmpty(info.ayear) || isLength(info.ayear) < 4 || isAfter(info.ayear)){
-      errs = {...errs, ayearError: true, errors: true}
-    }
-    else {
-      errs = {...errs, ayearError: false, errors: false}
-    }
-
-    if(isEmpty(info.amonth)){
-      errs = {...errs, amonthError: true, errors: true}
-    }
-    else {
-      errs = {...errs, amonthError: false, errors: false}
-    }
-
-    if(isEmpty(info.aday)){
-      errs = {...errs, adayError: true, errors: true}
-    }
-    else {
-      errs = {...errs, adayError: false, errors: false}
+      errs = {...errs, dayError: false}
     }
 
     if(isEmpty(info.strAddress)) {
-      errs = {...errs, strAddressError: true, errors: true}
+      errs = {...errs, strAddressError: true}
     }
     else {
-      errs = {...errs, strAddressError: false, errors: false}
+      errs = {...errs, strAddressError: false}
     }
 
-    if(isEmpty(info.postCode) || !isNumeric(info.postCode)) {
-      errs = {...errs, postCodeError: true, errors: true}
+    if(!isNumeric(info.postCode)) {
+      errs = {...errs, postCodeError: true}
     }
     else {
-      errs = {...errs, postCodeError: false, errors: false}
+      errs = {...errs, postCodeError: false}
     }
 
     if(isEmpty(info.postAddress)) {
-      errs = {...errs, postAddressError: true, errors: true}
+      errs = {...errs, postAddressError: true}
     }
     else {
-      errs = {...errs, postAddressError: false, errors: false}
+      errs = {...errs, postAddressError: false}
     }
 
-    if(isEmpty(info.postCode2) || !isNumeric(info.postCode2)) {
-      errs = {...errs, postCode2Error: true, errors: true}
+    if(!isNumeric(info.postCode2)) {
+      errs = {...errs, postCode2Error: true}
     }
     else {
-      errs = {...errs, postCode2Error: false, errors: false}
-    }
-
-    if(isEmpty(info.workaddr)) {
-      errs = {...errs, workAddressError: true, errors: true}
-    }
-    else {
-      errs = {...errs, workAddressError: false, errors: false}
-    }
-
-    if(isEmpty(info.postCode3) || !isNumeric(info.postCode3))
-    {
-       errs = {...errs, postCode3Error: true, errors: true}
-    }
-    else {
-      errs = {...errs, postCode3Error: false, errors: false}
+      errs = {...errs, postCode2Error: false}
     }
 
     if(!isMobilePhone(info.homeno)){
-      errs = {...errs, homenoError: true, errors: true}
+      errs = {...errs, homenoError: true}
     }
     else {
-      errs = {...errs, homenoError: false, errors: false}
+      errs = {...errs, homenoError: false}
     }
 
     if(!isMobilePhone(info.cellno)){
-      errs = {...errs, cellnoError: true, errors: true}
+      errs = {...errs, cellnoError: true}
     }
     else {
-      errs = {...errs, cellnoError: false, errors: false}
+      errs = {...errs, cellnoError: false}
     }
 
     if(isEmpty(info.employer)){
-      errs = {...errs, employerError: true, errors: true}
+      errs = {...errs, employerError: true}
     }
     else {
-      errs = {...errs, employerError: false, errors: false}
+      errs = {...errs, employerError: false}
     }
 
     if(!isMobilePhone(info.faxno)){
-      errs = {...errs, faxnoError: true, errors: true}
+      errs = {...errs, faxnoError: true}
     }
     else {
-      errs = {...errs, faxnoError: false, errors: false}
+      errs = {...errs, faxnoError: false}
     }
 
     if(!isMobilePhone(info.workno)){
-      errs = {...errs, worknoError: true, errors: true}
+      errs = {...errs, worknoError: true}
     }
     else {
-      errs = {...errs, worknoError: false, errors: false}
+      errs = {...errs, worknoError: false}
     }
 
     if(!isEmail(info.email)){
-      errs = {...errs, emailError: true, errors: true}
+      errs = {...errs, emailError: true}
     }
     else {
-      errs = {...errs, emailError: false, errors: false}
-    }
-
-    if(isEmpty(info.club)){
-      errs = {...errs, clubError: true, errors: true}
-    }
-    else {
-      errs = {...errs, clubError: false, errors: false}
+      errs = {...errs, emailError: false}
     }
 
     dispatch(validateComplete(errs));
-    let strAddress = "";
-    let postAddress = "";
-    let workaddr = "";
-    if (info.strAddress2 != "" && info.postAddress2 != "" && info.workAddress2 != "") {
-      strAddress = info.strAddress + "," + info.strAddress2 +"," + info.postCode
-      postAddress = info.postAddress + ", " + info.postAddress2 + ", " + info.postCode2
-      workaddr = info.workaddr + ", " + info.workaddr2 + ", " + info.postCode3
-    } else {
-      strAddress = info.strAddress +"," + info.postCode
-      postAddress = info.postAddress + ", " + info.postCode2
-      workaddr = info.workaddr + ", " + info.postCode3
-    }
-    const dob = info.month + " " + info.day + ", " + info.year
+    let errors = false;
 
-    const assessment_date = info.amonth + ", " + info.aday + ", " + info.ayear
-    info = {...info, dob: dob, strAddress: strAddress, postAddress: postAddress, workaddr: workaddr, assessment_date: assessment_date}
+    for (var x in errs) {
+      if (errs[x]) {
+        errors = true;
+        break;
+      }
+    }
+    let facs = "";
+    let mods = "";
+    let ass = "";
+    info.fac.map(fac => facs = facs + fac + " ");
+    info.ass.map(mod => mods = mods + mod + " ");
+    info.mod.map(as => ass = ass + as + " ");
+    let newInfo = {
+      id_type: info.id_type,
+      national_id: info.national_id,
+      last_school: info.last_school,
+      statssa: info.statssa,
+      education: info.education,
+      ass_status: info.ass_status,
+      equity: info.equity,
+      nationality: info.nationality,
+      gender: info.gender,
+      language: info.language,
+      employed: info.employed,
+      disability: info.disability,
+      surname: info.surname,
+      firstname: info.firstname,
+      secondname: info.secondname,
+      title: info.title,
+      dob: info.dob,
+      strAddress: info.physicalAddress,
+      homeno: info.homeno,
+      postAddress: info.postalAddress,
+      cellno: info.cellno,
+      employer: info.employer,
+      faxno: info.faxno,
+      workno: info.workno,
+      email: info.email,
+      prev_surname: info.prev_surname,
+    //  assessment_date: info.assessment_date,
+      assessor: ass,
+      moderator: mods,
+      facilitator: facs,
+      club: info.club
+    }
+    console.log(newInfo)
     const state = getState();
-    if(state.learner.errors == false) {
-      dispatch(save(info))
-      dispatch(uploadLearner(info))
-      dispatch(changeActiveStep("learner"))
+    if(errors == false) {
+      if (state.learner.type == "add") {
+        dispatch(uploadLearner(newInfo))
+        dispatch(saveComplete(true))
+      }
+      else {
+        dispatch(editLearner(newInfo))
+        dispatch(saveComplete(true))
+      }
+      dispatch(changeActiveTable("learner"))
     }
   }
 }
@@ -282,17 +367,31 @@ export const validateInput1 = (info, errs) => {
   return (dispatch, getState) => {
     console.log(info)
     if(info.length == 0) {
-      errs = {...errs, learnerError: true, errors: true}
+      errs = {...errs, learnerError: true}
     }
     else {
-      errs = {...errs, learnerError: false, errors: false}
+      errs = {...errs, learnerError: false}
     }
     dispatch(validateComplete(errs));
+    let errors = false;
 
-        const state = getState();
-        if(state.learner.errors == false) {
+    for (var x in errs) {
+      if (errs[x]) {
+        errors = true;
+        break;
+      }
+    }
+
+    const state = getState();
+    let newInfo = [];
+    for (var x in info) {
+      newInfo.push(info[x].split("-")[0])
+    }
+    newInfo = _.difference(newInfo, state.table.batchLearnerIDs)
+    console.log(newInfo);
+        if(errors == false) {
           //dispatch(updateBatchLearner(info))
-          dispatch(uploadBatchLearner(info))
+          dispatch(uploadBatchLearner(newInfo, state.table.batch))
           dispatch(changeActiveTable("batch"))
         }
   }
@@ -300,13 +399,15 @@ export const validateInput1 = (info, errs) => {
 
 }
 
-export const uploadBatchLearner = info => {
-  let newInfo = {};
+export const uploadBatchLearner = (info, batch) => {
+  let newInfo = [];
+  console.log(info)
   for(var key in info) {
     if (info[key] != "") {
-      newInfo = {...newInfo, [key]: info[key]}
+      newInfo = [...newInfo, Object.assign({id: info[key].split("-")[0], batch: batch})]
     }
   }
+  console.log(newInfo)
   return dispatch => {
 
     return fetch("/data/lms_learner_batch",{
@@ -335,7 +436,37 @@ export const uploadLearner = (info) => {
          console.log(body);
      });
   }
+}
 
+export const editLearner = (info) => {
+  return dispatch => {
+    return fetch("/data/lms_learnerEdit",{
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
+
+export const fetchLearnerInfo = (ID) => {
+
+  return dispatch => {
+    return fetch('/api/learnerInfo', {
+      method: 'POST',
+      body:JSON.stringify({ID: ID}),
+      headers: {"Content-Type": "application/json"}
+    })
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(loadLearner(json))
+    });
+  }
 }
 
 
@@ -349,3 +480,87 @@ export const fetchLearners = () => {
     });
   }
 }
+
+export const fetchClubs = () => {
+  return dispatch => {
+    return fetch('/api/clubs')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveClubs(json))
+    });
+  }
+}
+
+export function receiveClubs(json) {
+  let clientsArr = [];
+  let sorted = _.orderBy(json.express, ['clube_name'],['asc']);
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].club_name, value: sorted[key].club_name})]
+  }
+  console.log(clientsArr)
+
+  return {
+    type: RECEIVE_CLUBS,
+    payload: clientsArr
+  }
+}
+
+export function receiveEmployeeInfo(json, employeeType) {
+  console.log(json.express)
+  let clientsArr = [];
+  let sorted = _.orderBy(json.express, ['name'],['asc']);
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].name, value: sorted[key].name})]
+  }
+  console.log(clientsArr)
+//  clientsArr = [...clientsArr, ...clientObj]
+//  console.log(clientsArr)
+  switch(employeeType) {
+    case "fac":
+      return { type: RECEIVE_FACILITATORS, payload: clientsArr }
+    break;
+    case "ass":
+      return { type: RECEIVE_ASSESSORS, payload: clientsArr }
+    break;
+    case "mod":
+      return { type: RECEIVE_MODERATORS, payload: clientsArr }
+    break;
+  }
+
+}
+
+export const fetchFacilitator = () => {
+  return dispatch => {
+    return fetch('/api/facilitator')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveEmployeeInfo(json, "fac"))
+    });
+  }
+}
+
+export const fetchAssessor = () => {
+  return dispatch => {
+    return fetch('/api/assessor')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveEmployeeInfo(json, "ass"))
+    });
+  }
+}
+
+export const fetchModerator = () => {
+  return dispatch => {
+    return fetch('/api/moderator')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveEmployeeInfo(json, "mod"))
+    });
+  }
+}
+
+export const updateChecked = (val, addrInfo) => ({type: UPDATE_CHECK, payload: val, addrInfo: addrInfo})

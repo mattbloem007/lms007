@@ -51,7 +51,7 @@ class Programme extends Component {
           </Form.Group>
           <Form.Group inline>
             <Form.Radio label="Credit" defaultValue='credit' checked={this.props.credit === 'credit'} onChange={(e,{value})=> {this.props.programmeActions.updateProgrammeInfo(value)}}/>
-          <Form.Radio label="Non-Credit" defaultValue='non-credit' checked={this.props.credit === 'non-credit'} onChange={(e,{value})=>{this.props.programmeActions.updateProgrammeInfo(value)}}/>
+            <Form.Radio label="Non-Credit" defaultValue='non-credit' checked={this.props.credit === 'non-credit'} onChange={(e,{value})=>{this.props.programmeActions.updateProgrammeInfo(value)}}/>
           </Form.Group>
           <Form.Group>
             <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Enter Facilitator Name" onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>

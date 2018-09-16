@@ -1,5 +1,5 @@
 import React, { Component }from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Icon } from 'semantic-ui-react';
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
@@ -17,6 +17,7 @@ class RegisterClient extends Component{
                           tel: "",
                           address: "",
                           address2: "",
+                          address3: "",
                           postCode: "",
                           contact: "",
                           municipality: ""
@@ -26,19 +27,11 @@ class RegisterClient extends Component{
   }
 
   validateInput = (e) => {
-    e.preventDefault();
-    let info = {
-            name: this.state.info.name,
-            tel: this.state.info.tel,
-            address: this.state.info.address + ", " + this.state.info.address + ", " + this.state.info.postCode,
-            contact: this.state.info.contact,
-            municipality: this.state.info.municipality
-    }
-
-    this.props.clientActions.validateInput(this.state.info);
+    this.props.clientActions.updateClient(this.state.info);
   }
 
   back = () => {
+    this.props.clientActions.updateClient(this.state.info);
     this.props.flowActions.changeActiveStep("client")
   }
 
@@ -62,6 +55,9 @@ class RegisterClient extends Component{
               <Form.Field>
                 <Form.Input type="text" name="aptaddr" defaultValue={this.props.address2} placeholder="Address Line 2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address2: data.value}}))}} />
             </Form.Field>
+            <Form.Field>
+              <Form.Input type="text" name="aptaddr" defaultValue={this.props.address3} placeholder="Address Line 3" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address3: data.value}}))}} />
+          </Form.Field>
           </Form.Field>
             <Form.Field>
             <Form.Input label="Postal Code" type="text" name="post" defaultValue={this.props.postCode} placeholder="Postal Code"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, postCode: data.value}}))}} error={this.props.postCodeError}/>
@@ -74,8 +70,8 @@ class RegisterClient extends Component{
         </Form.Field>
       </Form.Field>
         </Form.Group>
-        <Form.Button onClick={this.back}>Back</Form.Button>
-        <Form.Button onClick={this.validateInput}>Save</Form.Button>
+        <Form.Button primary onClick={this.back}><Icon name="chevron circle left"/> Back</Form.Button>
+        <Form.Button primary onClick={this.validateInput}><Icon name="save" />Save</Form.Button>
     </Form>
     )
   }
@@ -93,6 +89,7 @@ const mapStateToProps = (state) => ({
   tel: state.client.tel,
   address: state.client.address,
   address2: state.client.address2,
+  address3: state.client.address3,
   postCode: state.client.postCode,
   contact: state.client.contact,
   municipality: state.client.municipality,

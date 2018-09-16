@@ -1,84 +1,73 @@
-import {  VALIDATE_FACILITATOR, SAVE_FACILITATOR } from './actionTypes'
+import {  VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
+import { changeActiveStep } from './flowActions'
 
 export const validateComplete = errs => ({ type: VALIDATE_FACILITATOR, payload: errs})
-export function save(info) {
 
-   let newInfo = {};
-   for(var key in info) {
-     if (info[key] != "") {
-       newInfo = {...newInfo, [key]: info[key]}
-     }
-   }
-   console.log(newInfo)
-  return {
-    type: SAVE_FACILITATOR,
-    payload: newInfo
+export const updateFacilitator = (info) => {
+  return (dispatch, getState) => {
+    let newInfo = {};
+    for(var key in info) {
+      if (info[key] != "") {
+        newInfo = {...newInfo, [key]: info[key]}
+      }
+    }
+
+    console.log(newInfo)
+    dispatch(save(newInfo))
+    const state = getState();
+    dispatch(validateInput(state.facilitator))
   }
 }
-
-
+export const save = newInfo => ({ type: SAVE_FACILITATOR, payload: newInfo })
+export const resetFacilitator = () => ({ type: RESET_FACILITATOR })
 export const validateInput = (info, errs) => {
   return (dispatch, getState) => {
     console.log(info)
     if (isEmpty(info.name)) {
-      errs = {...errs, nameError: true, errors: true}
+      errs = {...errs, nameError: true}
     }
     else {
-      errs = {...errs, nameError: false, errors: false}
+      errs = {...errs, nameError: false}
     }
 
     if (isEmpty(info.ID) && isLength(info.ID) < 13 && !isNumeric(info.ID)) {
-      errs = {...errs, IDError: true, errors: true}
+      errs = {...errs, IDError: true}
     }
     else {
-      errs = {...errs, IDError: false, errors: false}
+      errs = {...errs, IDError: false}
     }
 
-    if (isEmpty(info.reg_no)) {
-      errs = {...errs, reg_noError: true, errors: true}
+    if (!isMobilePhone(info.cellno)) {
+      errs = {...errs, cellnoError: true}
     }
     else {
-      errs = {...errs, reg_noError: false, errors: false}
+      errs = {...errs, cellnoError: false}
     }
 
-    if (isEmpty(info.seta)) {
-      errs = {...errs, setaError: true, errors: true}
+    let errors = false;
+
+    for (var x in errs) {
+      if (errs[x]) {
+        errors = true;
+        break;
+      }
     }
-    else {
-      errs = {...errs, setaError: false, errors: false}
+    let newInfo = {
+      name: info.name,
+      ID: info.ID,
+      cellno: info.cellno,
     }
 
-    if(isEmpty(info.day)) {
-      errs = {...errs, dayError: true, errors: true}
-    }
-    else {
-      errs = {...errs, dayError: false, errors: false}
-    }
-
-    if(isEmpty(info.month)) {
-      errs = {...errs, monthError: true, errors: true}
-    }
-    else {
-      errs = {...errs, monthError: false, errors: false}
-    }
-
-    if(isEmpty(info.year)) {
-      errs = {...errs, yearError: true, errors: true}
-    }
-    else {
-      errs = {...errs, yearError: false, errors: false}
-    }
-    const date = info.month + " " + info.day +", " + info.year
-    info = {...info, expiry_date: date}
     dispatch(validateComplete(errs));
 
-    let state = getState();
-    if (state.facilitator.errors == false) {
-      dispatch(save(info))
-      dispatch(uploadFacilitator(info))
-    }
-  }
+    console.log(errors)
+    if (errors == false) {
+          dispatch(uploadFacilitator(newInfo))
+          dispatch(resetFacilitator())
+          dispatch(changeActiveStep("client"))
+        }
+      }
 }
 
 export const uploadFacilitator = (info) => {

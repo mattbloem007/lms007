@@ -1,4 +1,4 @@
-import { RECEIVE_CLIENTS, SAVE_CLIENT, VALIDATE_CLIENT } from '../actions/actionTypes'
+import { RECEIVE_CLIENTS, SAVE_CLIENT, VALIDATE_CLIENT, RELOAD, RESET_CLIENT } from '../actions/actionTypes'
 
 const clientState = {
   projectError: false,
@@ -9,10 +9,17 @@ const clientState = {
   postCodeError: false,
   contactError: false,
   municipalityError: false,
+  programme_nameError: false,
+  facilitatorError: false,
+  assessorError: false,
+  moderatorError: false,
+  programmeTypeError: false,
+  saved: false,
   name: "",
   tel: "",
   address: "",
   address2: "",
+  address3: "",
   postCode: "",
   contact: "",
   municipality: "",
@@ -29,16 +36,13 @@ const clientReducer = (state = clientState, action) => {
     case RECEIVE_CLIENTS:
       return {...state, clients: action.payload };
     case SAVE_CLIENT:
-      return {...state, ...action.payload
-        // name: action.payload.name,
-        // tel: action.payload.tel,
-        // no: action.payload.no,
-        // address: action.payload.address,
-        // contact: action.payload.contact,
-        // municipality: action.payload.municipality
-      }
+      return {...state, ...action.payload}
     case VALIDATE_CLIENT:
       return {...state, ...action.payload}
+    case RELOAD:
+      return clientState
+    case RESET_CLIENT:
+      return clientState
     default:
       return state;
   }

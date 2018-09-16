@@ -15,8 +15,9 @@ const tableReducer = (state = tableState, action) => {
       return {...state, activeTable: action.payload, batch: action.batch}
     case RECEIVE_BATCH_LEARNERS:
       let found = false;
+      console.log(action.payload);
       state.batchLearners.map(learners => {
-        if (learners.client_id == action.payload[0].client_id) {
+        if (learners.national_id == action.payload[0].national_id) {
           found = true;
         }
       })
@@ -27,7 +28,11 @@ const tableReducer = (state = tableState, action) => {
         return state
       }
     case RECEIVE_BATCH_LEARNERIDS:
-      return {...state, batchLearnerIDs: action.payload}
+      let learnerIDs = [];
+      for (var x in action.payload) {
+        learnerIDs.push(action.payload[x].learner_ID)
+      }
+      return {...state, batchLearnerIDs: learnerIDs}
     case CLEAR_BATCH_LEARNERS:
         return {...state, batchLearners: []}
     default:

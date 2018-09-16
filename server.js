@@ -2,13 +2,23 @@ const express = require('express');
 var mysql      = require('mysql');
 var bodyParser = require('body-parser')
 const path = require('path')
-
+var json2xls = require('json2xls');
+var fs = require('fs');
 
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(json2xls.middleware);
+
+app.post('/',function(req, res) {
+  console.log(req.body)
+  var xls = json2xls(req.body);
+  fs.writeFileSync('data1.xlsx', xls, 'binary');
+  var file = __dirname + '/data1.xlsx';
+  res.download(file, 'data1.xlsx');
+});
 
 // app.get('*', (req, res)=>{
 //   res.sendFile(path.join(__dirname+'/client/build/index.html'));
@@ -33,7 +43,16 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 //   database : 'lms',
 //   port     : port
 // });
-
+var club = mysql.createPool({
+  connectionLimit : 1000,
+  connectTimeout  : 60 * 60 * 1000,
+  aquireTimeout   : 60 * 60 * 1000,
+  timeout         : 60 * 60 * 1000,
+  host     : '41.185.8.125',
+  user     : 'xiconco1_mikeb',
+  password : 'X4k474ssPz',
+  database : 'xiconco1_iosgroup_clubs'
+})
 var pool  = mysql.createPool({
   connectionLimit : 1000,
   connectTimeout  : 60 * 60 * 1000,
@@ -70,6 +89,23 @@ var pool  = mysql.createPool({
 //     }
 //   });
 // });
+
+app.get('/api/clubs', (req, res) => {
+  club.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `club_name` FROM `ppSD_member_data`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
 app.get('/api/lms_batch', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -91,6 +127,7 @@ app.get('/api/client', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err;
     console.log("connection made");
+
 
     connection.query('SELECT `name` FROM `lms_client`', function(err, rows, fields) {
 
@@ -157,7 +194,24 @@ app.get('/api/learner', (req, res) => {
     if (err) throw err;
     console.log("connection made");
 
-    connection.query('SELECT `national_id` FROM `lms_learner`', function(err, rows, fields) {
+    connection.query('SELECT `national_id`, `firstname`, `surname` FROM `lms_learner`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/learnerInfo', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+    console.log(req.body)
+
+    connection.query('SELECT * FROM `lms_learner` WHERE national_id = ?', [req.body.ID], function(err, rows, fields) {
 
       if (err) throw err;
 
@@ -193,7 +247,7 @@ app.post('/api/learner_batch2', (req, res) => {
 
     let jsondata = req.body;
     console.log(jsondata)
-    connection.query('SELECT * FROM `lms_learner` WHERE national_id = ?', [jsondata.learner_ID], function(err, rows, fields) {
+    connection.query('SELECT * FROM `lms_learner` WHERE national_id = ?', [jsondata.ID], function(err, rows, fields) {
 
       if (err) throw err;
 
@@ -261,22 +315,6 @@ app.get('/api/lms_dates', (req, res) => {
   });
 });
 
-app.get('/api/lms_learner', (req, res) => {
-  pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected
-    // Use the connection
-    connection.query('SELECT `national_id`,`alt_id`,`equity`,`nationality`,`gender`,`language`,`employed`,`disability`,`surname`,`firstname`,`secondname`,`title`,`dob`,`homeaddr`,`postaddr`,`cellno`,`employer`,`workaddr`,`faxno`,`workno`,`email`,`prev_surname`,`assessment_date`,`club`,`programme`,`qualification`,`skill_programme`,`short_course`,`unitstd` FROM `lms_learner`', function (err, rows, fields) {
-      // And done with the connection.
-      connection.release();
-
-      // Handle error after the release.
-      if (err) throw err;
-
-      console.log('The solution is: ', rows);
-      res.send({ express: rows });
-    });
-  });
-});
 
 app.post('/data/lms_learner_batch', function(req, res) {
   pool.getConnection(function(err, connection) {
@@ -314,19 +352,19 @@ app.post('/data/lms_batch', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "day" && i != "month" && i != "year" && i != "modules" && i != "learnerIDs" && i != "modules" && i != "batchs"){
-        if (i == "date") {
-          let date = new Date(jsondata[i])
-          values.push(date)
-        }
-        else {
+    //  if (i != "day" && i != "month" && i != "year" && i != "modules" && i != "learnerIDs" && i != "modules" && i != "batchs"){
+        // if (i == "date" || i == "assessment_date" || i == "moderator_date") {
+        //   let date = new Date(jsondata[i])
+        //   values.push(date)
+        // }
+        // else {
           values.push(jsondata[i]);
-        }
+       //}
 
-      }
+      //}
     }
     console.log(values)
-      connection.query("INSERT INTO `lms_batch` (`date`,`client_name`,`project`,`programme`,`credit`,`facilitator`) VALUES (?)", [values], function(err, result){
+      connection.query("INSERT INTO `lms_batch` (`date`,`client_name`,`project`,`programme`,`credit`,`facilitator`, `assessor`, `moderator`, `assessment_date`, `moderator_date`, `programmeType`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");
@@ -344,9 +382,9 @@ app.post('/data/lms_client', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "address2" && i != "postCode"){
+      //if (i != "address2" && i != "postCode"){
         values.push(jsondata[i]);
-      }
+      //}
     }
     console.log(values)
       connection.query("INSERT INTO `lms_client` (`name`, `telephone`, `address`, `contact`, `municipality`) VALUES (?)", [values], function(err, result){
@@ -367,19 +405,10 @@ app.post('/data/lms_facilitator', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "day" && i != "month" && i != "year"){
-        if (i == "expiry_date") {
-          let date = new Date(jsondata[i])
-          values.push(date)
-        }
-        else {
-          values.push(jsondata[i]);
-        }
-
-      }
+        values.push(jsondata[i]);
     }
     console.log(values)
-      connection.query("INSERT INTO `lms_facilitator` (`name`,`ID`,`Reg_no`,`SETA`,`Expiry Date`) VALUES (?)", [values], function(err, result){
+      connection.query("INSERT INTO `lms_facilitator` (`name`,`ID`,`Cell_no`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");
@@ -397,16 +426,13 @@ app.post('/data/lms_assessor', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "day" && i != "month" && i != "year"){
-        if (i == "expiry_date") {
-          let date = new Date(jsondata[i])
-          values.push(date)
-        }
-        else {
+       //  if (i == "expiry_date") {
+       //    let date = new Date(jsondata[i])
+       //    values.push(date)
+       //  }
+       // else {
           values.push(jsondata[i]);
-        }
-
-      }
+      //  }
     }
     console.log(values)
       connection.query("INSERT INTO `lms_assessor` (`name`,`ID`,`Reg_no`,`SETA`,`Expiry Date`) VALUES (?)", [values], function(err, result){
@@ -427,16 +453,13 @@ app.post('/data/lms_moderator', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "day" && i != "month" && i != "year"){
-        if (i == "expiry_date") {
-          let date = new Date(jsondata[i])
-          values.push(date)
-        }
-        else {
+        // if (i == "expiry_date") {
+        //   let date = new Date(jsondata[i])
+        //   values.push(date)
+        // }
+        // else {
           values.push(jsondata[i]);
-        }
-
-      }
+      //  }
     }
     console.log(values)
       connection.query("INSERT INTO `lms_moderator` (`name`,`ID`,`Reg_no`,`SETA`,`Expiry Date`) VALUES (?)", [values], function(err, result){
@@ -457,24 +480,31 @@ app.post('/data/lms_learner', function(req, res) {
     console.log(jsondata);
     var values = [];
     for(var i in jsondata){
-      if (i != "day" && i != "month" && i != "year"
-          && i != "aday" && i != "amonth" && i != "ayear"
-          && i != "strAddress2" && i != "strAddress3"
-          && i != "postCode" && i != "postAddress2" && i != "postCode2"
-          && i != "workaddr2" && i != "postCode3" && i != "learnerIDs"
-        ) {
-        if (i == "dob" || i == "assessment_date") {
-          let date = new Date(jsondata[i])
-          values.push(date)
-        }
-        else {
           values.push(jsondata[i]);
-        }
-
-      }
     }
     console.log(values)
-      connection.query("INSERT INTO `lms_learner`(`id_type`, `national_id`, `last_school`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `workaddr`, `faxno`, `workno`, `email`, `prev_surname`, `assessment_date`, `club`, `course`) VALUES (?)", [values], function(err, result){
+      connection.query("INSERT INTO `lms_learner`(`id_type`, `national_id`, `last_school`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_learnerEdit', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+          values.push(jsondata[i]);
+    }
+    console.log(values)
+      connection.query("REPLACE INTO `lms_learner`(`id_type`, `national_id`, `last_school`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");
@@ -521,29 +551,6 @@ app.post('/data/lms_dates', function(req, res) {
     }
 
       connection.query("INSERT INTO `lms_dates` (`facilitator_date`, `assessment_date`, `moderation_date`) VALUES (?)", [values], function(err, result){
-        if(err) console.log(err);
-
-        console.log("1 record inserted");
-          });
-
-      res.send({ express: req.body });
-  });
-});
-
-app.post('/data/lms_learner', function(req, res) {
-  pool.getConnection(function(err, connection) {
-    if (err) throw err; // not connected
-    // Use the connection
-    var jsondata = req.body;
-    console.log(jsondata);
-    var values = [];
-    for(var i in jsondata){
-      if (i != "table"){
-        values.push(jsondata[i]);
-      }
-    }
-
-      connection.query("INSERT INTO `lms_learner` (`national_id`, `alt_id`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `postaddr`, `cellno`, `employer`, `workaddr`, `faxno`, `workno`, `email`, `prev_surname`, `assessment_date`, `club`, `programme`, `qualification` , `skill_programme`, `short_course`, `unitstd`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");
