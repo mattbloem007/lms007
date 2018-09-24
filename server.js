@@ -4,6 +4,8 @@ var bodyParser = require('body-parser')
 const path = require('path')
 var json2xls = require('json2xls');
 var fs = require('fs');
+const XLSX = require('xlsx');
+
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -12,13 +14,33 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(json2xls.middleware);
 
-app.post('/',function(req, res) {
-  console.log(req.body)
+app.post('/save',function(req, res) {
+  // console.log(req.body)
+  //res.xls('data.xlsx', req.body);
+
+  console.log("IN")
   var xls = json2xls(req.body);
   fs.writeFileSync('data1.xlsx', xls, 'binary');
-  var file = __dirname + '/data1.xlsx';
-  res.download(file, 'data1.xlsx');
+
+
+  // var xFile = fs.readFile(__dirname + '/data1.xlsx', function (err, data) {
+  //   res.contentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  // })
+  // res.send(new Buffer(xFile))
+//  let file = fs.readFileSync(__dirname + '/data1.xlsx')
+//  var buffer = new Buffer(file)
+  //var buffer = new Buffer(file)
+  res.set("Content-Disposition", "attachment;filename=data1.xls");
+  res.set("Content-Type", "application/octet-stream");
+  res.sendFile(__dirname + '/data1.xlsx');
+  //var file = __dirname;
+  //res.download(__dirname, 'data1.xlsx');
 });
+
+app.get('/download', function(req, res) {
+  let file = __dirname + '/data1.xlsx';
+  res.download(file, 'data1.xlsx')
+})
 
 // app.get('*', (req, res)=>{
 //   res.sendFile(path.join(__dirname+'/client/build/index.html'));

@@ -27,7 +27,7 @@ class BatchTable extends Component {
 
   showBatchLearners = (batch_no) => {
     this.props.tableActions.fetchBatchLearnerIDs(batch_no)
-    this.props.tableActions.changeActiveTable("learnerTable")
+    this.props.tableActions.changeActiveTable("creport")
   }
 
   downloadExcel = () => {

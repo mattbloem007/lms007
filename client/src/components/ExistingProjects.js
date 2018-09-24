@@ -11,7 +11,7 @@ import LearnerTable from './LearnerTable'
 import BatchTable from './batchTable'
 import Learner from '../components/chooseLearner'
 import RegisterLearner from '../components/registerLearner';
-
+import ClientReport from '../components/clientReport'
 
 class ExistingProjects extends Component {
 
@@ -66,6 +66,10 @@ class ExistingProjects extends Component {
 
       case "lms_learner":
         currentForm = (<LearnerTable footerClicked={this.handleFooterClicked} info={this.state.response} />)
+      break;
+
+      case "creport":
+        currentForm = (<ClientReport />)
       break;
       default:
 
