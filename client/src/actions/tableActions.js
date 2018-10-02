@@ -1,9 +1,10 @@
 import { BATCH_NO, ACTIVE_TABLE, ADD_LEARNERS, RECEIVE_BATCH_LEARNERS, RECEIVE_BATCH_LEARNERIDS, CLEAR_BATCH_LEARNERS } from './actionTypes'
 import fileDownload from 'react-file-download'
 import exportToExcel from '../exportToExcel';
+import pdfMake from 'pdfmake/build/pdfmake';
+import vfsFonts from 'pdfmake/build/vfs_fonts';
 
 
-var json2xls = require('json2xls');
 export const changeActiveTable = activeTable => ({ type: ACTIVE_TABLE, payload: activeTable });
 export const getBatchNumber = (batchNo) => ({ type: BATCH_NO, payload: batchNo })
 export const addLearners = (activeTable, batchNo) => ({ type: ADD_LEARNERS, payload: activeTable, batch: batchNo })
@@ -23,8 +24,120 @@ export function receiveLearners(json) {
 }
 
 export const downloadExcel = (batchs) => {
+
+
   return dispatch => {
     exportToExcel(batchs)
+  }
+}
+
+const _format = (data) => {
+	return data.map(item => {
+		return ([
+			{text: item.firstname + " " + item.surname, style: 'backColor'},
+			{text: item.national_id, style: 'backColor'},
+			{text: item.cellno, style: 'backColor'},
+			{text: item.gender, style: 'backColor'},
+			{text: item.equity, style: 'backColor'},
+		]);
+	});
+}
+
+export const downloadPDF = (batch, batchs, learners) => {
+  return dispatch => {
+
+
+    const {vfs} = vfsFonts.pdfMake;
+    pdfMake.vfs = vfs;
+    let index = parseInt(batch) - 1
+    let info = batchs[index]
+
+	  const formattedData = _format(learners);
+
+    const documentDefinition = {
+      pageSize: 'A4',
+      pageOrientation: 'landscape',
+      content: [
+        {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Batch Number:',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: batch
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Programme Name:',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.programme
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Name(s) of Facilitator(s):',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.facilitator
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Client:',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.client_name
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+        '\n',
+        {
+          table: {
+            headerRows: 1,
+            dontBreakRows: true,
+            body: [
+              [{text: 'Full Name', style: 'tableHeader'}, {text: 'ID Number', style: 'tableHeader'}, {text: 'Cell Phone', style: 'tableHeader'}, {text: 'Gender', style: 'tableHeader'}, {text: 'Ethnicity', style: 'tableHeader'}],
+              ...formattedData,
+            ]
+          }
+        }
+      ],
+      styles: {
+        backColor: {
+          background: 'green'
+        }
+      }
+    };
+
+    pdfMake.createPdf(documentDefinition).open();
   }
 }
 

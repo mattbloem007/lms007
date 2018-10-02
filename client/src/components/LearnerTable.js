@@ -21,6 +21,10 @@ class LearnerTable extends Component {
     this.props.tableActions.clearBatchLearners()
   }
 
+  downloadPDF = () => {
+    this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
+  }
+
   render() {
     return(
     <Table celled>
@@ -48,6 +52,9 @@ class LearnerTable extends Component {
       <Table.Row>
       <Table.HeaderCell colSpan='5'>
           <Button onClick={this.back} size='small'>Back</Button>
+            <Button onClick={this.downloadPDF} floated='right' icon labelPosition='left' primary size='small'>
+              <Icon name='download' /> Download Report
+            </Button>
         </Table.HeaderCell>
       </Table.Row>
     </Table.Footer>
@@ -57,6 +64,8 @@ class LearnerTable extends Component {
 
 }
 const mapStateToProps = state => ({
+  batch: state.table.batch,
+  batchs: state.batch.batchs,
   batchLearners: state.table.batchLearners
 
 })
