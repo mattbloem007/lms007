@@ -7,6 +7,9 @@ import * as programmeActions from '../actions/programmeActions'
 import * as flowActions from '../actions/flowActions';
 import * as learnerActions from '../actions/learnerActions';
 import { days, months } from '../common';
+import _ from 'lodash';
+
+import qualifications from './qualifications'
 
 
 
@@ -31,7 +34,17 @@ class Client extends Component {
           credit: "",
           creditStatus: false,
           facilitator: "",
-          programmeType: ""
+          programmeType: "",
+          qpms: [],
+          spms: [],
+          us: "",
+          qp: "",
+          sp: "",
+          sc: "",
+          show1: true,
+          show2: true,
+          show3: true,
+          show4: true
 
       }
   }
@@ -41,6 +54,10 @@ class Client extends Component {
     this.props.learnerActions.fetchFacilitator();
     this.props.learnerActions.fetchAssessor();
     this.props.learnerActions.fetchModerator();
+    // this.props.clientActions.fetchQualifications();
+    // this.props.clientActions.fetchSkillProgramme();
+    // this.props.clientActions.fetchShortCourse();
+    // this.props.clientActions.fetchUnitStd();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,6 +91,49 @@ class Client extends Component {
   addClient = () => {
     this.props.clientActions.updateBatchClient(this.state)
     this.props.flowActions.changeActiveStep("rclient");
+  }
+
+  handleProgramme = (value) => {
+    this.setState({programmeType: value})
+    console.log("changed: ", value)
+    switch(value) {
+      case "Qualification":
+      this.props.clientActions.fetchQualifications();
+        this.setState({show1: false, show2: true, show3: true, show4: true})
+        console.log(this.state.show1)
+      break;
+      case "Unit Standard":
+        this.props.clientActions.fetchUnitStd();
+        this.setState({show1: true, show2: false, show3: true, show4: true})
+        console.log(this.state.show2)
+      break;
+      case "Skill Programme":
+      this.props.clientActions.fetchSkillProgramme();
+        this.setState({show1: true, show2: true, show3: false, show4: true})
+        console.log(this.state.show3)
+      break;
+      case "Short Course":
+      this.props.clientActions.fetchShortCourse();
+        this.setState({show1: true, show2: true, show3: true, show4: false})
+        console.log(this.state.show4)
+      break;
+    }
+  }
+
+  handleQProgramme = value => {
+    this.setState({qp: value})
+    console.log(value, this.props.qp);
+    let index = _.findIndex(this.props.qp, {value: value})
+    console.log(index)
+    this.props.clientActions.fetchQualificationModules(index + 1);
+  }
+
+  handleSProgramme = value => {
+    this.setState({sp: value})
+    console.log(value);
+    let index = _.findIndex(this.props.sp, {value: value})
+    console.log(index)
+    this.props.clientActions.fetchSPModules(index + 1);
   }
 
   render() {
@@ -116,7 +176,25 @@ class Client extends Component {
                 this.state.creditStatus ?
                 <Form.Field>
                   <Form.Field>
-                    <Form.Select defaultValue={this.props.programmeType} label="Programme Type" placeholder="Select Programme Type" fluid search selection onChange={(e,{value})=>{this.setState({programmeType: value})}} options={this.props.programmeOptions} error={this.props.programmeTypeError}/>
+                    <Form.Select defaultValue={this.props.programmeType} label="Programme Type" placeholder="Select Programme Type" fluid search selection onChange={(e,{value}) => {this.handleProgramme(value)}} options={this.props.programmeOptions} error={this.props.programmeTypeError}/>
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Select disabled={this.state.show1} placeholder="Select Qualification Programme Name"  fluid search selection options={this.props.qp} onChange={(e, {value}) => {this.handleQProgramme(value)}}></Form.Select>
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Select disabled={this.state.show1} placeholder="Select Qualification Module"  fluid multiple search selection options={this.props.qpm} onChange={(e,{value})=>{this.setState({qpms: value})}}></Form.Select>
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Select disabled={this.state.show2} placeholder="Select Unit Standard"  fluid search selection options={this.props.us} onChange={(e,{value})=>{this.setState({us: value})}}></Form.Select>
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Select disabled={this.state.show3} placeholder="Select Skill Programmes"  fluid search selection options={this.props.sp} onChange={(e, {value}) => {this.handleSProgramme(value)}}></Form.Select>
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Select disabled={this.state.show3} placeholder="Select Skill Programme Modules"  fluid multiple search selection options={this.props.spm} onChange={(e,{value})=>{this.setState({spms: value})}}></Form.Select>
+                  </Form.Field>
+                  <Form.Field>
+                    <Form.Select disabled={this.state.show4} placeholder="Select Short Course"  fluid search selection options={this.props.sc} onChange={(e,{value})=>{this.setState({sc: value})}}></Form.Select>
                   </Form.Field>
                   <Form.Field>
                     <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Select Facilitator Name" fluid multiple search selection onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>
@@ -158,6 +236,12 @@ class Client extends Component {
 }
 const mapStateToProps = state => ({
   clients: state.client.clients,
+  qp: state.client.qp,
+  qpm: state.client.qpm,
+  us: state.client.us,
+  sp: state.client.sp,
+  spm: state.client.spm,
+  sc: state.client.sc,
   projectError: state.client.projectError,
   dayError: state.client.dayError,
   yearError: state.client.yearError,

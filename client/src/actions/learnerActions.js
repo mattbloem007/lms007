@@ -55,41 +55,41 @@ export const updateLearner = (info) => {
   return (dispatch, getState) => {
     let newInfo = {};
     for(var key in info) {
-      if (info[key] != "") {
+      if (info[key] !== "") {
         newInfo = {...newInfo, [key]: info[key]}
       }
     }
-    if (newInfo.day != undefined || newInfo.aday != undefined) {
+    if (newInfo.day !== undefined || newInfo.aday !== undefined) {
       const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
       let strAddress = newInfo.strAddress;
       let postAddress = "";
-      if (newInfo.addrCheck == true) {
+      if (newInfo.addrCheck === true) {
         postAddress = newInfo.strAddress;
       }
       else {
         postAddress = newInfo.postAddress
       }
-      if (newInfo.strAddress2 != "" && newInfo.strAddress2 != undefined) {
+      if (newInfo.strAddress2 !== "" && newInfo.strAddress2 !== undefined) {
         strAddress =  strAddress + ", " + newInfo.strAddress2
-        if (newInfo.strAddress3 != "" && newInfo.strAddress3 != undefined) {
+        if (newInfo.strAddress3 !== "" && newInfo.strAddress3 !== undefined) {
           strAddress = strAddress + ", " + newInfo.strAddress3
         }
-        if (newInfo.strAddress4 != "" && newInfo.strAddress4 != undefined) {
+        if (newInfo.strAddress4 !== "" && newInfo.strAddress4 !== undefined) {
           strAddress = strAddress + ", " + newInfo.strAddress4
         }
       }
-      if(newInfo.postAddress2 != "" && newInfo.postAddress2 != undefined) {
+      if(newInfo.postAddress2 !== "" && newInfo.postAddress2 !== undefined) {
           postAddress =  strAddress + ", " + newInfo.postAddress2
-        if (newInfo.postAddress3 != "" && newInfo.postAddress3 != undefined) {
+        if (newInfo.postAddress3 !== "" && newInfo.postAddress3 !== undefined) {
           postAddress = postAddress + ", " + newInfo.postAddress3
         }
-        if (newInfo.postAddress4 != "" && newInfo.postAddress4 != undefined) {
+        if (newInfo.postAddress4 !== "" && newInfo.postAddress4 !== undefined) {
           postAddress = postAddress + ", " + newInfo.postAddress4
         }
 
       }
         strAddress = strAddress +", " + newInfo.postCode
-        if (newInfo.addrCheck == true) {
+        if (newInfo.addrCheck === true) {
           postAddress = postAddress + ", " + newInfo.postCode
         }
         else {
@@ -113,7 +113,7 @@ export const updateBatchLearner = (info) => {
   return (dispatch, getState) => {
     let newInfo = {};
     for(var key in info) {
-      if (info[key] != "") {
+      if (info[key] !== "") {
         newInfo = {...newInfo, [key]: info[key]}
       }
     }
@@ -349,8 +349,8 @@ export const validateInput = (info, errs) => {
     }
     console.log(newInfo)
     const state = getState();
-    if(errors == false) {
-      if (state.learner.type == "add") {
+    if(errors === false) {
+      if (state.learner.type === "add") {
         dispatch(uploadLearner(newInfo))
         dispatch(saveComplete(true))
       }
@@ -366,7 +366,7 @@ export const validateInput = (info, errs) => {
 export const validateInput1 = (info, errs) => {
   return (dispatch, getState) => {
     console.log(info)
-    if(info.length == 0) {
+    if(info.length === 0) {
       errs = {...errs, learnerError: true}
     }
     else {
@@ -389,7 +389,7 @@ export const validateInput1 = (info, errs) => {
     }
     newInfo = _.difference(newInfo, state.table.batchLearnerIDs)
     console.log(newInfo);
-        if(errors == false) {
+        if(errors === false) {
           //dispatch(updateBatchLearner(info))
           dispatch(uploadBatchLearner(newInfo, state.table.batch))
           dispatch(changeActiveTable("batch"))
@@ -403,7 +403,7 @@ export const uploadBatchLearner = (info, batch) => {
   let newInfo = [];
   console.log(info)
   for(var key in info) {
-    if (info[key] != "") {
+    if (info[key] !== "") {
       newInfo = [...newInfo, Object.assign({id: info[key].split("-")[0], batch: batch})]
     }
   }

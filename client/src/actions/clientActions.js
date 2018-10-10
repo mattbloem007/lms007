@@ -1,4 +1,4 @@
-import { FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, RESET_CLIENT } from './actionTypes'
+import { RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, RESET_CLIENT } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import _ from 'lodash'
@@ -6,20 +6,8 @@ import _ from 'lodash'
 // export const receiveInfo = json => (console.log(json)
 // { type: RECEIVE, payload: json }
 // );
-export function receiveInfo(json) {
-  console.log(json.express)
-  let sorted = _.orderBy(json.express, ['name'],['asc']);
-  console.log(sorted)
-  let clientsArr = [];
-  for (const key of Object.keys(sorted)) {
-    clientsArr = [...clientsArr, Object.assign({text: sorted[key].name, value: sorted[key].name})]
-  }
-  console.log(clientsArr)
-  return {
-    type: RECEIVE_CLIENTS,
-    payload: clientsArr
-  }
-}
+
+
 export const updateClient = (info) => {
   return (dispatch, getState) => {
     let newInfo = {};
@@ -320,6 +308,21 @@ export const uploadClient = (info) => {
 
 }
 
+export function receiveInfo(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['name'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].name, value: sorted[key].name})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_CLIENTS,
+    payload: clientsArr
+  }
+}
+
 export const fetchClients = () => {
   return dispatch => {
     return fetch('/api/client')
@@ -328,5 +331,163 @@ export const fetchClients = () => {
       console.log(json)
       dispatch(receiveInfo(json))
     });
+  }
+}
+
+export function receiveQualification(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['Number'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].SAQA_ID  + "-" + sorted[key].QUALIFICATION_MODULE_DETAILS, value: sorted[key].SAQA_ID + "-" + sorted[key].QUALIFICATION_MODULE_DETAILS})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_QP,
+    payload: clientsArr
+  }
+}
+
+export const fetchQualifications = () => {
+  return dispatch => {
+    return fetch('/api/qualifications')
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receiveQualification(json))
+    })
+  }
+}
+
+export function receiveQualificationModules(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['Number'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].SAQA_ID + "-" + sorted[key].QUALIFICATION_MODULE_DETAILS, value: sorted[key].SAQA_ID + "-" + sorted[key].QUALIFICATION_MODULE_DETAILS})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_QPM,
+    payload: clientsArr
+  }
+}
+
+export const fetchQualificationModules = (index) => {
+  return dispatch => {
+    return fetch('/api/qualificationsMod', {
+      method: 'POST',
+      body: JSON.stringify({ index: index }),
+      headers: {"Content-Type": "application/json"}
+    })
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receiveQualificationModules(json))
+    })
+  }
+}
+
+export const fetchUnitStd = () => {
+  return dispatch => {
+    return fetch('/api/unitstd')
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receiveUnitStd(json))
+    })
+  }
+}
+
+export function receiveUnitStd(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['SAQA_ID'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].SAQA_ID + "-" + sorted[key].UNIT_STANDARD, value: sorted[key].SAQA_ID + "-" + sorted[key].UNIT_STANDARD})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_US,
+    payload: clientsArr
+  }
+}
+
+export const fetchSkillProgramme = () => {
+  return dispatch => {
+    return fetch('/api/spp')
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receiveSkillProgrammeP(json))
+    })
+  }
+}
+
+export function receiveSkillProgrammeP(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['Number'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].MODULE_DETAILS, value: sorted[key].MODULE_DETAILS})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_SP,
+    payload: clientsArr
+  }
+}
+
+export function receiveSPModules(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['Number'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].SAQA_ID + "-" + sorted[key].MODULE_DETAILS, value: sorted[key].SAQA_ID + "-" + sorted[key].MODULE_DETAILS})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_SPM,
+    payload: clientsArr
+  }
+}
+
+export const fetchSPModules = (index) => {
+  return dispatch => {
+    return fetch('/api/spMod', {
+      method: 'POST',
+      body: JSON.stringify({ index: index }),
+      headers: {"Content-Type": "application/json"}
+    })
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receiveSPModules(json))
+    })
+  }
+}
+
+export const fetchShortCourse = () => {
+  return dispatch => {
+    return fetch('/api/sc')
+    .then(res => res.json())
+    .then(json => {
+      dispatch(receiveShortCourse(json))
+    })
+  }
+}
+
+export function receiveShortCourse(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['Number'],['asc']);
+  console.log(sorted)
+  let clientsArr = [];
+  for (const key of Object.keys(sorted)) {
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].Programme, value: sorted[key].Programme})]
+  }
+  console.log(clientsArr)
+  return {
+    type: RECEIVE_SC,
+    payload: clientsArr
   }
 }

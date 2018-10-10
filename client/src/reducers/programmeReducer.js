@@ -2,7 +2,7 @@ import { UPDATE_PROGRAMME, RECEIVE_FACILITATORS, VALIDATE_PROGRAMME, RECEIVE_ASS
 
 
 const programmeState = {
-  programmeOptions: [{text: "Qualification", value: "Qualification"}, {text: "Unit Standard", value: "Unit Standard"}, {text: "Skill Programme", value: "Skill Programme"}, {text: "Other", value: "Other"}],
+  programmeOptions: [{text: "Qualification", value: "Qualification"}, {text: "Unit Standard", value: "Unit Standard"}, {text: "Skill Programme", value: "Skill Programme"}, {text: "Short Course", value: "Short Course"}],
   facilitators: [],
   assessors: [],
   moderators: [],

@@ -227,6 +227,110 @@ app.get('/api/learner', (req, res) => {
   })
 })
 
+app.get('/api/qualifications', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT * FROM `lms_q_programmes`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/qualificationsMod', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(jsondata)
+    connection.query('SELECT * FROM `lms_q_modules` WHERE Number = ?', [jsondata.index], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({express: rows})
+      connection.release();
+    })
+  })
+
+})
+
+app.get('/api/unitstd', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT * FROM `lms_unitstd`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.get('/api/spp', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT * FROM `lms_sp_programmes`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/spMod', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(jsondata)
+    connection.query('SELECT * FROM `lms_sp_modules` WHERE Number = ?', [jsondata.index], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({express: rows})
+      connection.release();
+    })
+  })
+
+})
+
+app.get('/api/sc', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT * FROM `lms_short_courses`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+
+
 app.post('/api/learnerInfo', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err;
