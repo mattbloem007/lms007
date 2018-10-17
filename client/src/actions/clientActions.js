@@ -243,12 +243,35 @@ export const validateInput1 = (info, errs) => {
     }
     let assessment_date = "";
     let moderator_date = "";
+    let qmodules = "";
+    let spmodules = "";
     if (info.assessment_date != undefined) {
       assessment_date = info.assessment_date
     }
     if (info.moderator_date != undefined) {
       moderator_date = info.moderator_date
     }
+
+    for (let i = 0; i < info.qpms.length; i++) {
+      if (i == info.qpms.length - 1) {
+        qmodules = qmodules + info.qpms[i]
+      }
+      else {
+        qmodules = qmodules + info.qpms[i] + ", ";
+
+      }
+    }
+
+    for (let i = 0; i < info.spms.length; i++) {
+      if (i == info.spms.length - 1) {
+        spmodules = spmodules + info.spms[i]
+      }
+      else {
+        spmodules = spmodules + info.spms[i] + ", ";
+
+      }
+    }
+
     let newInfo = {
       date:  info.date,
       client_name: info.client_name,
@@ -260,7 +283,13 @@ export const validateInput1 = (info, errs) => {
       moderator: moderators,
       assessment_date: assessment_date,
       moderator_date: moderator_date,
-      programmeType: info.programmeType
+      programmeType: info.programmeType,
+      us: info.us,
+      qp: info.qp,
+      sp: info.sp,
+      sc: info.sc,
+      qpms: qmodules,
+      spms: spmodules
 
     }
     dispatch(validateComplete(errs));
