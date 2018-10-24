@@ -159,7 +159,7 @@ class registerLearner extends Component {
         <Form.Select defaultValue={this.props.gender} label="Gender" placeholder="Select Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}}  fluid search selection options={genderOptions} error={this.props.genderError} />
       </Form.Field>
       <Form.Field>
-      <Form.Select defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Select Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}}  fluid search selection options={genderOptions} error={this.props.lastSchoolError} />
+      <Form.Input defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Enter Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}} error={this.props.lastSchoolError} />
     </Form.Field>
     <Form.Field>
       <Form.Input defaultValue={this.props.statssa} label="Statssa Area" placeholder="Statssa Area" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, statssa: data.value}}))}} />
