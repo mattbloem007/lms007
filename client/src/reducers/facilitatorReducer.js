@@ -2,9 +2,11 @@ import { VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR } from '../ac
 
 const facilitatorState = {
   name: "",
+  surname: "",
   ID: "",
   cellno: "",
   nameError: false,
+  surnameError: false,
   IDError: false,
   cellnoError: false
 }

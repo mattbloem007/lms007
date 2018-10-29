@@ -15,6 +15,7 @@ class RegisterFacilitator extends Component{
     this.state = {
                   info: {
                           name: "",
+                          surname: "",
                           ID: "",
                           cellno: ""
                          }
@@ -38,7 +39,10 @@ class RegisterFacilitator extends Component{
       <Form>
         <Form.Group>
           <Form.Field>
-            <Form.Input label="Name" defaultValue={this.props.name} placeholder="Enter Facilitator Name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
+            <Form.Input label="Name" defaultValue={this.props.name} placeholder="Enter Name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
+        </Form.Field>
+        <Form.Field>
+          <Form.Input  label= "Surname" defaultValue={this.props.surname} placeholder="Enter Surname"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} error={this.props.surnameError}/>
         </Form.Field>
           <Form.Field>
           <Form.Input label="ID Number" defaultValue={this.props.ID} placeholder="ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} error={this.props.IDError}/>
@@ -56,9 +60,11 @@ class RegisterFacilitator extends Component{
 }
 const mapStateToProps = (state) => ({
   nameError: state.facilitator.nameError,
+  surnameError: state.facilitator.surnameError,
   IDError: state.facilitator.IDError,
   cellnoError: state.facilitator.cellnoError,
   name: state.facilitator.name,
+  surname: state.facilitator.surname,
   ID: state.facilitator.ID,
   cellno: state.facilitator.cellno,
   errors: state.facilitator.errors

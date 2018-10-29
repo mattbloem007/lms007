@@ -144,10 +144,9 @@ export const validateInput = (info, errs) => {
       errs = {...errs, lastSchoolError: false}
     }
 
-    if (!isNumeric(info.national_id)) {
+    if (info.national_id.length != 13 ||!isNumeric(info.national_id)) {
       errs = {...errs, idError: true}
     }
-
     else {
       errs = {...errs, idError: false}
     }

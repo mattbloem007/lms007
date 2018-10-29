@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as batchActions from '../actions/batchActions'
@@ -36,7 +36,8 @@ class BatchTable extends Component {
 
   render() {
     return(
-    <Table celled selectable>
+    <Segment style={{overflow: 'auto', maxHeight: 500 }}>
+    <Table celled selectable sortable stackable>
       <Table.Header>
         <Table.Row>
           {
@@ -72,6 +73,7 @@ class BatchTable extends Component {
     </Table.Row>
   </Table.Footer>
     </Table>
+  </Segment>
     )
   }
 }
