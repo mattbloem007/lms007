@@ -18,6 +18,7 @@ class registerLearner extends Component {
                     id_type: "",
                     national_id: "",
                     last_school: "",
+                    year_attented: "",
                     statssa: "",
                     education: "",
                     ass_status: "",
@@ -175,6 +176,9 @@ class registerLearner extends Component {
       <Form.Field>
       <Form.Input defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Enter Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}} error={this.props.lastSchoolError} />
     </Form.Field>
+    <Form.Field>
+    <Form.Input defaultValue={this.props.year_attented} label="Year Learner Graduated" placeholder="Enter The Year You Graduated" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year_attented: data.value}}))}} />
+  </Form.Field>
     <Form.Field>
       <Form.Input defaultValue={this.props.statssa} label="Statssa Area" placeholder="Statssa Area" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, statssa: data.value}}))}} />
     </Form.Field>
@@ -450,6 +454,7 @@ const mapStateToProps = state => ({
   nationality: state.learner.nationality,
   gender: state.learner.gender,
   last_school: state.learner.last_school,
+  year_attented: state.learner.year_attented,
   language: state.learner.language,
   employed: state.learner.employed,
   disability: state.learner.disability,

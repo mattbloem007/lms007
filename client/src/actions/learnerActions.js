@@ -296,6 +296,7 @@ export const validateInput = (info, errs) => {
       id_type: info.id_type,
       national_id: info.national_id,
       last_school: info.last_school,
+      year_attented: info.year_attented,
       statssa: info.statssa,
       education: info.education,
       ass_status: info.ass_status,

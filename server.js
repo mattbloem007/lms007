@@ -600,7 +600,7 @@ app.post('/data/lms_learner', function(req, res) {
           values.push(jsondata[i]);
     }
     console.log(values)
-      connection.query("INSERT INTO `lms_learner`(`id_type`, `national_id`, `last_school`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
+      connection.query("INSERT INTO `lms_learner`(`id_type`, `national_id`, `last_school`,`year_attended`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");
@@ -621,7 +621,7 @@ app.post('/data/lms_learnerEdit', function(req, res) {
           values.push(jsondata[i]);
     }
     console.log(values)
-      connection.query("REPLACE INTO `lms_learner`(`id_type`, `national_id`, `last_school`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
+      connection.query("REPLACE INTO `lms_learner`(`id_type`, `national_id`, `last_school`,`year_attended`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");

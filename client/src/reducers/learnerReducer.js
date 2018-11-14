@@ -43,6 +43,7 @@ const learnerState = {
   nationality: "",
   gender: "",
   last_school: "",
+  year_attented: "",
   language: "",
   employed: "",
   disability: "",
