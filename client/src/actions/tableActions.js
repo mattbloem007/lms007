@@ -31,15 +31,27 @@ export const downloadExcel = (batchs) => {
 
 const _format = (data) => {
 	return data.map(item => {
+    let styleC = 'backColor';
+    switch (item.ass_status ) {
+      case "Competent":
+        styleC = 'backColor'
+      break;
+      case "Not yet competent":
+        styleC = 'notCompetent'
+      break;
+      case "Not Submitted":
+        styleC = 'notSubmitted'
+      break;
+    }
 		return ([
-			{text: item.firstname + " " + item.surname, style: 'backColor'},
-			{text: item.national_id, style: 'backColor'},
-			{text: item.cellno, style: 'backColor'},
-			{text: item.gender, style: 'backColor'},
-			{text: item.equity, style: 'backColor'},
-      {text: item.year_attented, style: 'backColor'},
-      {text: item.last_school, style: 'backColor'},
-      {text: item.physicalAddress, style: 'backColor'}
+			{text: item.firstname + " " + item.surname, style: styleC},
+			{text: item.national_id, style: styleC},
+			{text: item.cellno, style: styleC},
+			{text: item.gender, style: styleC},
+			{text: item.equity, style: styleC},
+      {text: item.year_attented, style: styleC},
+      {text: item.last_school, style: styleC},
+      {text: item.strAddress, style: styleC}
 		]);
 	});
 }
@@ -196,6 +208,12 @@ export const downloadPDF = (batch, batchs, learners) => {
       styles: {
         backColor: {
           background: 'green'
+        },
+        notCompetent: {
+          background: 'red'
+        },
+        notSubmitted : {
+          background: 'white'
         }
       }
     };

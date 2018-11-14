@@ -31,7 +31,7 @@ export const updateBatchClient = (info) => {
         newInfo = {...newInfo, [key]: info[key]}
       }
     }
-    console.log("Clicked: ", newInfo.save)
+    console.log("Clicked: ", newInfo)
     if (newInfo.day != undefined) {
       const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
       newInfo = {...newInfo, date: date}
