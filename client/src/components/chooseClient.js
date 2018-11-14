@@ -78,7 +78,7 @@ class Client extends Component {
 
   validateInput = (e) => {
     this.setState({save: true})
-    this.props.clientActions.updateBatchClient(this.state)
+    this.props.clientActions.updateBatchClient(this.state, true)
   //  this.props.clientActions.validateInput1(this.state)
   }
 

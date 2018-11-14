@@ -270,13 +270,6 @@ export const validateInput = (info, errs) => {
       errs = {...errs, cellnoError: false}
     }
 
-    if(isEmpty(info.employer)){
-      errs = {...errs, employerError: true}
-    }
-    else {
-      errs = {...errs, employerError: false}
-    }
-
     dispatch(validateComplete(errs));
     let errors = false;
 

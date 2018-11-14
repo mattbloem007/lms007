@@ -23,7 +23,7 @@ export const updateClient = (info) => {
   }
 }
 
-export const updateBatchClient = (info) => {
+export const updateBatchClient = (info, bool) => {
   return (dispatch, getState) => {
     let newInfo = {};
     for(var key in info) {
@@ -31,7 +31,6 @@ export const updateBatchClient = (info) => {
         newInfo = {...newInfo, [key]: info[key]}
       }
     }
-    console.log("Clicked: ", info.save)
     if (newInfo.day != undefined) {
       const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
       newInfo = {...newInfo, date: date}
@@ -53,7 +52,7 @@ export const updateBatchClient = (info) => {
     console.log(newInfo)
     dispatch(update(newInfo))
     const state = getState();
-    let b = {...state.batch, save: info.save}
+    let b = {...state.batch, save: bool}
     dispatch(validateInput1(b))
   }
 }
@@ -311,7 +310,7 @@ export const validateInput1 = (info, errs) => {
       //  dispatch(reload(true))
     //  dispatch(changeActiveStep("programme"))
     }
-    console("CLICKED:" + info.save )
+    console.log("CLICKED:" + info.save )
     if (info.save == true) {
       dispatch(reload(true))
     }
