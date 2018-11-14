@@ -306,8 +306,8 @@ export const validateInput1 = (info, errs) => {
     if (errors == false) {
 
         dispatch(uploadBatch(newInfo))
-        dispatch(success(true))
         if (info.save == true) {
+          dispatch(success(true))
           dispatch(reload(true))
         }
       //  dispatch(reload(true))

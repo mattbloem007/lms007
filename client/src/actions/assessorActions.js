@@ -107,12 +107,12 @@ export const validateInput = (info, errs) => {
     if (errors == false) {
       dispatch(uploadAssessor(newInfo))
       dispatch(resetAssessor())
-      if (state.flow.activeStep == "client") {
+    //  if (state.flow.activeStep == "client") {
         dispatch(changeActiveStep("client"))
-      }
-      else {
-        dispatch(changeActiveTable("learner"))
-      }
+      // }
+      // else {
+      //   dispatch(changeActiveTable("learner"))
+      // }
 
     }
   }
