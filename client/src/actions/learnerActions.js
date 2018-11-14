@@ -277,27 +277,6 @@ export const validateInput = (info, errs) => {
       errs = {...errs, employerError: false}
     }
 
-    if(!isMobilePhone(info.faxno)){
-      errs = {...errs, faxnoError: true}
-    }
-    else {
-      errs = {...errs, faxnoError: false}
-    }
-
-    if(!isMobilePhone(info.workno)){
-      errs = {...errs, worknoError: true}
-    }
-    else {
-      errs = {...errs, worknoError: false}
-    }
-
-    if(!isEmail(info.email)){
-      errs = {...errs, emailError: true}
-    }
-    else {
-      errs = {...errs, emailError: false}
-    }
-
     dispatch(validateComplete(errs));
     let errors = false;
 

@@ -29,7 +29,6 @@ class RegisterAssessor extends Component{
 
   validateInput = (e) => {
     this.props.assessorActions.updateAssessor(this.state.info);
-    this.props.flowActions.changeActiveStep("client")
 
   }
 

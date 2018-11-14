@@ -29,7 +29,6 @@ class RegisterModerator extends Component{
 
   validateInput = (e) => {
     this.props.moderatorActions.updateModerator(this.state.info);
-    this.props.flowActions.changeActiveStep("client")
 
   }
 

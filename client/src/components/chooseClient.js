@@ -19,6 +19,7 @@ class Client extends Component {
   constructor() {
       super();
       this.state = {
+          success: false,
           day: "",
           month: "",
           year: "",
@@ -138,7 +139,8 @@ class Client extends Component {
 
   render() {
     return(
-      <Form>
+      <Form success={this.props.success}>
+        <Message success header='Form Completed' content="Saved Batch Successfully" />
         <Form.Input defaultValue={this.props.project} label="Project Name" placeholder="Enter Project Name" onChange={(e,{value})=>{this.setState({project: value})}} error={this.props.projectError}/>
         <Form.Field>
           <label>Date</label>
@@ -276,6 +278,7 @@ const mapStateToProps = state => ({
   moderator: state.batch.moderator,
   creditStatus: state.programme.creditStatus,
   programmeType: state.batch.programmeType,
+  success: state.batch.success,
   saved: state.client.saved
 })
 const mapDispatchToProps = dispatch => ({

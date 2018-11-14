@@ -25,7 +25,6 @@ class RegisterFacilitator extends Component{
 
   validateInput = (e) => {
     this.props.facilitatorActions.updateFacilitator(this.state.info);
-    this.props.flowActions.changeActiveStep("client")
 
   }
 

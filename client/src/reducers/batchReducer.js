@@ -28,6 +28,7 @@ const batchState = {
   modules: {},
   learnerIDs: [],
   saved: false,
+  success: false,
   batchs: []
 }
 
