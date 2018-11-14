@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Form, Icon } from 'semantic-ui-react';
+import { Segment, Form, Icon, Message } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as clientActions from '../actions/clientActions';
