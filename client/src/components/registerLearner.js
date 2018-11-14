@@ -177,7 +177,7 @@ class registerLearner extends Component {
       <Form.Input defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Enter Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}} error={this.props.lastSchoolError} />
     </Form.Field>
     <Form.Field>
-    <Form.Input defaultValue={this.props.year_attented} label="Year Learner Graduated" placeholder="Enter The Year You Graduated" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year_attented: data.value}}))}} />
+    <Form.Input defaultValue={this.props.year_attented} label="Last Year at High School" placeholder="Enter Last Year" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year_attented: data.value}}))}} />
   </Form.Field>
     <Form.Field>
       <Form.Input defaultValue={this.props.statssa} label="Statssa Area" placeholder="Statssa Area" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, statssa: data.value}}))}} />
@@ -309,6 +309,9 @@ class registerLearner extends Component {
       </Form.Field>
       <Form.Field>
       <Form.Input defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Enter Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}} error={this.props.lastSchoolError} />
+    </Form.Field>
+    <Form.Field>
+      <Form.Input defaultValue={this.props.year_attented} label="Last Year at High School" placeholder="Enter Last Year" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year_attented: data.value}}))}} />
     </Form.Field>
     <Form.Field>
       <Form.Input defaultValue={this.props.statssa} label="Statssa Area" placeholder="Statssa Area" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, statssa: data.value}}))}} />

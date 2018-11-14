@@ -235,12 +235,12 @@ export const validateInput = (info, errs) => {
       errs = {...errs, strAddressError: false}
     }
 
-    if(!isNumeric(info.postCode)) {
-      errs = {...errs, postCodeError: true}
-    }
-    else {
-      errs = {...errs, postCodeError: false}
-    }
+    // if(!isNumeric(info.postCode)) {
+    //   errs = {...errs, postCodeError: true}
+    // }
+    // else {
+    //   errs = {...errs, postCodeError: false}
+    // }
 
     if(isEmpty(info.postAddress)) {
       errs = {...errs, postAddressError: true}
@@ -249,12 +249,12 @@ export const validateInput = (info, errs) => {
       errs = {...errs, postAddressError: false}
     }
 
-    if(!isNumeric(info.postCode2)) {
-      errs = {...errs, postCode2Error: true}
-    }
-    else {
-      errs = {...errs, postCode2Error: false}
-    }
+    // if(!isNumeric(info.postCode2)) {
+    //   errs = {...errs, postCode2Error: true}
+    // }
+    // else {
+    //   errs = {...errs, postCode2Error: false}
+    // }
 
     if(!isMobilePhone(info.homeno)){
       errs = {...errs, homenoError: true}
