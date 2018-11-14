@@ -31,7 +31,7 @@ export const updateBatchClient = (info) => {
         newInfo = {...newInfo, [key]: info[key]}
       }
     }
-    console.log("Clicked: ", newInfo)
+    console.log("Clicked: ", info.save)
     if (newInfo.day != undefined) {
       const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
       newInfo = {...newInfo, date: date}
@@ -53,7 +53,8 @@ export const updateBatchClient = (info) => {
     console.log(newInfo)
     dispatch(update(newInfo))
     const state = getState();
-    dispatch(validateInput1(state.batch))
+    let b = {...state.batch, save: info.save}
+    dispatch(validateInput1(b))
   }
 }
 export const reload = (saved) => ({ type: RELOAD, payload: true})
@@ -309,6 +310,10 @@ export const validateInput1 = (info, errs) => {
         dispatch(success(true))
       //  dispatch(reload(true))
     //  dispatch(changeActiveStep("programme"))
+    }
+    console("CLICKED:" + info.save )
+    if (info.save == true) {
+      dispatch(reload(true))
     }
   }
 

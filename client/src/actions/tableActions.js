@@ -43,6 +43,7 @@ const _format = (data) => {
         styleC = 'notSubmitted'
       break;
     }
+    console.log(item)
 		return ([
 			{text: item.firstname + " " + item.surname, style: styleC},
 			{text: item.national_id, style: styleC},
