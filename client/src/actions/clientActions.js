@@ -307,13 +307,14 @@ export const validateInput1 = (info, errs) => {
 
         dispatch(uploadBatch(newInfo))
         dispatch(success(true))
+        if (info.save == true) {
+          dispatch(reload(true))
+        }
       //  dispatch(reload(true))
     //  dispatch(changeActiveStep("programme"))
     }
     console.log("CLICKED:" + info.save )
-    if (info.save == true) {
-      dispatch(reload(true))
-    }
+
   }
 
 
