@@ -52,7 +52,7 @@ const _format = (data) => {
 			{text: item.equity, style: styleC},
       {text: item.year_attented, style: styleC},
       {text: item.last_school, style: styleC},
-      {text: item.strAddress, style: styleC}
+      {text: item.homeaddr, style: styleC}
 		]);
 	});
 }
