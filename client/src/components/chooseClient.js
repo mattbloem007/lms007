@@ -182,7 +182,7 @@ class Client extends Component {
                     <Form.Select disabled={this.state.show1} placeholder="Select Qualification Programme Name"  fluid search selection options={this.props.qp} onChange={(e, {value}) => {this.handleQProgramme(value)}}></Form.Select>
                   </Form.Field>
                   <Form.Field>
-                    <Form.Select disabled={this.state.show1} placeholder="Select Qualification Module"  fluid multiple search selection options={this.props.qpm} onChange={(e,{value})=>{this.setState({qpms: value})}}></Form.Select>
+                    <Form.Select disabled={this.state.show1} placeholder="Select Qualification Module"  fluid multiple search selection closeOnChange options={this.props.qpm} onChange={(e,{value})=>{this.setState({qpms: value})}}></Form.Select>
                   </Form.Field>
                   <Form.Field>
                     <Form.Select disabled={this.state.show2} placeholder="Select Unit Standard"  fluid search selection options={this.props.us} onChange={(e,{value})=>{this.setState({us: value})}}></Form.Select>
@@ -191,24 +191,24 @@ class Client extends Component {
                     <Form.Select disabled={this.state.show3} placeholder="Select Skill Programmes"  fluid search selection options={this.props.sp} onChange={(e, {value}) => {this.handleSProgramme(value)}}></Form.Select>
                   </Form.Field>
                   <Form.Field>
-                    <Form.Select disabled={this.state.show3} placeholder="Select Skill Programme Modules"  fluid multiple search selection options={this.props.spm} onChange={(e,{value})=>{this.setState({spms: value})}}></Form.Select>
+                    <Form.Select disabled={this.state.show3} placeholder="Select Skill Programme Modules"  fluid multiple search selection closeOnChange options={this.props.spm} onChange={(e,{value})=>{this.setState({spms: value})}}></Form.Select>
                   </Form.Field>
                   <Form.Field>
                     <Form.Select disabled={this.state.show4} placeholder="Select Short Course"  fluid search selection options={this.props.sc} onChange={(e,{value})=>{this.setState({sc: value})}}></Form.Select>
                   </Form.Field>
                   <Form.Field>
-                    <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Select Facilitator Name" fluid multiple search selection onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>
+                    <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Select Facilitator Name" fluid multiple search selection closeOnChange onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>
                   </Form.Field>
                   <Form.Field>
-                    <Form.Select defaultValue={this.props.assessor} label="Assessor" placeholder="Select Assessor Name"  fluid multiple search selection onChange={(e,{value})=>{this.setState({assessor: value})}} options={this.props.assessors} error={this.props.assessorError}/>
+                    <Form.Select defaultValue={this.props.assessor} label="Assessor" placeholder="Select Assessor Name"  fluid multiple search selection closeOnChange onChange={(e,{value})=>{this.setState({assessor: value})}} options={this.props.assessors} error={this.props.assessorError}/>
                   </Form.Field>
                   <Form.Field>
-                    <Form.Select defaultValue={this.props.moderator} label="Moderator" placeholder="Select Moderator Name"  fluid multiple search selection onChange={(e,{value})=>{this.setState({moderator: value})}} options={this.props.moderators} error={this.props.moderatorError}/>
+                    <Form.Select defaultValue={this.props.moderator} label="Moderator" placeholder="Select Moderator Name"  fluid multiple search selection closeOnChange onChange={(e,{value})=>{this.setState({moderator: value})}} options={this.props.moderators} error={this.props.moderatorError}/>
                   </Form.Field>
                 </Form.Field>
                 :
                 <Form.Field>
-                  <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Select Facilitator Name" fluid multiple search selection onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>
+                  <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Select Facilitator Name" fluid multiple search selection closeOnChange onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>
                 </Form.Field>
               }
                   {
