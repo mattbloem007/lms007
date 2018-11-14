@@ -297,7 +297,7 @@ export const validateInput1 = (info, errs) => {
 
     if (errors == false) {
         dispatch(uploadBatch(newInfo))
-        dispatch(reload(true))
+      //  dispatch(reload(true))
     //  dispatch(changeActiveStep("programme"))
     }
   }
