@@ -15,6 +15,7 @@ class RegisterAssessor extends Component{
     this.state = {
                   info: {
                           name: "",
+                          surname: "",
                           ID: "",
                           reg_no: "",
                           seta: "",
@@ -44,6 +45,9 @@ class RegisterAssessor extends Component{
           <Form.Field>
             <Form.Input label="Name" defaultValue={this.props.name} placeholder="Enter Assessor Name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
         </Form.Field>
+        <Form.Field>
+          <Form.Input  label= "Surname" defaultValue={this.props.surname} placeholder="Enter Surname"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} error={this.props.surnameError}/>
+        </Form.Field>
           <Form.Field>
           <Form.Input label="ID Number" defaultValue={this.props.ID} placeholder="ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} error={this.props.IDError}/>
       </Form.Field>
@@ -67,6 +71,7 @@ class RegisterAssessor extends Component{
 }
 const mapStateToProps = (state) => ({
   nameError: state.assessor.nameError,
+  surnameError: state.assessor.surnameError,
   IDError: state.assessor.IDError,
   reg_noError: state.assessor.reg_noError,
   setaError: state.assessor.setaError,
@@ -74,6 +79,7 @@ const mapStateToProps = (state) => ({
   yearError: state.assessor.yearError,
   monthError: state.assessor.monthError,
   name: state.assessor.name,
+  surname: state.assessor.surname,
   ID: state.assessor.ID,
   reg_no: state.assessor.reg_no,
   seta: state.assessor.seta,

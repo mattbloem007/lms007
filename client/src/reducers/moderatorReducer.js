@@ -2,6 +2,7 @@ import { VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR } from '../actions/
 
 const moderatorState = {
   name: "",
+  surname: "",
   ID: "",
   reg_no: "",
   seta: "",
@@ -10,6 +11,7 @@ const moderatorState = {
   month: "",
   year: "",
   nameError: false,
+  surnameError: false,
   IDError: false,
   reg_noError: false,
   setaError: false,

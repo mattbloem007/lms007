@@ -36,6 +36,13 @@ export const validateInput = (info, errs) => {
       errs = {...errs, nameError: false}
     }
 
+    if(isEmpty(info.surname)) {
+      errs = {...errs, surnameError: true}
+    }
+    else {
+      errs = {...errs, surnameError: false}
+    }
+
     if (info.ID.length != 13 ||!isNumeric(info.ID)) {
       errs = {...errs, IDError: true}
     }
@@ -88,7 +95,7 @@ export const validateInput = (info, errs) => {
     }
 
     let newInfo = {
-      name: info.name,
+      name: info.name+ " " + info.surname,
       ID: info.ID,
       reg_no: info.reg_no,
       seta: info.seta,

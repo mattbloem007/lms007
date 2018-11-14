@@ -2,6 +2,7 @@ import { VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR } from '../actions/act
 
 const assessorState = {
   name: "",
+  surname: "",
   ID: "",
   reg_no: "",
   seta: "",
@@ -10,6 +11,7 @@ const assessorState = {
   month: "",
   year: "",
   nameError: false,
+  surnameError: false,
   IDError: false,
   reg_noError: false,
   setaError: false,

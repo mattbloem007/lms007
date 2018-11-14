@@ -148,6 +148,20 @@ class registerLearner extends Component {
         <Form.Field>
           <Form.Input defaultValue={this.props.secondname} label="Second Name" name="secondname" placeholder="Second Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, secondname: data.value}}))}}/>
         </Form.Field>
+        <Form.Field>
+          <label>Birth Date</label>
+        </Form.Field>
+        <Form.Group>
+          <Form.Field>
+            <Form.Select defaultValue={this.props.day}  placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.props.dayError}/>
+          </Form.Field>
+          <Form.Field>
+            <Form.Select defaultValue={this.props.month} placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.props.monthError}/>
+          </Form.Field>
+          <Form.Field>
+            <Form.Input defaultValue={this.props.year} name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.props.yearError}/>
+          </Form.Field>
+        </Form.Group>
       </Form.Group>
         <Form.Field>
           <Form.Select defaultValue={this.props.equity} label="Equity" placeholder="Select Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} fluid search selection options={EquityOptions}/>
@@ -181,20 +195,7 @@ class registerLearner extends Component {
         <Form.Field>
           <Form.Select defaultValue={this.props.disability} label="Disability" placeholder="Disability" options={disability} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, disability: data.value}}))}} />
         </Form.Field>
-        <Form.Field>
-          <label>Birth Date</label>
-        </Form.Field>
-        <Form.Group>
-          <Form.Field>
-            <Form.Select defaultValue={this.props.day}  placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.props.dayError}/>
-          </Form.Field>
-          <Form.Field>
-            <Form.Select defaultValue={this.props.month} placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.props.monthError}/>
-          </Form.Field>
-          <Form.Field>
-            <Form.Input defaultValue={this.props.year} name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.props.yearError}/>
-          </Form.Field>
-        </Form.Group>
+
 
           <Form.Field>
             <Form.Input defaultValue={this.props.strAddress} label="Physical Address" name="address" placeholder="Home Address Line 1"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress: data.value}}))}} error={this.props.strAddressError} />
@@ -278,6 +279,20 @@ class registerLearner extends Component {
         <Form.Field>
           <Form.Input defaultValue={this.props.secondname} label="Second Name" name="secondname" placeholder="Second Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, secondname: data.value}}))}}/>
         </Form.Field>
+        <Form.Field>
+          <label>Birth Date</label>
+        </Form.Field>
+        <Form.Group>
+          <Form.Field>
+            <Form.Select defaultValue={this.props.day}  placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.props.dayError}/>
+          </Form.Field>
+          <Form.Field>
+            <Form.Select defaultValue={this.props.month} placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.props.monthError}/>
+          </Form.Field>
+          <Form.Field>
+            <Form.Input defaultValue={this.props.year} name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.props.yearError}/>
+          </Form.Field>
+        </Form.Group>
       </Form.Group>
         <Form.Field>
           <Form.Select defaultValue={this.props.equity} label="Equity" placeholder="Select Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} fluid search selection options={EquityOptions}/>
@@ -289,7 +304,7 @@ class registerLearner extends Component {
         <Form.Select defaultValue={this.props.gender} label="Gender" placeholder="Select Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}}  fluid search selection options={genderOptions} error={this.props.genderError} />
       </Form.Field>
       <Form.Field>
-      <Form.Select defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Select Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}}  fluid search selection options={genderOptions} error={this.props.lastSchoolError} />
+      <Form.Input defaultValue={this.props.last_school} label="Last School (EMIS Number)" placeholder="Enter Last School Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, last_school: data.value}}))}} error={this.props.lastSchoolError} />
     </Form.Field>
     <Form.Field>
       <Form.Input defaultValue={this.props.statssa} label="Statssa Area" placeholder="Statssa Area" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, statssa: data.value}}))}} />
@@ -311,20 +326,7 @@ class registerLearner extends Component {
         <Form.Field>
           <Form.Select defaultValue={this.props.disability} label="Disability" placeholder="Disability" options={disability} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, disability: data.value}}))}} />
         </Form.Field>
-        <Form.Field>
-          <label>Birth Date</label>
-        </Form.Field>
-        <Form.Group>
-          <Form.Field>
-            <Form.Select defaultValue={this.props.day}  placeholder="DD" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, day: data.value}}))}} fluid search selection options={days} error={this.props.dayError}/>
-          </Form.Field>
-          <Form.Field>
-            <Form.Select defaultValue={this.props.month} placeholder="MM" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, month: data.value}}))}} fluid search selection options={months} error={this.props.monthError}/>
-          </Form.Field>
-          <Form.Field>
-            <Form.Input defaultValue={this.props.year} name="year" maxLength="4" placeholder="YYYY" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year: data.value}}))}} error={this.props.yearError}/>
-          </Form.Field>
-        </Form.Group>
+
 
           <Form.Field>
             <Form.Input defaultValue={this.props.strAddress} label="Physical Address" name="address" placeholder="Home Address Line 1"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, strAddress: data.value}}))}} error={this.props.strAddressError} />

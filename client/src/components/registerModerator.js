@@ -15,6 +15,7 @@ class RegisterModerator extends Component{
     this.state = {
                   info: {
                           name: "",
+                          surname: "",
                           ID: "",
                           reg_no: "",
                           seta: "",
@@ -44,6 +45,9 @@ class RegisterModerator extends Component{
           <Form.Field>
             <Form.Input label="Name" defaultValue={this.props.name} placeholder="Enter moderator Name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
         </Form.Field>
+        <Form.Field>
+          <Form.Input  label= "Surname" defaultValue={this.props.surname} placeholder="Enter Surname"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} error={this.props.surnameError}/>
+        </Form.Field>
           <Form.Field>
           <Form.Input label="ID Number" defaultValue={this.props.ID} placeholder="ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} error={this.props.IDError}/>
       </Form.Field>
@@ -67,6 +71,7 @@ class RegisterModerator extends Component{
 }
 const mapStateToProps = (state) => ({
   nameError: state.moderator.nameError,
+  surnameError: state.moderator.surnameError,
   IDError: state.moderator.IDError,
   reg_noError: state.moderator.reg_noError,
   setaError: state.moderator.setaError,
@@ -74,6 +79,7 @@ const mapStateToProps = (state) => ({
   yearError: state.moderator.yearError,
   monthError: state.moderator.monthError,
   name: state.moderator.name,
+  surname: state.moderator.surname,
   ID: state.moderator.ID,
   reg_no: state.moderator.reg_no,
   seta: state.moderator.seta,
