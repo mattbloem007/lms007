@@ -38,7 +38,7 @@ export const validateInput = (info, errs) => {
       errs = {...errs, surnameError: false}
     }
 
-    if (isEmpty(info.ID) && isLength(info.ID) < 13 && !isNumeric(info.ID)) {
+    if (info.ID.length != 13 ||!isNumeric(info.ID)) {
       errs = {...errs, IDError: true}
     }
     else {
