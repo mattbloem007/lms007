@@ -29,8 +29,12 @@ class Client extends Component {
           mday: "",
           mmonth: "",
           myear: "",
+          endday: "",
+          endmonth: "",
+          endyear: "",
           client_name: "",
           project: "",
+          venue: "",
           programme_name: "",
           credit: "",
           creditStatus: false,
@@ -143,13 +147,22 @@ class Client extends Component {
         <Message success header='Form Completed' content="Saved Batch Successfully" />
         <Form.Input defaultValue={this.props.project} label="Project Name" placeholder="Enter Project Name" onChange={(e,{value})=>{this.setState({project: value})}} error={this.props.projectError}/>
         <Form.Field>
-          <label>Date</label>
+          <label>Training Start Date</label>
         </Form.Field>
         <Form.Group>
             <Form.Select placeholder="DD" defaultValue={this.props.day} onChange={(e,{value})=>{this.setState({day: value})}} fluid search selection options={days} error={this.props.dayError}/>
             <Form.Select placeholder="MM" defaultValue={this.props.month} onChange={(e,{value})=>{this.setState({month: value})}} fluid search selection options={months} error={this.props.monthError}/>
             <Form.Input name="year" defaultValue={this.props.year} maxLength="4" placeholder="YYYY" onChange={(e,{value})=>{this.setState({year: value})}} error={this.props.yearError}/>
         </Form.Group>
+        <Form.Field>
+          <label>Training End Date</label>
+        </Form.Field>
+        <Form.Group>
+            <Form.Select placeholder="DD" defaultValue={this.props.endday} onChange={(e,{value})=>{this.setState({endday: value})}} fluid search selection options={days} />
+            <Form.Select placeholder="MM" defaultValue={this.props.endmonth} onChange={(e,{value})=>{this.setState({endmonth: value})}} fluid search selection options={months} />
+            <Form.Input name="year" defaultValue={this.props.endyear} maxLength="4" placeholder="YYYY" onChange={(e,{value})=>{this.setState({endyear: value})}} />
+        </Form.Group>
+        <Form.Input defaultValue={this.props.venue} label="Training Venue" placeholder="Enter the venue" onChange={(e,{value})=>{this.setState({venue: value})}} />
             <Form.Select label="Choose Client" defaultValue={this.props.client_name} placeholder='Select Client Name' fluid search selection options={this.props.clients} onChange={(e,{value})=>{this.setState({client_name: value})}} error={this.props.clientError}/>
               <Form.Field>
                 <label>Date Assessed</label>
@@ -258,9 +271,14 @@ const mapStateToProps = state => ({
   mday: state.batch.mday,
   mmonth: state.batch.mmonth,
   myear: state.batch.myear,
+  endday: state.batch.endday,
+  endmonth: state.batch.endmonth,
+  endyear: state.batch.endyear,
+  enddate: state.batch.enddate,
   date: state.batch.date,
   client_name: state.batch.client_name,
   project: state.batch.project,
+  venue: state.batch.venue,
   errors: state.client.errors,
   programmeOptions: state.programme.programmeOptions,
   credit: state.programme.credit,

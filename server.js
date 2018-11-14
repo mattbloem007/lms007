@@ -481,7 +481,7 @@ app.post('/data/lms_batch', function(req, res) {
           values.push(jsondata[i]);
     }
     console.log(values)
-      connection.query("INSERT INTO `lms_batch` (`date`,`client_name`,`project`,`programme`,`credit`,`facilitator`, `assessor`, `moderator`, `assessment_date`, `moderator_date`, `programmeType`, `unitstd`, `qualification`, `skills_programme`, `short_courses`, `q_modules`, `sp_modules`) VALUES (?)", [values], function(err, result){
+      connection.query("INSERT INTO `lms_batch` (`date`,`end_date`, `client_name`,`project`,`venue`,`programme`,`credit`,`facilitator`, `assessor`, `moderator`, `assessment_date`, `moderator_date`, `programmeType`, `unitstd`, `qualification`, `skills_programme`, `short_courses`, `q_modules`, `sp_modules`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");

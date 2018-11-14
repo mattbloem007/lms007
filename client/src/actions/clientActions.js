@@ -44,6 +44,10 @@ export const updateBatchClient = (info) => {
       const moderator_date = newInfo.mmonth + " " + newInfo.mday +", " + newInfo.myear
       newInfo = {...newInfo, moderator_date: moderator_date}
     }
+    if (newInfo.endday != undefined) {
+      const end_date = newInfo.endmonth + " " + newInfo.endday + ", " + newInfo.endyear
+      newInfo = {...newInfo, enddate: end_date}
+    }
 
     console.log(newInfo)
     dispatch(update(newInfo))
@@ -274,8 +278,10 @@ export const validateInput1 = (info, errs) => {
 
     let newInfo = {
       date:  info.date,
+      enddate: info.enddate,
       client_name: info.client_name,
       project: info.project,
+      venue: info.venue,
       programme_name: info.programme_name,
       credit: info.credit,
       facilitator: facilitators,
