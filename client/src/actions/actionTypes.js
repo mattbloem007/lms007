@@ -41,6 +41,7 @@ export const RECEIVE_CLUBS = 'RECEIVE_CLUBS';
 export const CLEAR_BATCH_LEARNERS = 'CLEAR_BATCH_LEARNERS';
 export const UPDATE_CHECK = 'UPDATE_CHECK';
 export const RELOAD = 'RELOAD';
+export const SUCCESS = 'SUCCESS';
 export const RESET_LEARNER = 'RESET_LEARNER';
 export const RESET_CLIENT = 'RESET_CLIENT';
 export const RESET_FACILITATOR = 'RESET_FACILITATOR';

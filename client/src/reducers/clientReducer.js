@@ -15,6 +15,7 @@ const clientState = {
   moderatorError: false,
   programmeTypeError: false,
   saved: false,
+  success: false,
   name: "",
   tel: "",
   address: "",
@@ -47,6 +48,8 @@ const clientReducer = (state = clientState, action) => {
       return {...state, ...action.payload}
     case RELOAD:
       return clientState
+    case SUCCESS:
+      return {...state, success: action.payload}
     case RESET_CLIENT:
       return clientState
     case RECEIVE_QP:

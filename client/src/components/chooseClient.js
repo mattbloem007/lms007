@@ -296,7 +296,7 @@ const mapStateToProps = state => ({
   moderator: state.batch.moderator,
   creditStatus: state.programme.creditStatus,
   programmeType: state.batch.programmeType,
-  success: state.batch.success,
+  success: state.client.success,
   saved: state.client.saved
 })
 const mapDispatchToProps = dispatch => ({

@@ -1,4 +1,4 @@
-import { RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, RESET_CLIENT } from './actionTypes'
+import { RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, SUCCESS, RESET_CLIENT } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import _ from 'lodash'
@@ -56,6 +56,7 @@ export const updateBatchClient = (info) => {
   }
 }
 export const reload = (saved) => ({ type: RELOAD, payload: true})
+export const success = (saved) => ({type: SUCCESS, payload: saved})
 export const resetClient = () => ({ type: RESET_CLIENT })
 export const validateComplete = errs => ({ type: VALIDATE_CLIENT, payload: errs})
 export const update = info => ({ type: UPDATE_BATCH, payload: info })
@@ -302,8 +303,9 @@ export const validateInput1 = (info, errs) => {
 
 
     if (errors == false) {
-      newInfo = {...newInfo, success: true}
+
         dispatch(uploadBatch(newInfo))
+        dispatch(success(true))
       //  dispatch(reload(true))
     //  dispatch(changeActiveStep("programme"))
     }
