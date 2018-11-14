@@ -37,6 +37,9 @@ const _format = (data) => {
 			{text: item.cellno, style: 'backColor'},
 			{text: item.gender, style: 'backColor'},
 			{text: item.equity, style: 'backColor'},
+      {text: item.year_attented, style: 'backColor'},
+      {text: item.last_school, style: 'backColor'},
+      {text: item.physicalAddress, style: 'backColor'}
 		]);
 	});
 }
@@ -96,6 +99,66 @@ export const downloadPDF = (batch, batchs, learners) => {
           },
           {
               text: info.facilitator
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Name(s) of Assessor(s):',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.assessor
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Assessment Date:',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.assessment_date
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Name(s) of Moderator(s):',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.moderator
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Moderation Date:',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.moderator_date
           }
         ],
         // optional space between columns

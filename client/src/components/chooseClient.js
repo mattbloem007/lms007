@@ -20,6 +20,7 @@ class Client extends Component {
       super();
       this.state = {
           success: false,
+          save: false,
           day: "",
           month: "",
           year: "",
@@ -76,6 +77,7 @@ class Client extends Component {
 
 
   validateInput = (e) => {
+    this.setState({save: true})
     this.props.clientActions.updateBatchClient(this.state)
   //  this.props.clientActions.validateInput1(this.state)
   }
@@ -144,7 +146,6 @@ class Client extends Component {
   render() {
     return(
       <Form success={this.props.success}>
-        <Message success header='Form Completed' content="Saved Batch Successfully" />
         <Form.Input defaultValue={this.props.project} label="Project Name" placeholder="Enter Project Name" onChange={(e,{value})=>{this.setState({project: value})}} error={this.props.projectError}/>
         <Form.Field>
           <label>Training Start Date</label>
@@ -244,7 +245,7 @@ class Client extends Component {
                   }
 
 
-
+                  <Message success header='Form Completed' content="Saved Batch Successfully" />
       </Form>
   )
   }
