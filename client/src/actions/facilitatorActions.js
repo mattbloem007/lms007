@@ -55,6 +55,7 @@ export const validateInput = (info, errs) => {
     let errors = false;
 
     for (var x in errs) {
+      console.log(x, errs[x])
       if (errs[x]) {
         errors = true;
         break;
