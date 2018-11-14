@@ -185,7 +185,9 @@ export const downloadPDF = (batch, batchs, learners) => {
             headerRows: 1,
             dontBreakRows: true,
             body: [
-              [{text: 'Full Name', style: 'tableHeader'}, {text: 'ID Number', style: 'tableHeader'}, {text: 'Cell Phone', style: 'tableHeader'}, {text: 'Gender', style: 'tableHeader'}, {text: 'Ethnicity', style: 'tableHeader'}],
+              [{text: 'Full Name', style: 'tableHeader'}, {text: 'ID Number', style: 'tableHeader'}, {text: 'Cell Phone', style: 'tableHeader'}, {text: 'Gender', style: 'tableHeader'}, {text: 'Ethnicity', style: 'tableHeader'},
+               {text: 'Year', style: 'tableHeader'}, {text: 'School', style: 'tableHeader'}, {text: 'Address', style: 'tableHeader'}
+             ],
               ...formattedData,
             ]
           }
