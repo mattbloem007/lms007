@@ -41,6 +41,8 @@ const _format = (data) => {
       break;
       case "Not Submitted":
         styleC = 'notSubmitted'
+      case "Competent After Resubmission":
+        styleC = 'resub'
       break;
     }
     console.log(item)
@@ -215,6 +217,9 @@ export const downloadPDF = (batch, batchs, learners) => {
         },
         notSubmitted : {
           background: 'white'
+        },
+        resub: {
+          background:'orange'
         }
       }
     };

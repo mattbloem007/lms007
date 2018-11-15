@@ -12,7 +12,41 @@ import _ from 'lodash';
 import qualifications from './qualifications'
 
 
+const initState = {
+    success: false,
+    save: false,
+    day: "",
+    month: "",
+    year: "",
+    aday: "",
+    amonth: "",
+    ayear: "",
+    mday: "",
+    mmonth: "",
+    myear: "",
+    endday: "",
+    endmonth: "",
+    endyear: "",
+    client_name: "",
+    project: "",
+    venue: "",
+    programme_name: "",
+    credit: "",
+    creditStatus: false,
+    facilitator: "",
+    programmeType: "",
+    qpms: [],
+    spms: [],
+    us: "",
+    qp: "",
+    sp: "",
+    sc: "",
+    show1: true,
+    show2: true,
+    show3: true,
+    show4: true
 
+}
 
 class Client extends Component {
 
@@ -60,6 +94,7 @@ class Client extends Component {
     this.props.learnerActions.fetchFacilitator();
     this.props.learnerActions.fetchAssessor();
     this.props.learnerActions.fetchModerator();
+
     // this.props.clientActions.fetchQualifications();
     // this.props.clientActions.fetchSkillProgramme();
     // this.props.clientActions.fetchShortCourse();
@@ -68,6 +103,7 @@ class Client extends Component {
 
   componentWillReceiveProps(nextProps) {
       this.setState({creditStatus: nextProps.creditStatus})
+
   }
 
   handleRadio = value => {
@@ -77,8 +113,21 @@ class Client extends Component {
 
 
   validateInput = (e) => {
-    this.setState({save: true})
     this.props.clientActions.updateBatchClient(this.state, true)
+    .then(() => {
+      console.log("SUCCESS?" + this.props.success)
+      if (this.props.success) {
+        this.setState({...initState, save: true})
+      }
+      this.props.clientActions.reload(true)
+      .then(() => {
+        this.props.clientActions.fetchClients();
+        this.props.learnerActions.fetchFacilitator();
+        this.props.learnerActions.fetchAssessor();
+        this.props.learnerActions.fetchModerator();
+      })
+    })
+
   //  this.props.clientActions.validateInput1(this.state)
   }
 
@@ -145,7 +194,7 @@ class Client extends Component {
 
   render() {
     return(
-      <Form success={this.props.success}>
+      <Form success={this.state.save}>
         <Form.Input defaultValue={this.props.project} label="Project Name" placeholder="Enter Project Name" onChange={(e,{value})=>{this.setState({project: value})}} error={this.props.projectError}/>
         <Form.Field>
           <label>Training Start Date</label>
@@ -221,11 +270,14 @@ class Client extends Component {
                   <Form.Field>
                     <Form.Select defaultValue={this.props.moderator} label="Moderator" placeholder="Select Moderator Name"  fluid multiple search selection closeOnChange onChange={(e,{value})=>{this.setState({moderator: value})}} options={this.props.moderators} error={this.props.moderatorError}/>
                   </Form.Field>
+                  <Message success header='Form Completed' content="Saved Batch Successfully" />
                 </Form.Field>
                 :
                 <Form.Field>
                   <Form.Select defaultValue={this.props.facilitator} label="Facilitator" placeholder="Select Facilitator Name" fluid multiple search selection closeOnChange onChange={(e,{value})=>{this.setState({facilitator: value})}} options={this.props.facilitators} error={this.props.facilitatorError}/>
+                  <Message success header='Form Completed' content="Saved Batch Successfully" />
                 </Form.Field>
+
               }
                   {
                     this.state.creditStatus ?
@@ -245,7 +297,6 @@ class Client extends Component {
                   }
 
 
-                  <Message success header='Form Completed' content="Saved Batch Successfully" />
       </Form>
   )
   }

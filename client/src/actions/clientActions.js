@@ -54,9 +54,15 @@ export const updateBatchClient = (info, bool) => {
     const state = getState();
     let b = {...state.batch, save: bool}
     dispatch(validateInput1(b))
+    return Promise.resolve()
   }
 }
-export const reload = (saved) => ({ type: RELOAD, payload: true})
+export const reload = (saved) => {
+  return dispatch => {
+    dispatch({type: RELOAD, payload: true})
+    return Promise.resolve()
+  }
+}
 export const success = (saved) => ({type: SUCCESS, payload: saved})
 export const resetClient = () => ({ type: RESET_CLIENT })
 export const validateComplete = errs => ({ type: VALIDATE_CLIENT, payload: errs})
@@ -304,16 +310,15 @@ export const validateInput1 = (info, errs) => {
 
 
     if (errors == false) {
-
         dispatch(uploadBatch(newInfo))
         if (info.save == true) {
-          dispatch(success(true))
-          dispatch(reload(true))
+            dispatch(success(true))
+            //dispatch(reload(true))
+
         }
-      //  dispatch(reload(true))
-    //  dispatch(changeActiveStep("programme"))
     }
-    console.log("CLICKED:" + info.save )
+
+
 
   }
 

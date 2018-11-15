@@ -44,7 +44,8 @@ export const SETA = [
 export const status = [
   {text: 'Competent', value:'Competent'},
   {text: 'Not yet competent', value:'Not yet competent'},
-  {text: 'Not Submitted', value:'Not Submitted'}
+  {text: 'Not Submitted', value:'Not Submitted'},
+  {text: 'Competent After Resubmission', value:'Competent After Resubmission'}
 ]
 
 export const education = [
