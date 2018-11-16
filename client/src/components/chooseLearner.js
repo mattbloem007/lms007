@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Form, Icon } from 'semantic-ui-react';
+import { Segment, Form, Icon, Message } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as learnerActions from '../actions/learnerActions';
@@ -15,7 +15,8 @@ class Learner extends Component {
   constructor() {
       super();
       this.state = {
-          learnerIDs: []
+          learnerIDs: [],
+          success: false
 
       }
   }
@@ -28,6 +29,7 @@ class Learner extends Component {
 
   validateInput = () => {
     this.props.learnerActions.updateBatchLearner(this.props.learnerIDs)
+    this.props.tableActions.changeActiveTable("batch");
   }
 
   back = () => {
@@ -41,6 +43,7 @@ class Learner extends Component {
       this.props.learnerActions.resetLearnerState();
     }
     this.props.tableActions.changeActiveTable("rLearner");
+
   }
 
   handleLearner = (e, data) => {
@@ -48,18 +51,21 @@ class Learner extends Component {
       this.setState({ learnerIDs: data.value});
       console.log(data, e)
       this.props.learnerActions.updateBatchLearner({ learnerIDs: data.value})
-      if (data.value.length > 0) {
-        this.props.learnerActions.fetchLearnerInfo(data.value[data.value.length - 1].split("-")[0]);
-      }
+      // if (data.value.length > 0) {
+      //   this.props.learnerActions.fetchLearnerInfo(data.value[data.value.length - 1].split("-")[0]);
+      // }
     }
 
   }
 
+   /***/
+
   render() {
     return(
-      <Form>
-        <Form.Select defaultValue={this.props.learnerIDs} label="Choose Learner" placeholder='Select Learner Name' fluid multiple search selection options={this.props.learners} onChange={(e, data)=>{this.handleLearner(e, data)}} error={this.props.learnerError}/>
+      <Form success={this.state.success}>
+        <Form.Select defaultValue={this.props.learnerIDs} label="Choose Learner" placeholder='Select Learner Name' fluid multiple search selection onChange={(e, data)=>{this.handleLearner(e, data)}} options={this.props.learners}   error={this.props.learnerError}/>
         <Form.Group widths='equal'>
+          <Message success header='Save Completed' content="Saved Learners Successfully" />
           <Form.Button primary onClick={this.validateInput}><Icon name="save"/>Save</Form.Button>
           <Form.Button primary onClick={this.back}><Icon name="chevron circle left"/>Back</Form.Button>
           <Form.Button primary onClick={this.addLearner}><Icon name="add"/>Add New Learner</Form.Button>

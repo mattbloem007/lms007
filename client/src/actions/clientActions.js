@@ -32,20 +32,20 @@ export const updateBatchClient = (info, bool) => {
       }
     }
     if (newInfo.day != undefined) {
-      const date = newInfo.month + " " + newInfo.day +", " + newInfo.year
+      const date = newInfo.day + " " + newInfo.month  +", " + newInfo.year
       newInfo = {...newInfo, date: date}
     }
     if (newInfo.aday != undefined) {
-      const assessment_date = newInfo.amonth + " " + newInfo.aday +", " + newInfo.ayear
+      const assessment_date =   newInfo.aday + " " + newInfo.amonth+", " + newInfo.ayear
       newInfo = {...newInfo, assessment_date: assessment_date}
 
     }
     if (newInfo.mday != undefined) {
-      const moderator_date = newInfo.mmonth + " " + newInfo.mday +", " + newInfo.myear
+      const moderator_date =  newInfo.mday + " " + newInfo.mmonth + ", " + newInfo.myear
       newInfo = {...newInfo, moderator_date: moderator_date}
     }
     if (newInfo.endday != undefined) {
-      const end_date = newInfo.endmonth + " " + newInfo.endday + ", " + newInfo.endyear
+      const end_date =   newInfo.endday+ " " + newInfo.endmonth+ ", " + newInfo.endyear
       newInfo = {...newInfo, enddate: end_date}
     }
 

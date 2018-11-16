@@ -66,8 +66,15 @@ export const downloadPDF = (batch, batchs, learners) => {
     const {vfs} = vfsFonts.pdfMake;
     pdfMake.vfs = vfs;
     let index = parseInt(batch) - 1
-    let info = batchs[index]
-
+    console.log(index)
+    let info = batchs[0];
+    for (var x = 0; x < batchs.length; x++) {
+      console.log(batchs[x].batch_no + " " + parseInt(batch))
+      if (batchs[x].batch_no == parseInt(batch)) {
+        info = batchs[x]
+      }
+    }
+    console.log(info)
 	  const formattedData = _format(learners);
 
     const documentDefinition = {
@@ -174,6 +181,21 @@ export const downloadPDF = (batch, batchs, learners) => {
           },
           {
               text: info.moderator_date
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Training Date:',
+            margin: [ 5, 2, 10, 20 ]
+          },
+          {
+              text: info.date + "-" + info.end_date
           }
         ],
         // optional space between columns

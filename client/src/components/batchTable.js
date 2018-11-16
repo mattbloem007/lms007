@@ -25,7 +25,7 @@ class BatchTable extends Component {
     this.props.tableActions.addLearners("learner", y.toString())
   }
 
-  showBatchLearners = (batch_no) => {
+  showBatchLearners = (batch_no, index) => {
     this.props.tableActions.fetchBatchLearnerIDs(batch_no)
     this.props.tableActions.changeActiveTable("learnerTable")
   }
@@ -51,7 +51,7 @@ class BatchTable extends Component {
             return(
               <Table.Row key={x.batch_no} >
                 {
-                  Object.keys(this.props.batchs[i]).map((y) => <Table.Cell onClick={() => this.showBatchLearners(x.batch_no)} key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(this.props.batchs[i]).map((y) => <Table.Cell onClick={() => this.showBatchLearners(x.batch_no, i)} key={y}>{x[y]}</Table.Cell>)
                 }
                 <Table.Cell>
                   <Button floated='right' icon labelPosition='left' primary size='small' onClick={() => this.addLearners(x.batch_no)}>

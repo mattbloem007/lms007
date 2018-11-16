@@ -6,9 +6,11 @@ export function receiveInfo(json) {
   let info = {};
 
   for (var x in json.express) {
+    console.log(x + " " + json.express[x].end_date)
     info = {
       batch_no: json.express[x].batch_no,
       date: json.express[x].date,
+      end_date: json.express[x].end_date,
       client_name: json.express[x].client_name,
       project: json.express[x].project,
       programme:  json.express[x].programme,
