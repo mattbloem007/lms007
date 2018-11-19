@@ -89,6 +89,7 @@ const learnerState = {
   learnerIDs: [],
   addrCheck: false,
   type: "add",
+  learnerInfo: false,
   errors: false
 }
 

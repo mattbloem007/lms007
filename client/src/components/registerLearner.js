@@ -119,7 +119,13 @@ class registerLearner extends Component {
 
   back = () => {
     this.props.learnerActions.updateLearner(this.state.info)
-    this.props.tableActions.changeActiveTable("learner")
+    if (this.props.learnerInfo) {
+      this.props.tableActions.changeActiveTable("learnerTable")
+
+    }
+    else {
+      this.props.tableActions.changeActiveTable("learner")
+    }
   }
 
   render() {
@@ -496,7 +502,8 @@ const mapStateToProps = state => ({
   club: state.learner.club,
   errors: state.learner.errors,
   clubs: state.learner.clubs,
-  addrCheck: state.learner.addrCheck
+  addrCheck: state.learner.addrCheck,
+  learnerInfo: state.learner.learnerInfo
 })
 const mapDispatchToProps = dispatch => ({
   learnerActions: bindActionCreators(learnerActions, dispatch),

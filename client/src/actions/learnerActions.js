@@ -28,7 +28,8 @@ export const loadLearner = json => {
       postAddress: json.express[0].postaddr,
       day: dob.getDate().toString(),
       month:months[dob.getMonth()].text,
-      year: dob.getFullYear().toString()
+      year: dob.getFullYear().toString(),
+      learnerInfo: true
     }))
     dispatch(changeActiveTable("rLearner"))
   }
