@@ -3,6 +3,8 @@ import { Icon, Table, Menu, Container, Button } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
+import * as learnerActions from '../actions/learnerActions';
+
 import _ from 'lodash'
 
 class LearnerTable extends Component {
@@ -25,6 +27,11 @@ class LearnerTable extends Component {
     this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
   }
 
+  showLearnerInfo = (data) => {
+    console.log(data);
+      this.props.learnerActions.fetchLearnerInfo(data.national_id);
+  }
+
   render() {
     return(
     <Table celled>
@@ -41,7 +48,7 @@ class LearnerTable extends Component {
             return(
               <Table.Row key={x.client_id}>
                 {
-                  Object.keys(_.pick(this.props.batchLearners[i], this.state.allowed)).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(_.pick(this.props.batchLearners[i], this.state.allowed)).map((y) =><Table.Cell onClick={() => this.showLearnerInfo(x)} key={y}>{x[y]}</Table.Cell>)
                 }
               </Table.Row>
               )
@@ -70,6 +77,7 @@ const mapStateToProps = state => ({
 
 })
 const mapDispatchToProps = dispatch => ({
+  learnerActions: bindActionCreators(learnerActions, dispatch),
   tableActions: bindActionCreators(tableActions, dispatch)
 })
 
