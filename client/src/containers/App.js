@@ -69,12 +69,12 @@ class App extends Component {
   }
 
   render() {
-
+    let segment, currentForm;
     if (!this.state.loggedIn) {
       return <Redirect to="/" />
     }
 
-    let segment, currentForm;
+
     switch (this.props.activeItem) {
       case "Register Project":
         switch (this.props.activeStep) {

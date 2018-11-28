@@ -617,7 +617,7 @@
 
  #topdark {
      display: flex;
-     justify-content: center;
+     justify-content: space-between;
      z-index: 3;
      border-bottom: 1px solid #4A8FD5;
      height: 54px;
@@ -630,9 +630,6 @@
      width: 94px;
      height: 56px;
      cursor: pointer;
-     position: fixed;
-     left: 12px;
-     top: 32px;
  }
 
  #logo img {

@@ -93,12 +93,6 @@ export const validateInput = (info, errs) => {
       errs = {...errs, addressError: false}
     }
 
-    if (isEmpty(info.address2)) {
-      errs = {...errs, address2Error: true}
-    }
-    else {
-      errs = {...errs, address2Error: false}
-    }
 
     if (isEmpty(info.postCode) || !isNumeric(info.postCode)) {
       errs = {...errs, postCodeError: true}

@@ -50,7 +50,7 @@ class RegisterClient extends Component{
           <Form.Field>
             <Form.Field>
               <Form.Field>
-                <Form.Input label="Address" defaultValue={this.props.address} placeholder="Street Address" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address: data.value}}))}}error={this.props.addressError}/>
+                <Form.Input label="Address" defaultValue={this.props.address} placeholder="Street Address" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address: data.value}}))}} error={this.props.addressError}/>
             </Form.Field>
               <Form.Field>
                 <Form.Input type="text" name="aptaddr" defaultValue={this.props.address2} placeholder="Address Line 2" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, address2: data.value}}))}} />
