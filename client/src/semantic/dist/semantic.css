@@ -370,7 +370,7 @@
 
  div#logo {
    display: flex;
-   justify-content: space-around;
+   justify-content: flex-start;
    width: 200px;
    height: 50px;
 
