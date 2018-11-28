@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as flowActions from '../actions/flowActions';
-import { Link } from "react-router-dom";
+import * as loginActions from '../actions/loginActions';
+import { Link, Redirect } from "react-router-dom";
 import update from 'immutability-helper';
-import { Menu, Button, Step, Segment } from 'semantic-ui-react';
+import { Menu, Button, Step, Segment, Image } from 'semantic-ui-react';
 import * as mysql from 'mysql';
+import myImage from '../imgs/CLUBSMART Logo.png'
+import logo from '../imgs/Institute of Sport Logo.png'
+import logout from '../imgs/icon-logout-mobile.png'
+
 
 
 import RegisterLearner from '../components/registerLearner';
@@ -24,10 +29,18 @@ import Home from './Home';
 import ExistingProjects from '../components/ExistingProjects';
 import { days, months } from '../common';
 
+const style1 = {
+  paddingLeft:'12px'
+}
+
 class App extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      loggedIn: true
+    }
 
   }
 
@@ -47,7 +60,20 @@ class App extends Component {
     this.props.flowActions.saveInfo(form, refs, prev)
   }
 
+  logout = () => {
+    console.log("INHERE")
+    this.props.loginActions.logout()
+    .then(() => {
+      this.setState({loggedIn: false})
+    })
+  }
+
   render() {
+
+    if (!this.state.loggedIn) {
+      return <Redirect to="/" />
+    }
+
     let segment, currentForm;
     switch (this.props.activeItem) {
       case "Register Project":
@@ -102,16 +128,25 @@ class App extends Component {
 
     return (
       <div>
-          <Menu secondary pointing>
-            {
-              this.props.menuItems.map((item) =>
-              <Menu.Item key={item.id} name={item.text} active={this.props.activeItem === item.text} onClick={this.handleItemClick} />
-            )
-            }
-          <Menu.Menu position='right'>
-            <Menu.Item link={true} name="logout" />
-          </Menu.Menu>
+        <div id="topbar">
+              <span style={style1}>
+                <a onClick={this.logout}><img src={logout} />Logout</a>
+              </span>
+        </div>
+          <Menu id="topdark" secondary pointing>
+            <div id="logo">
+              <Image className="logo" src={logo} />
+              <Image className="logo" src={myImage}  />
+            </div>
+              <ul id="nav">
+                {
+                  this.props.menuItems.map((item) =>
+                  <Menu.Item as="li" key={item.id} name={item.text} active={this.props.activeItem === item.text} onClick={this.handleItemClick} />
+                )
+                }
+              </ul>
         </Menu>
+        <div id="topblue"></div>
           {segment}
      </div>
     );
@@ -124,6 +159,7 @@ const mapStateToProps = (state) => ({
       menuItems: state.flow.menuItems
 })
 const mapDispatchToProps = (dispatch) => ({
-    flowActions: bindActionCreators(flowActions, dispatch)
+    flowActions: bindActionCreators(flowActions, dispatch),
+    loginActions: bindActionCreators(loginActions, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(App);

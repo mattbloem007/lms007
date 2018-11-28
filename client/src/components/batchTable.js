@@ -37,7 +37,7 @@ class BatchTable extends Component {
   render() {
     return(
     <Segment style={{overflow: 'auto', maxHeight: 500 }}>
-    <Table celled selectable sortable stackable>
+    <Table className="tablesorter listings" id="active_table" celled selectable sortable stackable>
       <Table.Header>
         <Table.Row>
           {

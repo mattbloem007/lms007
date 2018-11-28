@@ -55,3 +55,6 @@ export const RECEIVE_US = 'RECEIVE_US';
 export const RECEIVE_SP = 'RECEIVE_SP';
 export const RECEIVE_SPM = 'RECEIVE_SPM';
 export const RECEIVE_SC = 'RECEIVE_SC';
+export const GET_USER = 'GET_USER';
+export const LOGOUT = 'LOGOUT';
+export const AUTH = 'AUTH';

@@ -8,6 +8,7 @@ import assessorReducer from './assessorReducer'
 import moderatorReducer from './moderatorReducer'
 import learnerReducer from './learnerReducer'
 import tableReducer from './tableReducer'
+import loginReducer from './loginReducer'
 
 const rootReducer = combineReducers({
   flow: flowReducer,
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   assessor: assessorReducer,
   moderator: moderatorReducer,
   learner: learnerReducer,
-  table: tableReducer
+  table: tableReducer,
+  login: loginReducer
 });
 
 export default rootReducer;

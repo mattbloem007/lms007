@@ -11,6 +11,7 @@ export function receiveInfo(json) {
       batch_no: json.express[x].batch_no,
       date: json.express[x].date,
       end_date: json.express[x].end_date,
+      venue: json.express[x].venue,
       client_name: json.express[x].client_name,
       project: json.express[x].project,
       programme:  json.express[x].programme,

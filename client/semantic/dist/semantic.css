@@ -19,6 +19,8 @@
  *
  */
 
+
+
 /*******************************
              Reset
 *******************************/
@@ -24096,7 +24098,16 @@ Floated Menu / Item
 .ui.secondary.pointing.menu {
   margin-left: 0em;
   margin-right: 0em;
-  border-bottom: 2px solid rgba(34, 36, 38, 0.15);
+  display: flex;
+  justify-content: space-around;
+  z-index: 3;
+  border-bottom: 2px solid #4A8FD5;
+  height: 54px;
+  background-color: #5298E0;
+  position: fixed;
+  top: 32px;
+  left: 0;
+  width: 100%;
 }
 
 .ui.secondary.pointing.menu .item {

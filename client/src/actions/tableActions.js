@@ -87,7 +87,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Batch Number:',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: batch
@@ -102,7 +102,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Programme Name:',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.programme
@@ -117,7 +117,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Name(s) of Facilitator(s):',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.facilitator
@@ -132,7 +132,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Name(s) of Assessor(s):',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.assessor
@@ -147,7 +147,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Assessment Date:',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.assessment_date
@@ -162,7 +162,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Name(s) of Moderator(s):',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.moderator
@@ -177,7 +177,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Moderation Date:',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.moderator_date
@@ -187,12 +187,25 @@ export const downloadPDF = (batch, batchs, learners) => {
         columnGap: 10
       },
       {
+        canvas: [
+		        {
+		            type: 'rect',
+					      x: 0,
+      					y: 0,
+      					w: 750,
+      					h: 25,
+      					r: 0,
+      					color: 'grey',
+		        }
+		    ]
+      },
+      {
         columns: [
           {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Training Date:',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.date + "-" + info.end_date
@@ -207,7 +220,7 @@ export const downloadPDF = (batch, batchs, learners) => {
             // auto-sized columns have their widths based on their content
             width: '*',
             text: 'Client:',
-            margin: [ 5, 2, 10, 20 ]
+            margin: [ 5, 2, 5, 5 ]
           },
           {
               text: info.client_name
@@ -215,6 +228,100 @@ export const downloadPDF = (batch, batchs, learners) => {
         ],
         // optional space between columns
         columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'Training Venue:',
+            margin: [ 5, 2, 5, 5 ]
+          },
+          {
+              text: info.venue
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        text: [
+				      {text: 'AFTER ASSESSMENT & MODERATION ONLY: (INDICATE ON LEARNER NAME LIST BELOW)', color: 'red'},
+			   ]
+      },
+      {
+        canvas: [
+		        {
+		            type: 'rect',
+					      x: 0,
+      					y: 0,
+      					w: 750,
+      					h: 25,
+      					r: 0,
+      					color: 'grey',
+		        }
+		    ]
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            color: 'green',
+            text: 'COMPETENT LEARNERS:',
+            margin: [ 5, 2, 5, 5 ]
+          },
+          {
+              text: '0'
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            text: 'NOT COMPETENT',
+            color: 'red',
+            margin: [ 5, 2, 5, 5 ]
+          },
+          {
+              text: '0'
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        columns: [
+          {
+            // auto-sized columns have their widths based on their content
+            width: '*',
+            color: 'orange',
+            text: 'COMPETENT AFTER RESUBMISSION',
+            margin: [ 5, 2, 5, 5 ]
+          },
+          {
+              text: '0'
+          }
+        ],
+        // optional space between columns
+        columnGap: 10
+      },
+      {
+        canvas: [
+		        {
+		            type: 'rect',
+					      x: 0,
+      					y: 0,
+      					w: 750,
+      					h: 25,
+      					r: 0,
+      					color: 'grey',
+		        }
+		    ]
       },
         '\n',
         {

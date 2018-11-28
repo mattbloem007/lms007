@@ -262,6 +262,24 @@ app.post('/api/qualificationsMod', (req, res) => {
 
 })
 
+app.post('/api/user', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+
+    connection.query('SELECT * FROM `lms_users` WHERE username= ?',[jsondata.username], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
 app.get('/api/unitstd', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -482,6 +500,28 @@ app.post('/data/lms_batch', function(req, res) {
     }
     console.log(values)
       connection.query("INSERT INTO `lms_batch` (`date`,`end_date`, `client_name`,`project`,`venue`,`programme`,`credit`,`facilitator`, `assessor`, `moderator`, `assessment_date`, `moderator_date`, `programmeType`, `unitstd`, `qualification`, `skills_programme`, `short_courses`, `q_modules`, `sp_modules`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/register', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+        values.push(jsondata[i]);
+      //}
+    }
+    console.log(values)
+      connection.query("INSERT INTO `lms_users`(`first_name`, `last_name`, `username`, `password`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");
