@@ -13,13 +13,13 @@ const port = process.env.PORT || 5000;
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(json2xls.middleware);
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'client/public/index.html'), function(err) {
-    if (err) {
-      res.status(500).send(err)
-    }
-  })
-})
+// app.get('/*', function(req, res) {
+//   res.sendFile(path.join(__dirname, 'client/public/index.html'), function(err) {
+//     if (err) {
+//       res.status(500).send(err)
+//     }
+//   })
+// })
 
 app.post('/save',function(req, res) {
   // console.log(req.body)
