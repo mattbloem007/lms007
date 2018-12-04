@@ -17,7 +17,7 @@ class RegisterFacilitator extends Component{
                           name: "",
                           surname: "",
                           ID: "",
-                          cellno: ""
+                          Cell_no: ""
                          }
 
                  }
@@ -29,8 +29,15 @@ class RegisterFacilitator extends Component{
   }
 
   back = () => {
-    this.props.facilitatorActions.updateFacilitator(this.state.info);
-    this.props.flowActions.changeActiveStep("client")
+    if (this.props.type == "add") {
+      this.props.facilitatorActions.updateFacilitator(this.state.info);
+      this.props.flowActions.changeActiveStep("client")
+    }
+    else {
+      this.props.facilitatorActions.updateFacilitator(this.state.info);
+      this.props.flowActions.changeActiveStep("Facilitators")
+    }
+
   }
 
   render() {
@@ -48,7 +55,7 @@ class RegisterFacilitator extends Component{
       </Form.Field>
         </Form.Group>
         <Form.Group>
-            <Form.Input label="Cell Number" defaultValue={this.props.cellno} placeholder="Cell Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, cellno: data.value}}))}} error={this.props.cellnoError}/>
+            <Form.Input label="Cell Number" defaultValue={this.props.Cell_no} placeholder="Cell Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, Cell_no: data.value}}))}} error={this.props.cellnoError}/>
          </Form.Group>
         <Form.Button primary onClick={this.back}><Icon name="chevron circle left"/> Back</Form.Button>
         <Form.Button primary onClick={this.validateInput}><Icon name="save"/>Save</Form.Button>
@@ -65,8 +72,9 @@ const mapStateToProps = (state) => ({
   name: state.facilitator.name,
   surname: state.facilitator.surname,
   ID: state.facilitator.ID,
-  cellno: state.facilitator.cellno,
-  errors: state.facilitator.errors
+  Cell_no: state.facilitator.Cell_no,
+  errors: state.facilitator.errors,
+  type: state.facilitator.type
 })
 const mapDispatchToProps = (dispatch) => ({
   facilitatorActions: bindActionCreators(facilitatorActions, dispatch),

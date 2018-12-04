@@ -1,9 +1,94 @@
-import { SAVE_COMPLETE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK, RECEIVE_FACILITATORS, RECEIVE_ASSESSORS, RECEIVE_MODERATORS, FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
+import { EDIT_LEARNER, SAVE_COMPLETE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK, RECEIVE_FACILITATORS, RECEIVE_ASSESSORS, RECEIVE_MODERATORS, FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength, isAfter, isEmail } from 'validator';
 import { changeActiveStep } from './flowActions'
 import { changeActiveTable } from './tableActions'
 import { months } from '../common'
 import _ from 'lodash'
+
+
+
+export const Delete = (rows) => {
+  return dispatch => {
+    return fetch("/api/deleteLearner", {
+         method: 'POST',
+         body: JSON.stringify(rows),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
+  }
+}
+
+export const DeleteBatchLearner = (info, batch) => {
+
+  return dispatch => {
+    let newInfo = [];
+    console.log(info)
+    for(var key in info) {
+      if (info[key] !== "") {
+        newInfo = [...newInfo, Object.assign({id: info[key].split("-")[0], batch: batch.toString()})]
+      }
+    }
+    console.log(newInfo);
+    return fetch("/api/deleteBatchLearners", {
+         method: 'POST',
+         body: JSON.stringify(newInfo),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
+  }
+}
+
+
+export const editLearner = (learner) => {
+  return dispatch => {
+    let homeAddr = [];
+    let strAddr = [];
+    for (var i = 0; i< learner.homeaddr.split(", ").length; i++) {
+      homeAddr[i] = learner.homeaddr.split(", ")[i];
+    }
+    for (var i = 0; i< learner.postaddr.split(", ").length; i++) {
+      strAddr[i] = learner.postaddr.split(", ")[i];
+    }
+    let dob = new Date(learner.dob);
+    dispatch(edit({
+      ...learner,
+      strAddress: learner.homeaddr,
+      postCode: homeAddr[homeAddr.length - 1],
+      postCode2: strAddr[strAddr.length - 1],
+      postAddress: learner.postaddr,
+      day: dob.getDate().toString(),
+      month:months[dob.getMonth()].text,
+      year: dob.getFullYear().toString(),
+       type: "edit"}))
+  }
+}
+
+export const saveEditLearner = (info) => {
+  return dispatch => {
+    return fetch("/data/lms_learnerEdit",{
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
+
+export const edit = (learner) => ({type: EDIT_LEARNER, payload: learner})
 
 export const resetLearnerState = () => ({ type: RESET_LEARNER })
 export const saveComplete = (saved) => ({ type: SAVE_COMPLETE, payload: saved })
@@ -11,27 +96,90 @@ export const loadLearner = json => {
   return dispatch => {
     let homeAddr = [];
     let strAddr = [];
-    for (var i = 0; i< json.express[0].homeaddr.split(",").length; i++) {
-      homeAddr[i] = json.express[0].homeaddr.split(",")[i];
+    let addr = json.express[0].homeaddr.split(", ");
+    let addr2 = json.express[0].postaddr.split(", ");
+    let newInfo = {...json.express[0], type: "edit"};
+
+    switch (addr.length) {
+      case 2:
+      newInfo = {...newInfo,
+                  strAddress: addr[0],
+                  postCode: addr[1]
+                }
+      break;
+      case 3:
+      newInfo = {...newInfo,
+                  strAddress: addr[0],
+                  strAddress2: addr[1],
+                  postCode: addr[2]
+                }
+      break;
+      case 4:
+      newInfo = {...newInfo,
+                  strAddress: addr[0],
+                  strAddress2: addr[1],
+                  strAddress3: addr[2],
+                  postCode: addr[3]
+                }
+      break;
+      case 5:
+      newInfo = {...newInfo,
+                  strAddress: addr[0],
+                  strAddress2: addr[1],
+                  strAddress3: addr[2],
+                  strAddress4: addr[3],
+                  postCode: addr[4]
+                }
+      break;
     }
-    for (var i = 0; i< json.express[0].postaddr.split(",").length; i++) {
-      strAddr[i] = json.express[0].postaddr.split(",")[i];
+    switch (addr2.length) {
+      case 2:
+      newInfo = {...newInfo,
+                  postAddress: addr2[0],
+                  postCode2: addr2[1]
+                }
+      break;
+      case 3:
+      newInfo = {...newInfo,
+                  postAddress: addr2[0],
+                  postAddress2: addr2[1],
+                  postCode2: addr2[2]
+                }
+      break;
+      case 4:
+      newInfo = {...newInfo,
+                  postAddress: addr2[0],
+                  postAddress2: addr2[1],
+                  postAddress3: addr2[2],
+                  postCode2: addr2[3]
+                }
+      break;
+      case 5:
+      newInfo = {...newInfo,
+                  postAddress: addr2[0],
+                  postAddress2: addr2[1],
+                  postAddress3: addr2[2],
+                  postAddress4: addr2[3],
+                  postCode2: addr[4]
+                }
+      break;
     }
+
+    // for (var i = 0; i< json.express[0].homeaddr.split(", ").length; i++) {
+    //   homeAddr[i] = json.express[0].homeaddr.split(", ")[i];
+    // }
+    // for (var i = 0; i< json.express[0].postaddr.split(", ").length; i++) {
+    //   strAddr[i] = json.express[0].postaddr.split(", ")[i];
+    // }
     let dob = new Date(json.express[0].dob);
 
-    dispatch(save({
-      ...json.express[0],
-      type: "edit",
-      strAddress: json.express[0].homeaddr,
-      postCode: homeAddr[homeAddr.length - 1],
-      postCode2: strAddr[strAddr.length - 1],
-      postAddress: json.express[0].postaddr,
+    dispatch(edit({
+      ...newInfo,
       day: dob.getDate().toString(),
       month:months[dob.getMonth()].text,
       year: dob.getFullYear().toString(),
-      learnerInfo: true
     }))
-    dispatch(changeActiveTable("rLearner"))
+    //dispatch(changeActiveTable("rLearner"))
   }
   //console.log(json.express[0])
 }
@@ -98,7 +246,6 @@ export const updateLearner = (info) => {
         }
 
       const dob = newInfo.month + " " + newInfo.day + ", " + newInfo.year
-
     //  const assessment_date = newInfo.amonth + ", " + newInfo.aday + ", " + newInfo.ayear
       newInfo = {...newInfo, dob: dob, physicalAddress: strAddress, postalAddress: postAddress}//, assessment_date: assessment_date}
     }
@@ -145,11 +292,31 @@ export const validateInput = (info, errs) => {
       errs = {...errs, lastSchoolError: false}
     }
 
-    if (info.national_id.length != 13 ||!isNumeric(info.national_id)) {
-      errs = {...errs, idError: true}
-    }
-    else {
-      errs = {...errs, idError: false}
+    switch (info.id_type) {
+      case "National ID":
+        if (info.national_id.length != 13 ||!isNumeric(info.national_id)) {
+          errs = {...errs, idError: true}
+        }
+        else {
+          errs = {...errs, idError: false}
+        }
+      break;
+      case "Passport":
+        if (info.national_id.length != 6 ||!isNumeric(info.national_id)) {
+          errs = {...errs, idError: true}
+        }
+        else {
+          errs = {...errs, idError: false}
+        }
+      break;
+      default:
+        if (!isNumeric(info.national_id)) {
+          errs = {...errs, idError: true}
+        }
+        else {
+          errs = {...errs, idError: false}
+        }
+      break;
     }
 
     if(isEmpty(info.equity)) {
@@ -305,9 +472,9 @@ export const validateInput = (info, errs) => {
       secondname: info.secondname,
       title: info.title,
       dob: info.dob,
-      strAddress: info.physicalAddress,
+      strAddress: info.strAddress,
       homeno: info.homeno,
-      postAddress: info.postalAddress,
+      postAddress: info.postAddress,
       cellno: info.cellno,
       employer: info.employer,
       faxno: info.faxno,
@@ -328,10 +495,10 @@ export const validateInput = (info, errs) => {
         dispatch(saveComplete(true))
       }
       else {
-        dispatch(editLearner(newInfo))
+        dispatch(saveEditLearner(newInfo))
         dispatch(saveComplete(true))
       }
-      dispatch(changeActiveTable("learner"))
+    //  dispatch(changeActiveTable("learner"))
     }
   }
 }
@@ -411,20 +578,20 @@ export const uploadLearner = (info) => {
   }
 }
 
-export const editLearner = (info) => {
-  return dispatch => {
-    return fetch("/data/lms_learnerEdit",{
-         method: 'POST',
-         body: JSON.stringify(info),
-         headers: {"Content-Type": "application/json"}
-       })
-       .then(function(response){
-         return response.json()
-       }).then(function(body){
-         console.log(body);
-     });
-  }
-}
+// export const editLearner = (info) => {
+//   return dispatch => {
+//     return fetch("/data/lms_learnerEdit",{
+//          method: 'POST',
+//          body: JSON.stringify(info),
+//          headers: {"Content-Type": "application/json"}
+//        })
+//        .then(function(response){
+//          return response.json()
+//        }).then(function(body){
+//          console.log(body);
+//      });
+//   }
+// }
 
 export const fetchLearnerInfo = (ID) => {
 
@@ -451,6 +618,28 @@ export const fetchLearners = () => {
       console.log(json)
       dispatch(receiveInfo(json))
     });
+  }
+}
+
+export const fetchAllLearners = () => {
+  return dispatch => {
+    return fetch('/api/learners')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveAllLearners(json))
+    });
+  }
+}
+
+export function receiveAllLearners(json) {
+  console.log(json.express)
+  let learnersArr = [];
+  let sorted = _.orderBy(json.express, ['surname'],['asc']);
+  console.log(sorted)
+  return {
+    type: RECEIVE_LEARNERS,
+    payload: sorted
   }
 }
 

@@ -17,8 +17,8 @@ class RegisterAssessor extends Component{
                           name: "",
                           surname: "",
                           ID: "",
-                          reg_no: "",
-                          seta: "",
+                          Reg_no: "",
+                          SETA: "",
                           day: "",
                           month: "",
                           year: ""
@@ -51,8 +51,8 @@ class RegisterAssessor extends Component{
           <Form.Input label="ID Number" defaultValue={this.props.ID} placeholder="ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} error={this.props.IDError}/>
       </Form.Field>
         </Form.Group>
-            <Form.Input label="Registration Number" defaultValue={this.props.reg_no} placeholder="Registration Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, reg_no: data.value}}))}} error={this.props.reg_noError}/>
-          <Form.Select options={SETA} label="SETA" placeholder="SETA" defaultValue={this.props.seta} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, seta: data.value}}))}} error={this.props.setaError}/>
+            <Form.Input label="Registration Number" defaultValue={this.props.Reg_no} placeholder="Registration Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, Reg_no: data.value}}))}} error={this.props.reg_noError}/>
+          <Form.Select options={SETA} label="SETA" placeholder="SETA" defaultValue={this.props.SETA} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, SETA: data.value}}))}} error={this.props.setaError}/>
           <Form.Field>
             <label>Expiry Date</label>
           </Form.Field>
@@ -80,8 +80,8 @@ const mapStateToProps = (state) => ({
   name: state.assessor.name,
   surname: state.assessor.surname,
   ID: state.assessor.ID,
-  reg_no: state.assessor.reg_no,
-  seta: state.assessor.seta,
+  Reg_no: state.assessor.Reg_no,
+  SETA: state.assessor.SETA,
   day: state.assessor.day,
   month: state.assessor.month,
   year: state.assessor.year,

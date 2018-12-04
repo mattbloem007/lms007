@@ -1,4 +1,4 @@
-import { RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, RECEIVE_CLIENTS, SAVE_CLIENT, VALIDATE_CLIENT, RELOAD, SUCCESS, RESET_CLIENT } from '../actions/actionTypes'
+import { EDIT_CLIENT, RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, RECEIVE_CLIENTS, SAVE_CLIENT, VALIDATE_CLIENT, RELOAD, SUCCESS, RESET_CLIENT } from '../actions/actionTypes'
 
 const clientState = {
   projectError: false,
@@ -17,7 +17,7 @@ const clientState = {
   saved: false,
   success: false,
   name: "",
-  tel: "",
+  telephone: "",
   address: "",
   address2: "",
   address3: "",
@@ -35,7 +35,8 @@ const clientState = {
   dayError: false,
   monthError: false,
   yearError: false,
-  errors: true
+  errors: true,
+  type: "add"
 }
 
 const clientReducer = (state = clientState, action) => {
@@ -64,6 +65,8 @@ const clientReducer = (state = clientState, action) => {
       return {...state, spm: action.payload}
     case RECEIVE_SC:
       return {...state, sc: action.payload}
+    case EDIT_CLIENT:
+      return {...state, ...action.payload}
     default:
       return state;
   }

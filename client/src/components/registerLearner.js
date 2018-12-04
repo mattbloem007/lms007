@@ -3,6 +3,7 @@ import { Form, Checkbox, Icon, Container } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as learnerActions from '../actions/learnerActions';
+import * as flowActions from '../actions/flowActions';
 import * as tableActions from '../actions/tableActions';
 import { isEmpty, isNumeric, isLength, isAlpha, isMobilePhone, isEmail, isAfter } from 'validator';
 import { disability, days, months, countryOptions, languageOptions, courseOptions, titleOptions, yesNoOption, genderOptions, EquityOptions, idType, status, education } from '../common'
@@ -62,15 +63,15 @@ class registerLearner extends Component {
                     mod: [],
                     addrCheck: false,
                     club: ""
-                             }
+                  }
 
                 }
   }
 
   componentDidMount() {
-    this.props.learnerActions.fetchFacilitator();
-    this.props.learnerActions.fetchAssessor();
-    this.props.learnerActions.fetchModerator();
+    // this.props.learnerActions.fetchFacilitator();
+    // this.props.learnerActions.fetchAssessor();
+    // this.props.learnerActions.fetchModerator();
     this.props.learnerActions.fetchClubs();
 
   }
@@ -119,12 +120,12 @@ class registerLearner extends Component {
 
   back = () => {
     this.props.learnerActions.updateLearner(this.state.info)
-    if (this.props.learnerInfo) {
+    if (this.props.type == "add") {
       this.props.tableActions.changeActiveTable("learnerTable")
 
     }
     else {
-      this.props.tableActions.changeActiveTable("learner")
+      this.props.flowActions.changeActiveStep("Learners")
     }
   }
 
@@ -249,15 +250,6 @@ class registerLearner extends Component {
       </Form.Field>
       <Form.Field>
         <Form.Select defaultValue={this.props.ass_status} label="Assessment Status" placeholder="Select Assessment Status" options={status} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ass_status: data.value}}))}} fluid search selection />
-      </Form.Field>
-      <Form.Field>
-        <Form.Select fluid multiple search selection options={this.props.assessors} label="Assessor" type="text" name="assessor" placeholder="Assessor" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ass: data.value}}))}} />
-      </Form.Field>
-      <Form.Field>
-      <Form.Select fluid multiple search selection options={this.props.moderators} label="Moderator" type="text" name="moderator" placeholder="Moderator" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, mod: data.value}}))}} />
-      </Form.Field>
-      <Form.Field>
-          <Form.Select fluid multiple search selection options={this.props.facilitators} label="Facilitator" type="text" name="facilitator" placeholder="Facilitator" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, fac: data.value}}))}} />
       </Form.Field>
       <Form.Field>
       <Form.Select defaultValue={this.props.club} label="Club" name="club" placeholder="Select Club Name"  options={this.props.clubs} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.props.clubError}/>
@@ -400,15 +392,6 @@ class registerLearner extends Component {
         <Form.Select defaultValue={this.props.ass_status} label="Assessment Status" placeholder="Select Assessment Status" options={status} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ass_status: data.value}}))}} fluid search selection />
       </Form.Field>
       <Form.Field>
-        <Form.Select fluid multiple search selection options={this.props.assessors} label="Assessor" type="text" name="assessor" placeholder="Assessor" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ass: data.value}}))}} />
-      </Form.Field>
-      <Form.Field>
-      <Form.Select fluid multiple search selection options={this.props.moderators} label="Moderator" type="text" name="moderator" placeholder="Moderator" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, mod: data.value}}))}} />
-      </Form.Field>
-      <Form.Field>
-          <Form.Select fluid multiple search selection options={this.props.facilitators} label="Facilitator" type="text" name="facilitator" placeholder="Facilitator" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, fac: data.value}}))}} />
-      </Form.Field>
-      <Form.Field>
       <Form.Select defaultValue={this.props.club} label="Club" name="club" placeholder="Select Club Name"  options={this.props.clubs} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.props.clubError}/>
       </Form.Field>
       <Form.Group widths='equal'>
@@ -503,10 +486,12 @@ const mapStateToProps = state => ({
   errors: state.learner.errors,
   clubs: state.learner.clubs,
   addrCheck: state.learner.addrCheck,
-  learnerInfo: state.learner.learnerInfo
+  learnerInfo: state.learner.learnerInfo,
+  type: state.learner.type
 })
 const mapDispatchToProps = dispatch => ({
   learnerActions: bindActionCreators(learnerActions, dispatch),
+  flowActions: bindActionCreators(flowActions, dispatch),
   tableActions: bindActionCreators(tableActions, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(registerLearner);

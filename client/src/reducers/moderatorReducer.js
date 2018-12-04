@@ -1,10 +1,10 @@
-import { VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR } from '../actions/actionTypes';
+import { EDIT_MODERATOR, VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR, RECEIVE_MODERATORS } from '../actions/actionTypes';
 
 const moderatorState = {
   name: "",
   surname: "",
   ID: "",
-  reg_no: "",
+  Reg_no: "",
   seta: "",
   expiry_date: "",
   day: "",
@@ -15,7 +15,10 @@ const moderatorState = {
   IDError: false,
   reg_noError: false,
   setaError: false,
-  errors: false
+  errors: false,
+  moderators: [],
+  type: "add"
+
 }
 
 const moderatorReducer = (state = moderatorState, action) => {
@@ -24,8 +27,12 @@ const moderatorReducer = (state = moderatorState, action) => {
       return {...state, ...action.payload}
     case SAVE_MODERATOR:
       return {...state, ...action.payload}
+    case RECEIVE_MODERATORS:
+      return {...state, moderators: action.payload}
     case RESET_MODERATOR:
       return moderatorState
+    case EDIT_MODERATOR:
+      return {...state, ...action.payload}
     default:
       return state;
   }

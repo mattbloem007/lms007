@@ -1,8 +1,50 @@
-import {  VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR } from './actionTypes'
+import {  EDIT_FACILITATOR, VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR, RECEIVE_FACILITATORS } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
+import _ from 'lodash'
+
 
 export const validateComplete = errs => ({ type: VALIDATE_FACILITATOR, payload: errs})
+
+export const Delete = (rows) => {
+  return dispatch => {
+    return fetch("/api/deleteFacilitator", {
+         method: 'POST',
+         body: JSON.stringify(rows),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
+  }
+}
+
+export const editFacilitator = (facilitator) => {
+  return dispatch => {
+    dispatch(edit({...facilitator, surname: facilitator.name.split(" ")[facilitator.name.split(" ").length - 1], type: "edit"}))
+    return Promise.resolve()
+  }
+}
+
+export const saveEditFacilitator = (info) => {
+  return dispatch => {
+    return fetch("/data/lms_facilitatorEdit",{
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
+
+export const edit = (facilitator) => ({type: EDIT_FACILITATOR, payload: facilitator})
 
 export const updateFacilitator = (info) => {
   return (dispatch, getState) => {
@@ -45,7 +87,7 @@ export const validateInput = (info, errs) => {
       errs = {...errs, IDError: false}
     }
 
-    if (!isMobilePhone(info.cellno)) {
+    if (!isMobilePhone(info.Cell_no)) {
       errs = {...errs, cellnoError: true}
     }
     else {
@@ -64,16 +106,23 @@ export const validateInput = (info, errs) => {
     let newInfo = {
       name: info.name + " " + info.surname,
       ID: info.ID,
-      cellno: info.cellno,
+      Cell_no: info.Cell_no,
     }
 
     dispatch(validateComplete(errs));
+    const state = getState();
 
     console.log(errors)
     if (errors == false) {
-          dispatch(uploadFacilitator(newInfo))
-          dispatch(resetFacilitator())
-          dispatch(changeActiveStep("client"))
+      if (state.facilitator.type == "add") {
+        dispatch(uploadFacilitator(newInfo))
+        dispatch(resetFacilitator())
+      //  dispatch(changeActiveStep("client"))
+      }
+      else {
+        dispatch(saveEditFacilitator(newInfo))
+      }
+
         }
       }
 }
@@ -92,4 +141,25 @@ export const uploadFacilitator = (info) => {
      });
   }
 
+}
+
+export const fetchFacilitators = () => {
+  return dispatch => {
+    return fetch('/api/facilitators')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveFacilitators(json))
+    });
+  }
+}
+
+export function receiveFacilitators(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['surname'],['asc']);
+  console.log(sorted)
+  return {
+    type: RECEIVE_FACILITATORS,
+    payload: sorted
+  }
 }

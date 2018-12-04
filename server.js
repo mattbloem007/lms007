@@ -169,6 +169,23 @@ app.get('/api/client', (req, res) => {
   })
 })
 
+app.get('/api/clients', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+
+    connection.query('SELECT `name`, `telephone`, `address`, `contact`, `municipality` FROM `lms_client`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
 
 app.get('/api/facilitator', (req, res) => {
   pool.getConnection(function(err, connection) {
@@ -176,6 +193,22 @@ app.get('/api/facilitator', (req, res) => {
     console.log("connection made");
 
     connection.query('SELECT `name` FROM `lms_facilitator`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.get('/api/facilitators', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name`, `ID`, `Cell_no` FROM `lms_facilitator`', function(err, rows, fields) {
 
       if (err) throw err;
 
@@ -202,6 +235,22 @@ app.get('/api/assessor', (req, res) => {
   })
 })
 
+app.get('/api/assessors', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name`, `ID`, `Reg_no`, `SETA`, `Expiry Date` FROM `lms_assessor`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
 app.get('/api/moderator', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err;
@@ -218,12 +267,44 @@ app.get('/api/moderator', (req, res) => {
   })
 })
 
+app.get('/api/moderators', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `name`, `ID`, `Reg_no`, `SETA`, `Expiry Date` FROM `lms_moderator`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
 app.get('/api/learner', (req, res) => {
   pool.getConnection(function(err, connection) {
     if (err) throw err;
     console.log("connection made");
 
     connection.query('SELECT `national_id`, `firstname`, `surname` FROM `lms_learner`', function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.get('/api/learners', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    connection.query('SELECT `national_id`,`firstname`,`surname`,`equity`,`gender`,`year_attended` FROM `lms_learner`', function(err, rows, fields) {
 
       if (err) throw err;
 
@@ -277,6 +358,144 @@ app.post('/api/user', (req, res) => {
     let jsondata = req.body;
 
     connection.query('SELECT * FROM `lms_users` WHERE username= ?',[jsondata.username], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteBatch', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(req.body)
+
+    connection.query('DELETE FROM `lms_batch` WHERE `batch_no` IN (?)', [req.body], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteClient', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(req.body)
+
+    connection.query('DELETE FROM `lms_client` WHERE `name` IN (?)', [req.body], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteFacilitator', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(req.body)
+
+    connection.query('DELETE FROM `lms_facilitator` WHERE `ID` IN (?)', [req.body], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteModerator', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(req.body)
+
+    connection.query('DELETE FROM `lms_moderator` WHERE `ID` IN (?)', [req.body], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteAssessor', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(req.body)
+
+    connection.query('DELETE FROM `lms_assessor` WHERE `ID` IN (?)', [req.body], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteLearner', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    console.log(req.body)
+
+    connection.query('DELETE FROM `lms_learner` WHERE `national_id` IN (?)', [req.body], function(err, rows, fields) {
+
+      if (err) throw err;
+
+      console.log('The solution is: ', rows);
+      res.send({ express: rows });
+      connection.release();
+    })
+  })
+})
+
+app.post('/api/deleteBatchLearners', (req, res) => {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err;
+    console.log("connection made");
+
+    let jsondata = req.body;
+    var values = [];
+    for(var i in jsondata){
+        for(var x in jsondata[i]) {
+          values.push(jsondata[i][x])
+        }
+        console.log(values)
+      }
+    connection.query('DELETE FROM `lms_learner_batch` WHERE `learner_ID`=? AND `batch_no`=?', [values[0], values[1]], function(err, rows, fields) {
 
       if (err) throw err;
 
@@ -648,6 +867,90 @@ app.post('/data/lms_learner', function(req, res) {
     }
     console.log(values)
       connection.query("INSERT INTO `lms_learner`(`id_type`, `national_id`, `last_school`,`year_attended`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_learnerEdit', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+          values.push(jsondata[i]);
+    }
+    console.log(values)
+      connection.query("REPLACE INTO `lms_learner`(`id_type`, `national_id`, `last_school`,`year_attended`, `statssa`, `education`, `ass_status`, `equity`, `nationality`, `gender`, `language`, `employed`, `disability`, `surname`, `firstname`, `secondname`, `title`, `dob`, `homeaddr`, `homeno`, `postaddr`, `cellno`, `employer`, `faxno`, `workno`, `email`, `prev_surname`, `assessor`, `moderator`, `facilitator`, `club`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_clientEdit', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+          values.push(jsondata[i]);
+    }
+    console.log(values)
+      connection.query("REPLACE INTO `lms_client`(`name`, `telephone`, `address`, `contact`, `municipality`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_facilitatorEdit', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+          values.push(jsondata[i]);
+    }
+    console.log(values)
+      connection.query("REPLACE INTO `lms_facilitator`(`name`, `ID`, `Cell_no`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
+app.post('/data/lms_moderatorEdit', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+          values.push(jsondata[i]);
+    }
+    console.log(values)
+      connection.query("REPLACE INTO `lms_moderator`(`name`, `ID`, `Reg_no`, `SETA`, `Expiry Date`) VALUES (?)", [values], function(err, result){
         if(err) console.log(err);
 
         console.log("1 record inserted");

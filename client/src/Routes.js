@@ -4,6 +4,7 @@ import asyncComponent from "./components/AsyncComponent";
 import AppliedRoute from "./components/AppliedRoute";
 
 import Login from './containers/Login.js'
+import ClientTable from './components/ClientTable.js'
 import Register from './containers/Register.js'
 import App from './containers/App.js'
 import Home from './containers/Home.js'

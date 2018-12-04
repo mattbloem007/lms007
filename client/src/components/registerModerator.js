@@ -17,8 +17,8 @@ class RegisterModerator extends Component{
                           name: "",
                           surname: "",
                           ID: "",
-                          reg_no: "",
-                          seta: "",
+                          Reg_no: "",
+                          SETA: "",
                           day: "",
                           month: "",
                           year: ""
@@ -33,8 +33,15 @@ class RegisterModerator extends Component{
   }
 
   back = () => {
-    this.props.moderatorActions.updateModerator(this.state.info);
-    this.props.flowActions.changeActiveStep("client")
+    if (this.props.type == "add") {
+      this.props.moderatorActions.updateModerator(this.state.info);
+      this.props.flowActions.changeActiveStep("client")
+    }
+    else {
+      this.props.moderatorActions.updateModerator(this.state.info);
+      this.props.flowActions.changeActiveStep("Moderator")
+    }
+
   }
 
   render() {
@@ -51,8 +58,8 @@ class RegisterModerator extends Component{
           <Form.Input label="ID Number" defaultValue={this.props.ID} placeholder="ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} error={this.props.IDError}/>
       </Form.Field>
         </Form.Group>
-            <Form.Input label="Registration Number" defaultValue={this.props.reg_no} placeholder="Registration Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, reg_no: data.value}}))}} error={this.props.reg_noError}/>
-          <Form.Select label="SETA" placeholder="SETA" defaultValue={this.props.seta} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, seta: data.value}}))}} options={SETA} error={this.props.setaError}/>
+            <Form.Input label="Registration Number" defaultValue={this.props.Reg_no} placeholder="Registration Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, Reg_no: data.value}}))}} error={this.props.reg_noError}/>
+          <Form.Select label="SETA" placeholder="SETA" defaultValue={this.props.SETA} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, SETA: data.value}}))}} options={SETA} error={this.props.setaError}/>
           <Form.Field>
             <label>Expiry Date</label>
           </Form.Field>
@@ -80,12 +87,13 @@ const mapStateToProps = (state) => ({
   name: state.moderator.name,
   surname: state.moderator.surname,
   ID: state.moderator.ID,
-  reg_no: state.moderator.reg_no,
-  seta: state.moderator.seta,
+  Reg_no: state.moderator.Reg_no,
+  SETA: state.moderator.SETA,
   day: state.moderator.day,
   month: state.moderator.month,
   year: state.moderator.year,
-  errors: state.moderator.errors
+  errors: state.moderator.errors,
+  type: state.moderator.type
 })
 const mapDispatchToProps = (dispatch) => ({
   moderatorActions: bindActionCreators(moderatorActions, dispatch),

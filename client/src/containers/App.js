@@ -5,7 +5,7 @@ import * as flowActions from '../actions/flowActions';
 import * as loginActions from '../actions/loginActions';
 import { Link, Redirect } from "react-router-dom";
 import update from 'immutability-helper';
-import { Menu, Button, Step, Segment, Image } from 'semantic-ui-react';
+import { Menu, Button, Step, Segment, Image, Icon } from 'semantic-ui-react';
 import * as mysql from 'mysql';
 import myImage from '../imgs/CLUBSMART Logo.png'
 import logo from '../imgs/Institute of Sport Logo.png'
@@ -25,6 +25,11 @@ import RegisterModerator from '../components/registerModerator'
 import Logistics from '../components/Logistics';
 import Dates from '../components/Dates';
 import Home from './Home';
+import AllLearnerTable from '../components/allLearnerTable';
+import ClientTable from '../components/ClientTable';
+import FacilitatorTable from '../components/FacilitatorTable';
+import ModeratorTable from '../components/ModeratorTable';
+import AssessorTable from '../components/AssessorTable';
 //import Steps from '../components/Steps';
 import ExistingProjects from '../components/ExistingProjects';
 import { days, months } from '../common';
@@ -39,7 +44,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      loggedIn: true
+      loggedIn: true,
+      register: false
     }
 
   }
@@ -68,11 +74,20 @@ class App extends Component {
     })
   }
 
+  register = () => {
+    this.setState({register: true})
+  }
+
   render() {
     let segment, currentForm;
     if (!this.state.loggedIn) {
       return <Redirect to="/" />
     }
+
+    if (this.state.register === true) {
+      return <Redirect to='/Register' />
+    }
+
 
 
     switch (this.props.activeItem) {
@@ -122,6 +137,96 @@ class App extends Component {
       case "Existing Projects":
         segment = (<ExistingProjects info={this.props.response}/>)
       break;
+      case "Learners":
+        switch (this.props.activeStep) {
+
+          case "rLearner":
+            currentForm = (<RegisterLearner />)
+          break;
+
+          default:
+            currentForm = (<AllLearnerTable />)
+          break;
+
+        }
+        segment = (
+                    <Segment>
+                      {currentForm}
+                    </Segment>
+        );
+      break;
+      case "Clients":
+      switch (this.props.activeStep) {
+
+        case "rclient":
+          currentForm = (<RegisterClient />)
+        break;
+
+        default:
+          currentForm = (<ClientTable />)
+        break;
+
+      }
+      segment = (
+                  <Segment>
+                    {currentForm}
+                  </Segment>
+      );
+      break;
+      case "Facilitators":
+      switch (this.props.activeStep) {
+
+        case "rfac":
+          currentForm = (<RegisterFacilitator />)
+        break;
+
+        default:
+          currentForm = (<FacilitatorTable />)
+        break;
+
+      }
+      segment = (
+                  <Segment>
+                    {currentForm}
+                  </Segment>
+      );
+      break;
+      case "Moderators":
+      switch (this.props.activeStep) {
+
+        case "rmod":
+          currentForm = (<RegisterModerator />)
+        break;
+
+        default:
+          currentForm = (<ModeratorTable />)
+        break;
+
+      }
+      segment = (
+                  <Segment>
+                    {currentForm}
+                  </Segment>
+      );
+      break;
+      case "Assessors":
+      switch (this.props.activeStep) {
+
+        case "rass":
+          currentForm = (<RegisterAssessor />)
+        break;
+
+        default:
+          currentForm = (<AssessorTable />)
+        break;
+
+      }
+      segment = (
+                  <Segment>
+                    {currentForm}
+                  </Segment>
+      );
+      break;
       default:
 
     }
@@ -129,6 +234,10 @@ class App extends Component {
     return (
       <div>
         <div id="topbar">
+              <span onClick={this.register} style={style1}>
+                <Icon name="add" />
+                Register Employee
+              </span>
               <span style={style1}>
                 <a onClick={this.logout}><img src={logout} />Logout</a>
               </span>

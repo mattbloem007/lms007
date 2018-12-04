@@ -1,11 +1,11 @@
-import { VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR } from '../actions/actionTypes';
+import { EDIT_ASSESSOR, VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR, RECEIVE_ASSESSORS } from '../actions/actionTypes';
 
 const assessorState = {
   name: "",
   surname: "",
   ID: "",
-  reg_no: "",
-  seta: "",
+  Reg_no: "",
+  SETA: "",
   expiry_date: "",
   day: "",
   month: "",
@@ -18,7 +18,9 @@ const assessorState = {
   dayError: false,
   yearError: false,
   monthError: false,
-  errors: false
+  errors: false,
+  assessors: [],
+  type: "add"
 }
 
 const assessorReducer = (state = assessorState, action) => {
@@ -27,8 +29,12 @@ const assessorReducer = (state = assessorState, action) => {
       return {...state, ...action.payload}
     case SAVE_ASSESSOR:
       return {...state, ...action.payload}
+    case RECEIVE_ASSESSORS:
+      return {...state, assessors: action.payload}
     case RESET_ASSESSOR:
       return assessorState
+    case EDIT_ASSESSOR:
+      return {...state, ...action.payload}
     default:
       return state;
   }

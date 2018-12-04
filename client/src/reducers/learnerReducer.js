@@ -1,4 +1,4 @@
-import { SAVE_COMPLETE, UPDATE_CHECK_FALSE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK,RECEIVE_FACILITATORS, RECEIVE_MODERATORS, RECEIVE_ASSESSORS, RECEIVE_LEARNERS, SAVE_LEARNER, VALIDATE_LEARNER, UPDATE_LEARNER } from '../actions/actionTypes'
+import { EDIT_LEARNER, SAVE_COMPLETE, UPDATE_CHECK_FALSE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK,RECEIVE_FACILITATORS, RECEIVE_MODERATORS, RECEIVE_ASSESSORS, RECEIVE_LEARNERS, SAVE_LEARNER, VALIDATE_LEARNER, UPDATE_LEARNER } from '../actions/actionTypes'
 
 const learnerState = {
   saved: false,
@@ -87,6 +87,7 @@ const learnerState = {
   assessors: [],
   moderators: [],
   learnerIDs: [],
+  learners: [],
   addrCheck: false,
   type: "add",
   learnerInfo: false,
@@ -129,6 +130,8 @@ const learnerReducer = (state = learnerState, action) => {
       return {...state, ...learnerState}
     case SAVE_COMPLETE:
       return {...state, saved: action.payload}
+    case EDIT_LEARNER:
+      return {...state, ...action.payload}
     default:
       return state;
   }

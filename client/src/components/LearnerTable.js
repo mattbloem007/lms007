@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Checkbox } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -14,7 +14,8 @@ class LearnerTable extends Component {
 
     this.state = {
                     headings: ["National ID", "First Name", "Surname", "Equity", "Gender"],
-                    allowed: ['national_id', 'firstname', 'surname', 'equity', 'gender']
+                    allowed: ['national_id', 'firstname', 'surname', 'equity', 'gender'],
+                    checkedRows: []
                  }
   }
 
@@ -27,6 +28,22 @@ class LearnerTable extends Component {
     this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
   }
 
+  delete = () => {
+    console.log(this.state.checkedRows)
+    this.props.learnerActions.DeleteBatchLearner(this.state.checkedRows, this.props.batch)
+  }
+
+  checkRow = (ID, value) => {
+    let checked = [];
+    if (value) {
+      checked.push(ID);
+      this.setState({checkedRows: [...this.state.checkedRows, ...checked]})
+    }
+    else {
+      this.setState({checkedRows:  _.without(this.state.checkedRows, ID) })
+    }
+  }
+
   showLearnerInfo = (data) => {
     console.log(data);
       this.props.learnerActions.fetchLearnerInfo(data.national_id);
@@ -34,9 +51,10 @@ class LearnerTable extends Component {
 
   render() {
     return(
-    <Table celled>
+    <Table celled selectable sortable stackable compact definition>
       <Table.Header>
         <Table.Row>
+          <Table.HeaderCell />
           {
             this.state.headings.map((head) => <Table.HeaderCell key={head}>{head}</Table.HeaderCell>)
           }
@@ -46,7 +64,10 @@ class LearnerTable extends Component {
           {
             this.props.batchLearners.map((x, i) => {
             return(
-              <Table.Row key={x.client_id}>
+              <Table.Row key={x.national_id}>
+                <Table.Cell collapsing>
+                  <Checkbox onChange={(e, {checked}) => {this.checkRow(x.national_id, checked)}}/>
+                </Table.Cell>
                 {
                   Object.keys(_.pick(this.props.batchLearners[i], this.state.allowed)).map((y) =><Table.Cell onClick={() => this.showLearnerInfo(x)} key={y}>{x[y]}</Table.Cell>)
                 }
@@ -61,6 +82,9 @@ class LearnerTable extends Component {
           <Button onClick={this.back} size='small'>Back</Button>
             <Button onClick={this.downloadPDF} floated='right' icon labelPosition='left' primary size='small'>
               <Icon name='download' /> Download Report
+            </Button>
+            <Button onClick={this.delete} floated='left' icon labelPosition='left' primary size='small'>
+              <Icon name='delete' /> Delete
             </Button>
         </Table.HeaderCell>
       </Table.Row>

@@ -50,11 +50,6 @@ class Login extends Component {
     if (this.state.submitted === true) {
       return <Redirect to='/App'/>
     }
-    else {
-      if (this.state.register === true) {
-        return <Redirect to='/Register' />
-      }
-    }
 
     return (
       <div>
@@ -93,7 +88,6 @@ class Login extends Component {
               </div>
           </div>
           <input type="submit" value="Login" className="save" onClick={this.login}/>
-            <input type="submit" value="Register" className="register" onClick={this.register}/>
         </div>
       </div>
     )

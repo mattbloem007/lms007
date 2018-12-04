@@ -1,9 +1,59 @@
-import {  VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR } from './actionTypes'
+import {  EDIT_ASSESSOR, VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR, RECEIVE_ASSESSORS } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import { changeActiveTable } from './tableActions'
+import { months } from '../common'
+import _ from 'lodash'
 
 export const validateComplete = errs => ({ type: VALIDATE_ASSESSOR, payload: errs})
+
+export const Delete = (rows) => {
+  return dispatch => {
+    return fetch("/api/deleteAssessor", {
+         method: 'POST',
+         body: JSON.stringify(rows),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
+  }
+}
+
+export const editAssessor = (assessor) => {
+  return dispatch => {
+    console.log(assessor['Expiry Date'])
+    let date = new Date(assessor['Expiry Date'])
+    dispatch(edit({...assessor,
+      surname: assessor.name.split(" ")[assessor.name.split(" ").length - 1],
+      day: date.getDate().toString(),
+      month: months[date.getMonth()].text,
+      year: date.getFullYear().toString(),
+      type: "edit"
+      }))
+    return Promise.resolve()
+  }
+}
+
+export const saveEditAssessor = (info) => {
+  return dispatch => {
+    return fetch("/data/lms_assessorEdit", {
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
+
+export const edit = (moderator) => ({type: EDIT_ASSESSOR, payload: moderator})
 
 export const updateAssessor = (info) => {
   return (dispatch, getState) => {
@@ -49,14 +99,14 @@ export const validateInput = (info, errs) => {
       errs = {...errs, IDError: false}
     }
 
-    if (isEmpty(info.reg_no)) {
+    if (isEmpty(info.Reg_no)) {
       errs = {...errs, reg_noError: true}
     }
     else {
       errs = {...errs, reg_noError: false}
     }
 
-    if (isEmpty(info.seta)) {
+    if (isEmpty(info.SETA)) {
       errs = {...errs, setaError: true}
     }
     else {
@@ -96,8 +146,8 @@ export const validateInput = (info, errs) => {
     let newInfo = {
       name: info.name+ " " + info.surname,
       ID: info.ID,
-      reg_no: info.reg_no,
-      seta: info.seta,
+      Reg_no: info.Reg_no,
+      SETA: info.SETA,
       expiry_date: info.expiry_date
     }
 
@@ -105,14 +155,15 @@ export const validateInput = (info, errs) => {
     const state = getState();
 
     if (errors == false) {
-      dispatch(uploadAssessor(newInfo))
-      dispatch(resetAssessor())
-    //  if (state.flow.activeStep == "client") {
-        dispatch(changeActiveStep("client"))
-      // }
-      // else {
-      //   dispatch(changeActiveTable("learner"))
-      // }
+
+      if (state.assessor.type == "add") {
+        dispatch(uploadAssessor(newInfo))
+        dispatch(resetAssessor())
+      //  dispatch(changeActiveStep("client"))
+      }
+      else {
+        dispatch(saveEditAssessor(newInfo))
+      }
 
     }
   }
@@ -131,5 +182,25 @@ export const uploadAssessor = (info) => {
          console.log(body);
      });
   }
+}
 
+export const fetchAssessors = () => {
+  return dispatch => {
+    return fetch('/api/assessors')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveAssessors(json))
+    });
+  }
+}
+
+export function receiveAssessors(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['surname'],['asc']);
+  console.log(sorted)
+  return {
+    type: RECEIVE_ASSESSORS,
+    payload: sorted
+  }
 }

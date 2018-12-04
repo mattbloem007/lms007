@@ -14,7 +14,7 @@ class RegisterClient extends Component{
     this.state = {
                   info: {
                           name: "",
-                          tel: "",
+                          telephone: "",
                           address: "",
                           address2: "",
                           address3: "",
@@ -27,12 +27,19 @@ class RegisterClient extends Component{
   }
 
   validateInput = (e) => {
-    this.props.clientActions.updateClient(this.state.info);
+      this.props.clientActions.updateClient(this.state.info);
   }
 
   back = () => {
-    this.props.clientActions.updateClient(this.state.info);
-    this.props.flowActions.changeActiveStep("client")
+    console.log(this.props.type)
+    if (this.props.type == "add") {
+      this.props.clientActions.updateClient(this.state.info);
+      this.props.flowActions.changeActiveStep("client")
+    }
+    else {
+      this.props.clientActions.updateClient(this.state.info);
+      this.props.flowActions.changeActiveStep("Clients")
+    }
   }
 
   render() {
@@ -43,7 +50,7 @@ class RegisterClient extends Component{
             <Form.Input defaultValue={this.props.name} label="Name" name="client_name" placeholder="Enter Client Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
         </Form.Field>
           <Form.Field>
-          <Form.Input label="Telephone" defaultValue={this.props.tel} name="client_telephone" placeholder="Telephone Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, tel: data.value}}))}} error={this.props.telError}/>
+          <Form.Input label="Telephone" defaultValue={this.props.telephone} name="client_telephone" placeholder="Telephone Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, telephone: data.value}}))}} error={this.props.telError}/>
       </Form.Field>
         </Form.Group>
         <Form.Group>
@@ -86,13 +93,14 @@ const mapStateToProps = (state) => ({
   contactError: state.client.contactError,
   municipalityError: state.client.municipalityError,
   name: state.client.name,
-  tel: state.client.tel,
+  telephone: state.client.telephone,
   address: state.client.address,
   address2: state.client.address2,
   address3: state.client.address3,
   postCode: state.client.postCode,
   contact: state.client.contact,
   municipality: state.client.municipality,
+  type: state.client.type
 })
 const mapDispatchToProps = (dispatch) => ({
   clientActions: bindActionCreators(clientActions, dispatch),

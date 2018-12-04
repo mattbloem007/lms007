@@ -52,7 +52,7 @@ const _format = (data) => {
 			{text: item.cellno, style: styleC},
 			{text: item.gender, style: styleC},
 			{text: item.equity, style: styleC},
-      {text: item.year_attented, style: styleC},
+      {text: item.year_attended, style: styleC},
       {text: item.last_school, style: styleC},
       {text: item.homeaddr, style: styleC}
 		]);
@@ -339,16 +339,16 @@ export const downloadPDF = (batch, batchs, learners) => {
       ],
       styles: {
         backColor: {
-          background: 'green'
+          fillColor: 'green'
         },
         notCompetent: {
-          background: 'red'
+          fillColor: 'red'
         },
         notSubmitted : {
-          background: 'white'
+          fillColor: 'white'
         },
         resub: {
-          background:'orange'
+          fillColor:'orange'
         }
       }
     };

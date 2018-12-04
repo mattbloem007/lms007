@@ -1,9 +1,60 @@
-import {  VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR } from './actionTypes'
+import {  EDIT_MODERATOR, VALIDATE_MODERATOR, SAVE_MODERATOR, RESET_MODERATOR, RECEIVE_MODERATORS } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import { changeActiveTable } from './tableActions'
+import { months } from '../common'
+import _ from 'lodash'
 
 export const validateComplete = errs => ({ type: VALIDATE_MODERATOR, payload: errs})
+
+export const Delete = (rows) => {
+  return dispatch => {
+    return fetch("/api/deleteModerator", {
+         method: 'POST',
+         body: JSON.stringify(rows),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
+  }
+}
+
+
+export const editModerator = (moderator) => {
+  return dispatch => {
+    console.log(moderator['Expiry Date'])
+    let date = new Date(moderator['Expiry Date'])
+    dispatch(edit({...moderator,
+      surname: moderator.name.split(" ")[moderator.name.split(" ").length - 1],
+      day: date.getDate().toString(),
+      month: months[date.getMonth()].text,
+      year: date.getFullYear().toString(),
+      type: "edit"
+      }))
+    return Promise.resolve()
+  }
+}
+
+export const saveEditModerator = (info) => {
+  return dispatch => {
+    return fetch("/data/lms_moderatorEdit", {
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
+
+export const edit = (moderator) => ({type: EDIT_MODERATOR, payload: moderator})
 
 export const updateModerator = (info) => {
   return (dispatch, getState) => {
@@ -50,14 +101,14 @@ export const validateInput = (info, errs) => {
       errs = {...errs, IDError: false}
     }
 
-    if (isEmpty(info.reg_no)) {
+    if (isEmpty(info.Reg_no)) {
       errs = {...errs, reg_noError: true}
     }
     else {
       errs = {...errs, reg_noError: false}
     }
 
-    if (isEmpty(info.seta)) {
+    if (isEmpty(info.SETA)) {
       errs = {...errs, setaError: true}
     }
     else {
@@ -97,8 +148,8 @@ export const validateInput = (info, errs) => {
     let newInfo = {
       name: info.name+ " " + info.surname,
       ID: info.ID,
-      reg_no: info.reg_no,
-      seta: info.seta,
+      Reg_no: info.Reg_no,
+      SETA: info.SETA,
       expiry_date: info.expiry_date
     }
 
@@ -106,10 +157,15 @@ export const validateInput = (info, errs) => {
     const state = getState()
 
     if (errors == false) {
-      dispatch(uploadModerator(newInfo))
-      dispatch(resetModerator())
-      //if (state.flow.activeStep == "client") {
-        dispatch(changeActiveStep("client"))
+      if (state.moderator.type == "add") {
+        dispatch(uploadModerator(newInfo))
+        dispatch(resetModerator())
+      //  dispatch(changeActiveStep("client"))
+      }
+      else {
+        dispatch(saveEditModerator(newInfo))
+      }
+
       // }
       // else {
       //   dispatch(changeActiveTable("learner"))
@@ -131,5 +187,25 @@ export const uploadModerator = (info) => {
          console.log(body);
      });
   }
+}
 
+export const fetchModerators = () => {
+  return dispatch => {
+    return fetch('/api/moderators')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveModerators(json))
+    });
+  }
+}
+
+export function receiveModerators(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['surname'],['asc']);
+  console.log(sorted)
+  return {
+    type: RECEIVE_MODERATORS,
+    payload: sorted
+  }
 }

@@ -25,8 +25,13 @@ class Register extends Component {
             password: '',
             fname: '',
             lname: '',
-            submitted: false
+            submitted: false,
+            back: false
         };
+    }
+
+    back = () => {
+      this.setState({back: true})
     }
 
     register = () => {
@@ -51,6 +56,10 @@ class Register extends Component {
   render() {
 
     if (this.state.submitted === true) {
+      return <Redirect to='/App'/>
+    }
+
+    if (this.state.back === true) {
       return <Redirect to='/App'/>
     }
 
@@ -100,6 +109,7 @@ class Register extends Component {
               </div>
           </div>
           <input type="submit" value="Save" className="save" onClick={this.register}/>
+          <input type="submit" value="Back" className="save" onClick={this.back}/>
         </div>
       </div>
     )

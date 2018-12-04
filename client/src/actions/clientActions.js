@@ -1,4 +1,4 @@
-import { RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, SUCCESS, RESET_CLIENT } from './actionTypes'
+import { EDIT_CLIENT, RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, SUCCESS, RESET_CLIENT } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import _ from 'lodash'
@@ -7,6 +7,71 @@ import _ from 'lodash'
 // { type: RECEIVE, payload: json }
 // );
 
+export const Delete = (rows) => {
+  return dispatch => {
+    return fetch("/api/deleteClient", {
+         method: 'POST',
+         body: JSON.stringify(rows),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
+  }
+}
+
+export const editClient = (client) => {
+  return dispatch => {
+        let addr = client.address.split(", ");
+        let newInfo = {...client, type: "edit"};
+        switch (addr.length) {
+          case 2:
+            newInfo = {...newInfo,
+                        address: addr[0],
+                        postCode: addr[1]
+                      }
+          break;
+          case 3:
+          newInfo = {...newInfo,
+                      address: addr[0],
+                      address2: addr[1],
+                      postCode: addr[2]
+                    }
+          break;
+          case 4:
+          newInfo = {...newInfo,
+                      address: addr[0],
+                      address2: addr[1],
+                      address3: addr[2],
+                      postCode: addr[3]
+                    }
+          break;
+        }
+        console.log(newInfo)
+        dispatch(edit(newInfo))
+    return Promise.resolve()
+  }
+}
+
+export const edit = (client) => ({type: EDIT_CLIENT, payload: client})
+
+export const saveEditClient= (info) => {
+  return dispatch => {
+    return fetch("/data/lms_clientEdit",{
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
 
 export const updateClient = (info) => {
   return (dispatch, getState) => {
@@ -79,7 +144,7 @@ export const validateInput = (info, errs) => {
       errs = {...errs, nameError: false}
     }
 
-    if (!isMobilePhone(info.tel)) {
+    if (!isMobilePhone(info.telephone)) {
       errs = {...errs, telError: true}
     }
     else {
@@ -126,23 +191,38 @@ export const validateInput = (info, errs) => {
 
     let address = "";
     if (info.address2 != "") {
-      address = info.address + "," + info.address2 +"," + info.postCode
-    } else {
-      address = info.address +"," + info.postCode
+      address = info.address + ", " + info.address2 + ", " + info.postCode
     }
+    else if(info.address3 != "") {
+      address = info.address + ", " + info.address2 + ", " + info.address3 +", "+ info.postCode
+    }
+    else {
+      address = info.address +", " + info.postCode
+    }
+    console.log(address)
     let newInfo = {
       name: info.name,
-      tel: info.tel,
+      telephone: info.telephone,
       address: address,
       contact: info.contact,
       municipality: info.municipality
     }
     dispatch(validateComplete(errs));
 
-    if (errors == false) {
-      dispatch(uploadClient(newInfo))
-      dispatch(resetClient())
-      dispatch(changeActiveStep("client"));
+
+    const state = getState();
+
+
+    if (errors === false) {
+      if (state.client.type == "add") {
+        dispatch(uploadClient(newInfo))
+        dispatch(resetClient())
+        // dispatch(changeActiveStep("client"));
+      }
+      else {
+        dispatch(saveEditClient(newInfo))
+      }
+
 
     }
   }
@@ -374,6 +454,27 @@ export const fetchClients = () => {
       console.log(json)
       dispatch(receiveInfo(json))
     });
+  }
+}
+
+export const fetchAllClients = () => {
+  return dispatch => {
+    return fetch('/api/clients')
+    .then(res =>  res.json())
+    .then(json => {
+      console.log(json)
+      dispatch(receiveClients(json))
+    });
+  }
+}
+
+export function receiveClients(json) {
+  console.log(json.express)
+  let sorted = _.orderBy(json.express, ['surname'],['asc']);
+  console.log(sorted)
+  return {
+    type: RECEIVE_CLIENTS,
+    payload: sorted
   }
 }
 

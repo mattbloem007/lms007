@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox } from 'semantic-ui-react'
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import * as tableActions from '../actions/tableActions'
+import * as flowActions from '../actions/flowActions'
+import * as clientActions from '../actions/clientActions';
+
+import _ from 'lodash'
 
 class ClientTable extends Component {
 
@@ -7,63 +14,120 @@ class ClientTable extends Component {
     super(props);
 
     this.state = {
-                    headings: ["Project Name", "Name", "Telephone", "Address", "Contact", "Municipality"]
+                    headings: ["Name", "Telephone", "Address", "Contact", "Muncipality"],
+                    checkedRows: []
                  }
   }
 
-  handleFooter = (table) => {
+  back = () => {
+    this.props.tableActions.changeActiveTable("batch")
+    this.props.tableActions.clearBatchLearners()
+  }
 
-    this.props.footerClicked(table);
+  downloadExcel = () => {
+    this.props.tableActions.downloadExcel(this.props.clients)
+  }
 
+  // downloadPDF = () => {
+  //   this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
+  // }
+
+  componentDidMount() {
+      this.props.clientActions.fetchAllClients();
+  }
+
+  delete = () => {
+    console.log(this.state.checkedRows)
+    this.props.clientActions.Delete(this.state.checkedRows)
+  }
+
+  edit = (client) => {
+    console.log(client)
+    this.props.clientActions.editClient(client)
+    .then(() => {
+      this.props.flowActions.changeActiveStep("rclient")
+    })
+  }
+
+  checkRow = (name, value) => {
+    let checked = [];
+    if (value) {
+      checked.push(name);
+      this.setState({checkedRows: [...this.state.checkedRows, ...checked]})
+    }
+    else {
+      this.setState({checkedRows:  _.without(this.state.checkedRows, name) })
+    }
   }
 
   render() {
     return(
-    <Table celled>
+    <Segment style={{overflow: 'auto', maxHeight: 500 }}>
+
+    <Table celled selectable sortable stackable compact definition>
       <Table.Header>
         <Table.Row>
+          <Table.HeaderCell />
+          <Table.HeaderCell />
           {
             this.state.headings.map((head) => <Table.HeaderCell key={head}>{head}</Table.HeaderCell>)
           }
         </Table.Row>
-        </Table.Header>
+      </Table.Header>
         <Table.Body>
           {
-            this.props.info.map((x, i) => {
+            this.props.clients.map((x, i) => {
             return(
-              <Table.Row>
+              <Table.Row key={x.name}>
+                <Table.Cell collapsing>
+                  <Checkbox onChange={(e, {checked}) => {this.checkRow(x.name, checked)}}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button onClick={() => this.edit(this.props.clients[i])} icon labelPosition='left' primary size='small'>
+                    <Icon name='edit' /> Edit
+                  </Button>
+                </Table.Cell>
                 {
-                  Object.keys(this.props.info[i]).map((y) => <Table.Cell>{x[y]}</Table.Cell>)
+                  Object.keys(this.props.clients[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
                 }
               </Table.Row>
               )
             })
           }
         </Table.Body>
-
-        <Table.Footer>
-          <Table.Row>
-            <Table.HeaderCell colSpan='3'>
-              <Menu floated='right' pagination>
-                <Menu.Item as='a' icon>
-                  <Icon name='chevron left' />
-                </Menu.Item>
-                <Menu.Item as='a' onClick={() => this.handleFooter("lms_client")}>Client</Menu.Item>
-                <Menu.Item as='a' onClick={() => this.handleFooter("lms_logistics")}>Logistics</Menu.Item>
-                <Menu.Item as='a' onClick={() => this.handleFooter("lms_dates")}>Dates</Menu.Item>
-                <Menu.Item as='a' onClick={() => this.handleFooter("lms_learner")}>Learner</Menu.Item>
-                <Menu.Item as='a' icon>
-                  <Icon name='chevron right' />
-                </Menu.Item>
-              </Menu>
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Footer>
-
-
+        <Table.Footer fullWidth>
+      <Table.Row>
+      <Table.HeaderCell colSpan='5'>
+          <Button onClick={this.back} size='small'>Back</Button>
+            <Button onClick={this.downloadExcel} floated='left' icon labelPosition='left' primary size='small'>
+              <Icon name='download' /> Export To Excel
+            </Button>
+            <Button onClick={this.delete} floated='left' icon labelPosition='left' primary size='small'>
+              <Icon name='delete' /> Delete
+            </Button>
+            <Button onClick={this.downloadPDF} floated='right' icon labelPosition='left' primary size='small'>
+              <Icon name='download' /> Download Report
+            </Button>
+        </Table.HeaderCell>
+      </Table.Row>
+    </Table.Footer>
     </Table>
+  </Segment>
     )
   }
 
 }
-export default ClientTable;
+const mapStateToProps = state => ({
+  batch: state.table.batch,
+  batchs: state.batch.batchs,
+  batchLearners: state.table.batchLearners,
+  clients: state.client.clients
+
+})
+const mapDispatchToProps = dispatch => ({
+  clientActions: bindActionCreators(clientActions, dispatch),
+  flowActions: bindActionCreators(flowActions, dispatch),
+  tableActions: bindActionCreators(tableActions, dispatch)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClientTable);

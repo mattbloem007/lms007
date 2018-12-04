@@ -1,4 +1,4 @@
-import { FETCH_BATCH, RECEIVE_BATCH } from './actionTypes'
+import { FETCH_BATCH, RECEIVE_BATCH, DELETE } from './actionTypes'
 
 export function receiveInfo(json) {
   console.log("BATCH: ", json.express);
@@ -40,5 +40,21 @@ export const fetchBatch = () => {
       console.log(json)
       dispatch(receiveInfo(json))
     });
+  }
+}
+
+export const Delete = (rows) => {
+  return dispatch => {
+    return fetch("/api/deleteBatch", {
+         method: 'POST',
+         body: JSON.stringify(rows),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+
   }
 }
