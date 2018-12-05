@@ -17,7 +17,8 @@ const moderatorState = {
   setaError: false,
   errors: false,
   moderators: [],
-  type: "add"
+  type: "add",
+  success: false
 
 }
 

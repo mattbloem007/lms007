@@ -27,7 +27,9 @@ class RegisterFacilitator extends Component{
   validateInput = (e) => {
     this.props.facilitatorActions.updateFacilitator(this.state.info)
     .then(() => {
-      this.setState({save: true})
+      if (this.props.success) {
+        this.setState({save: true})
+      }
     })
 
   }
@@ -79,7 +81,8 @@ const mapStateToProps = (state) => ({
   ID: state.facilitator.ID,
   Cell_no: state.facilitator.Cell_no,
   errors: state.facilitator.errors,
-  type: state.facilitator.type
+  type: state.facilitator.type,
+  success: state.facilitator.success
 })
 const mapDispatchToProps = (dispatch) => ({
   facilitatorActions: bindActionCreators(facilitatorActions, dispatch),

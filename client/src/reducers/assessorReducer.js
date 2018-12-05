@@ -20,7 +20,8 @@ const assessorState = {
   monthError: false,
   errors: false,
   assessors: [],
-  type: "add"
+  type: "add",
+  success: false
 }
 
 const assessorReducer = (state = assessorState, action) => {

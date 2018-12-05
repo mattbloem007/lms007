@@ -116,6 +116,7 @@ export const validateInput = (info, errs) => {
 
     console.log(errors)
     if (errors == false) {
+      newInfo = {...newInfo, success:true}
       if (state.facilitator.type == "add") {
         dispatch(uploadFacilitator(newInfo))
         dispatch(resetFacilitator())

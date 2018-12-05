@@ -493,6 +493,7 @@ export const validateInput = (info, errs) => {
     console.log(newInfo)
     const state = getState();
     if(errors === false) {
+      newInfo = {...newInfo, success: true}
       if (state.learner.type === "add") {
         dispatch(uploadLearner(newInfo))
         dispatch(saveComplete(true))

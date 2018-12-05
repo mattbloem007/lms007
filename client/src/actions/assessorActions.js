@@ -157,8 +157,9 @@ export const validateInput = (info, errs) => {
     const state = getState();
 
     if (errors == false) {
-
+      newInfo = {...newInfo, success: true}
       if (state.assessor.type == "add") {
+
         dispatch(uploadAssessor(newInfo))
         dispatch(resetAssessor())
       //  dispatch(changeActiveStep("client"))

@@ -10,7 +10,8 @@ const facilitatorState = {
   IDError: false,
   cellnoError: false,
   facilitators: [],
-  type: "add"
+  type: "add",
+  success: false
 }
 
 const facilitatorReducer = (state = facilitatorState, action) => {

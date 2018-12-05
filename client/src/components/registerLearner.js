@@ -107,7 +107,9 @@ class registerLearner extends Component {
   validateInput = () => {
     this.props.learnerActions.updateLearner(this.state.info)
     .then(() => {
-      this.setState({save: true})
+      if (this.props.success) {
+        this.setState({save: true})
+      }
     })
   }
 
@@ -493,7 +495,8 @@ const mapStateToProps = state => ({
   clubs: state.learner.clubs,
   addrCheck: state.learner.addrCheck,
   learnerInfo: state.learner.learnerInfo,
-  type: state.learner.type
+  type: state.learner.type,
+  success: state.learner.success
 })
 const mapDispatchToProps = dispatch => ({
   learnerActions: bindActionCreators(learnerActions, dispatch),

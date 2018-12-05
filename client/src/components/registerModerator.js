@@ -31,7 +31,10 @@ class RegisterModerator extends Component{
   validateInput = (e) => {
     this.props.moderatorActions.updateModerator(this.state.info)
     .then(() => {
-      this.setState({save: true})
+      if(this.props.success) {
+        this.setState({save: true})
+
+      }
     })
 
   }
@@ -98,7 +101,8 @@ const mapStateToProps = (state) => ({
   month: state.moderator.month,
   year: state.moderator.year,
   errors: state.moderator.errors,
-  type: state.moderator.type
+  type: state.moderator.type,
+  success: state.moderator.success
 })
 const mapDispatchToProps = (dispatch) => ({
   moderatorActions: bindActionCreators(moderatorActions, dispatch),

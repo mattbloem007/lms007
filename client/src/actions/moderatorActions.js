@@ -159,6 +159,7 @@ export const validateInput = (info, errs) => {
     const state = getState()
 
     if (errors == false) {
+      newInfo = {...newInfo, success: true}
       if (state.moderator.type == "add") {
         dispatch(uploadModerator(newInfo))
         dispatch(resetModerator())

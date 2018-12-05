@@ -91,7 +91,8 @@ const learnerState = {
   addrCheck: false,
   type: "add",
   learnerInfo: false,
-  errors: false
+  errors: false,
+  success: false
 }
 
 const learnerReducer = (state = learnerState, action) => {

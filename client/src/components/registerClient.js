@@ -30,7 +30,10 @@ class RegisterClient extends Component{
   validateInput = (e) => {
       this.props.clientActions.updateClient(this.state.info)
       .then(() => {
-        this.setState({save: true})
+        if (this.props.success) {
+          this.setState({save: true})
+        }
+
       })
   }
 
@@ -105,7 +108,8 @@ const mapStateToProps = (state) => ({
   postCode: state.client.postCode,
   contact: state.client.contact,
   municipality: state.client.municipality,
-  type: state.client.type
+  type: state.client.type,
+  success: state.client.success
 })
 const mapDispatchToProps = (dispatch) => ({
   clientActions: bindActionCreators(clientActions, dispatch),

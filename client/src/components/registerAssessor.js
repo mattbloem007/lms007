@@ -31,7 +31,9 @@ class RegisterAssessor extends Component{
   validateInput = (e) => {
     this.props.assessorActions.updateAssessor(this.state.info)
     .then(() => {
-      this.setState({save: true})
+      if (this.props.success) {
+        this.setState({save: true})
+      }
     })
 
   }
@@ -90,7 +92,8 @@ const mapStateToProps = (state) => ({
   day: state.assessor.day,
   month: state.assessor.month,
   year: state.assessor.year,
-  errors: state.assessor.errors
+  errors: state.assessor.errors,
+  success: state.assessor.success
 })
 const mapDispatchToProps = (dispatch) => ({
   assessorActions: bindActionCreators(assessorActions, dispatch),
