@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -15,9 +15,13 @@ class FacilitatorTable extends Component {
 
     this.state = {
                     headings: ["Name", "ID", "Cell Number"],
-                    checkedRows: []
+                    checkedRows: [],
+                    open: false
                  }
   }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -39,6 +43,7 @@ class FacilitatorTable extends Component {
   delete = () => {
     console.log(this.state.checkedRows)
     this.props.facilitatorActions.Delete(this.state.checkedRows)
+    this.close()
   }
 
   edit = (facilitator) => {
@@ -98,13 +103,15 @@ class FacilitatorTable extends Component {
         <Table.Footer fullWidth>
       <Table.Row>
       <Table.HeaderCell colSpan='5'>
-          <Button onClick={this.back} size='small'>Back</Button>
             <Button onClick={this.downloadExcel} floated='left' icon labelPosition='left' primary size='small'>
               <Icon name='download' /> Export To Excel
             </Button>
-            <Button onClick={this.delete} floated='left' icon labelPosition='left' primary size='small'>
-              <Icon name='delete' /> Delete
-            </Button>
+            <div>
+              <Button onClick={this.open} floated='left' icon labelPosition='left' primary size='small'>
+                <Icon name='delete' /> Delete
+              </Button>
+              <Confirm open={this.state.open} onCancel={this.close} onConfirm={this.delete} />
+            </div>
             <Button onClick={this.downloadPDF} floated='right' icon labelPosition='left' primary size='small'>
               <Icon name='download' /> Download Report
             </Button>

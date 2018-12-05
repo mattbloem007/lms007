@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -16,9 +16,14 @@ class AllLearnerTable extends Component {
     this.state = {
                     headings: ["National ID", "First Name", "Surname", "Equity", "Gender", "Year"],
                     allowed: ['national_id', 'firstname', 'surname', 'equity', 'gender'],
-                    checkedRows: []
+                    checkedRows: [],
+                    deleted: false,
+                    open: false
                  }
   }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -40,6 +45,9 @@ class AllLearnerTable extends Component {
   delete = () => {
     console.log(this.state.checkedRows)
     this.props.learnerActions.Delete(this.state.checkedRows)
+    .then(() => {
+      this.close()
+    })
   }
 
   edit = (learners) => {
@@ -99,13 +107,15 @@ class AllLearnerTable extends Component {
         <Table.Footer fullWidth>
       <Table.Row>
       <Table.HeaderCell colSpan='5'>
-          <Button onClick={this.back} size='small'>Back</Button>
             <Button onClick={this.downloadExcel} floated='left' icon labelPosition='left' primary size='small'>
               <Icon name='download' /> Export To Excel
             </Button>
-            <Button onClick={this.delete} floated='left' icon labelPosition='left' primary size='small'>
-              <Icon name='delete' /> Delete
-            </Button>
+            <div>
+              <Button onClick={this.open} floated='left' icon labelPosition='left' primary size='small'>
+                <Icon name='delete' /> Delete
+              </Button>
+              <Confirm open={this.state.open} onCancel={this.close} onConfirm={this.delete} />
+            </div>
         </Table.HeaderCell>
       </Table.Row>
     </Table.Footer>

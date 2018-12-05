@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -15,9 +15,14 @@ class ClientTable extends Component {
 
     this.state = {
                     headings: ["Name", "Telephone", "Address", "Contact", "Muncipality"],
-                    checkedRows: []
+                    checkedRows: [],
+                    deleted: false,
+                    open: false
                  }
   }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -28,9 +33,6 @@ class ClientTable extends Component {
     this.props.tableActions.downloadExcel(this.props.clients)
   }
 
-  // downloadPDF = () => {
-  //   this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
-  // }
 
   componentDidMount() {
       this.props.clientActions.fetchAllClients();
@@ -38,7 +40,12 @@ class ClientTable extends Component {
 
   delete = () => {
     console.log(this.state.checkedRows)
+
     this.props.clientActions.Delete(this.state.checkedRows)
+    .then(() => {
+      this.close()
+      this.forceUpdate();
+    })
   }
 
   edit = (client) => {
@@ -98,13 +105,15 @@ class ClientTable extends Component {
         <Table.Footer fullWidth>
       <Table.Row>
       <Table.HeaderCell colSpan='5'>
-          <Button onClick={this.back} size='small'>Back</Button>
             <Button onClick={this.downloadExcel} floated='left' icon labelPosition='left' primary size='small'>
               <Icon name='download' /> Export To Excel
             </Button>
-            <Button onClick={this.delete} floated='left' icon labelPosition='left' primary size='small'>
-              <Icon name='delete' /> Delete
-            </Button>
+            <div>
+              <Button onClick={this.open} floated='left' icon labelPosition='left' primary size='small'>
+                <Icon name='delete' /> Delete
+              </Button>
+              <Confirm open={this.state.open} onCancel={this.close} onConfirm={this.delete} />
+            </div>
             <Button onClick={this.downloadPDF} floated='right' icon labelPosition='left' primary size='small'>
               <Icon name='download' /> Download Report
             </Button>
