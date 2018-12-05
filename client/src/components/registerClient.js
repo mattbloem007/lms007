@@ -1,5 +1,5 @@
 import React, { Component }from 'react';
-import { Form, Icon } from 'semantic-ui-react';
+import { Form, Icon, Message } from 'semantic-ui-react';
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
@@ -20,14 +20,18 @@ class RegisterClient extends Component{
                           address3: "",
                           postCode: "",
                           contact: "",
-                          municipality: ""
+                          municipality: "",
+                          save: false
                          }
 
                  }
   }
 
   validateInput = (e) => {
-      this.props.clientActions.updateClient(this.state.info);
+      this.props.clientActions.updateClient(this.state.info)
+      .then(() => {
+        this.setState({save: true})
+      })
   }
 
   back = () => {
@@ -44,7 +48,7 @@ class RegisterClient extends Component{
 
   render() {
     return(
-      <Form>
+      <Form success={this.state.save}>
         <Form.Group>
           <Form.Field>
             <Form.Input defaultValue={this.props.name} label="Name" name="client_name" placeholder="Enter Client Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
@@ -77,6 +81,7 @@ class RegisterClient extends Component{
         </Form.Field>
       </Form.Field>
         </Form.Group>
+        <Message success header='Form Completed' content="Saved Client Successfully" />
         <Form.Button primary onClick={this.back}><Icon name="chevron circle left"/> Back</Form.Button>
         <Form.Button primary onClick={this.validateInput}><Icon name="save" />Save</Form.Button>
     </Form>

@@ -60,6 +60,7 @@ export const updateFacilitator = (info) => {
     dispatch(save(newInfo))
     const state = getState();
     dispatch(validateInput(state.facilitator))
+    return Promise.resolve()
   }
 }
 export const save = newInfo => ({ type: SAVE_FACILITATOR, payload: newInfo })

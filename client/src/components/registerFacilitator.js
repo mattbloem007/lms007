@@ -1,5 +1,5 @@
 import React, { Component }from 'react';
-import { Form, Icon } from 'semantic-ui-react';
+import { Form, Icon, Message } from 'semantic-ui-react';
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
@@ -17,14 +17,18 @@ class RegisterFacilitator extends Component{
                           name: "",
                           surname: "",
                           ID: "",
-                          Cell_no: ""
+                          Cell_no: "",
+                          save: false
                          }
 
                  }
   }
 
   validateInput = (e) => {
-    this.props.facilitatorActions.updateFacilitator(this.state.info);
+    this.props.facilitatorActions.updateFacilitator(this.state.info)
+    .then(() => {
+      this.setState({save: true})
+    })
 
   }
 
@@ -42,7 +46,7 @@ class RegisterFacilitator extends Component{
 
   render() {
     return(
-      <Form>
+      <Form success={this.state.save}>
         <Form.Group>
           <Form.Field>
             <Form.Input label="Name" defaultValue={this.props.name} placeholder="Enter Name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
@@ -57,6 +61,7 @@ class RegisterFacilitator extends Component{
         <Form.Group>
             <Form.Input label="Cell Number" defaultValue={this.props.Cell_no} placeholder="Cell Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, Cell_no: data.value}}))}} error={this.props.cellnoError}/>
          </Form.Group>
+         <Message success header='Form Completed' content="Saved Facilitator Successfully" />
         <Form.Button primary onClick={this.back}><Icon name="chevron circle left"/> Back</Form.Button>
         <Form.Button primary onClick={this.validateInput}><Icon name="save"/>Save</Form.Button>
     </Form>

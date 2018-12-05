@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Checkbox, Icon, Container } from 'semantic-ui-react';
+import { Form, Checkbox, Icon, Container, Message } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as learnerActions from '../actions/learnerActions';
@@ -62,7 +62,8 @@ class registerLearner extends Component {
                     ass: [],
                     mod: [],
                     addrCheck: false,
-                    club: ""
+                    club: "",
+                    save: false
                   }
 
                 }
@@ -105,6 +106,9 @@ class registerLearner extends Component {
 
   validateInput = () => {
     this.props.learnerActions.updateLearner(this.state.info)
+    .then(() => {
+      this.setState({save: true})
+    })
   }
 
   handleEmployer = (e, data) => {
@@ -135,7 +139,7 @@ class registerLearner extends Component {
 <Container>
   {
     this.props.addrCheck ?
-    <Form className="ui form">
+    <Form className="ui form" success={this.state.save}>
       <h4 className="ui dividing header">Learner Information</h4>
     <Form.Group>
       <Form.Group>
@@ -254,13 +258,14 @@ class registerLearner extends Component {
       <Form.Field>
       <Form.Select defaultValue={this.props.club} label="Club" name="club" placeholder="Select Club Name"  options={this.props.clubs} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.props.clubError}/>
       </Form.Field>
+      <Message success header='Form Completed' content="Saved Learner Successfully" />
       <Form.Group widths='equal'>
         <Form.Button primary onClick={this.back} className="ui button" tabIndex="0"><Icon name="chevron circle left"/>Back</Form.Button>
         <Form.Button primary onClick={this.validateInput} className="ui button" tabIndex="0"><Icon name="save"/>Save Learner</Form.Button>
       </Form.Group>
     </Form>
     :
-    <Form className="ui form">
+    <Form className="ui form" success={this.state.save}>
       <h4 className="ui dividing header">Learner Information</h4>
     <Form.Group>
       <Form.Group>
@@ -394,6 +399,7 @@ class registerLearner extends Component {
       <Form.Field>
       <Form.Select defaultValue={this.props.club} label="Club" name="club" placeholder="Select Club Name"  options={this.props.clubs} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, club: data.value}}))}} error={this.props.clubError}/>
       </Form.Field>
+      <Message success header='Form Completed' content="Saved Learner Successfully" />
       <Form.Group widths='equal'>
         <Form.Button primary onClick={this.back} className="ui button" tabIndex="0"><Icon name="chevron circle left"/>Back</Form.Button>
         <Form.Button primary onClick={this.validateInput} className="ui button" tabIndex="0"><Icon name="save"/>Save Learner</Form.Button>

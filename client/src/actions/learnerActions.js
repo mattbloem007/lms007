@@ -256,6 +256,7 @@ export const updateLearner = (info) => {
     dispatch(save(newInfo))
     const state = getState();
     dispatch(validateInput(state.learner))
+    return Promise.resolve();
   }
 }
 

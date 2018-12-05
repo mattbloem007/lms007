@@ -1,5 +1,5 @@
 import React, { Component }from 'react';
-import { Form, Icon } from 'semantic-ui-react';
+import { Form, Icon, Message } from 'semantic-ui-react';
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
@@ -21,14 +21,18 @@ class RegisterModerator extends Component{
                           SETA: "",
                           day: "",
                           month: "",
-                          year: ""
+                          year: "",
+                          save: false
                          }
 
                  }
   }
 
   validateInput = (e) => {
-    this.props.moderatorActions.updateModerator(this.state.info);
+    this.props.moderatorActions.updateModerator(this.state.info)
+    .then(() => {
+      this.setState({save: true})
+    })
 
   }
 
@@ -46,7 +50,7 @@ class RegisterModerator extends Component{
 
   render() {
     return(
-      <Form>
+      <Form success={this.state.save}>
         <Form.Group>
           <Form.Field>
             <Form.Input label="Name" defaultValue={this.props.name} placeholder="Enter moderator Name"  onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} error={this.props.nameError}/>
@@ -68,6 +72,7 @@ class RegisterModerator extends Component{
               <Form.Select placeholder="MM" defaultValue={this.props.month} onChange={(e,{value})=>{this.setState(prevState => ({info: {...prevState.info, month: value}}))}} fluid search selection options={months} error={this.props.monthError}/>
               <Form.Input name="year" defaultValue={this.props.year} maxLength="4" placeholder="YYYY" onChange={(e,{value})=>{this.setState(prevState => ({info: {...prevState.info, year: value}}))}} error={this.props.yearError}/>
           </Form.Group>
+          <Message success header='Form Completed' content="Saved Moderator Successfully" />
           <Form.Button primary onClick={this.back}><Icon name="chevron circle left"/> Back</Form.Button>
           <Form.Button primary onClick={this.validateInput}><Icon name="save"/>Save</Form.Button>
     </Form>

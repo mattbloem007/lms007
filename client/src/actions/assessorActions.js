@@ -72,6 +72,7 @@ export const updateAssessor = (info) => {
     dispatch(save(newInfo))
     const state = getState();
     dispatch(validateInput(state.assessor))
+    return Promise.resolve()
   }
 }
 export const save = newInfo => ({ type: SAVE_ASSESSOR, payload: newInfo })

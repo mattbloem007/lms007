@@ -73,6 +73,7 @@ export const updateModerator = (info) => {
     dispatch(save(newInfo))
     const state = getState();
     dispatch(validateInput(state.moderator))
+    return Promise.resolve()
   }
 }
 export const save = newInfo => ({ type: SAVE_MODERATOR, payload: newInfo })

@@ -86,6 +86,7 @@ export const updateClient = (info) => {
     dispatch(save(newInfo))
     const state = getState();
     dispatch(validateInput(state.client))
+    return Promise.resolve()
   }
 }
 
