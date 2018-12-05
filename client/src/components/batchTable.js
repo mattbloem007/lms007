@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as batchActions from '../actions/batchActions'
@@ -13,9 +13,13 @@ class BatchTable extends Component {
 
     this.state = {
                     headings: ["Batch Number", "Date", "Client Name", "Project", "Programme", "Credit Bearing", "Facilitator", "Assessor", "Moderator", "Date Assessed", "Date Moderated", "Programme Type", ""],
-                    checkedRows: []
+                    checkedRows: [],
+                    open: false
                  }
   }
+
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
   componentDidMount() {
     this.props.batchActions.fetchBatch();
@@ -50,7 +54,12 @@ class BatchTable extends Component {
 
   delete = () => {
     console.log(this.state.checkedRows)
-    this.props.batchActions.Delete(this.state.checkedRows);
+    this.props.batchActions.Delete(this.state.checkedRows)
+    .then (() => {
+      this.close();
+      this.forceUpdate()
+      this.props.batchActions.fetchBatch();
+    })
   }
 
   render() {
@@ -92,9 +101,12 @@ class BatchTable extends Component {
         <Button onClick={this.downloadExcel} floated='left' icon labelPosition='left' primary size='small'>
           <Icon name='download' /> Export To Excel
         </Button>
-        <Button onClick={this.delete} floated='right' icon labelPosition='left' primary size='small'>
-          <Icon name='delete' /> Delete
-        </Button>
+        <div>
+          <Button onClick={this.open} floated='left' icon labelPosition='left' primary size='small'>
+            <Icon name='delete' /> Delete
+          </Button>
+          <Confirm open={this.state.open} onCancel={this.close} onConfirm={this.delete} />
+        </div>
       </Table.HeaderCell>
     </Table.Row>
   </Table.Footer>

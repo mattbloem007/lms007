@@ -20,6 +20,7 @@ export const Delete = (rows) => {
      });
 
   }
+  return Promise.resolve();
 }
 
 export const editFacilitator = (facilitator) => {

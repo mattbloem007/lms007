@@ -47,6 +47,8 @@ class AllLearnerTable extends Component {
     this.props.learnerActions.Delete(this.state.checkedRows)
     .then(() => {
       this.close()
+      this.forceUpdate()
+      this.props.learnerActions.fetchAllLearners();
     })
   }
 

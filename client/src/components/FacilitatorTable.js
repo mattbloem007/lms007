@@ -43,7 +43,11 @@ class FacilitatorTable extends Component {
   delete = () => {
     console.log(this.state.checkedRows)
     this.props.facilitatorActions.Delete(this.state.checkedRows)
-    this.close()
+    .then (() => {
+      this.close();
+      this.forceUpdate()
+      this.props.facilitatorActions.fetchFacilitators();
+    })
   }
 
   edit = (facilitator) => {

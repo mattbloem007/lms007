@@ -45,6 +45,7 @@ class ClientTable extends Component {
     .then(() => {
       this.close()
       this.forceUpdate();
+      this.props.clientActions.fetchAllClients();
     })
   }
 

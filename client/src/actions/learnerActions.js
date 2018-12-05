@@ -47,6 +47,7 @@ export const DeleteBatchLearner = (info, batch) => {
      });
 
   }
+  return Promise.resolve()
 }
 
 

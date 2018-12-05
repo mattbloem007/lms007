@@ -57,4 +57,5 @@ export const Delete = (rows) => {
      });
 
   }
+  return Promise.resolve();
 }

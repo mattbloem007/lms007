@@ -43,7 +43,11 @@ class ModeratorTable extends Component {
   delete = () => {
     console.log(this.state.checkedRows)
     this.props.moderatorActions.Delete(this.state.checkedRows)
-    this.close()
+    .then (() => {
+      this.close();
+      this.forceUpdate()
+      this.props.moderatorActions.fetchModerators();
+    })
   }
 
   edit = (moderator) => {

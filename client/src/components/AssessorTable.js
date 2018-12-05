@@ -43,7 +43,12 @@ class AssessorTable extends Component {
   delete = () => {
     console.log(this.state.checkedRows)
     this.props.assessorActions.Delete(this.state.checkedRows)
-    this.close();
+    .then (() => {
+      this.close();
+      this.forceUpdate();
+      this.props.assessorActions.fetchAssessors();
+    })
+
   }
 
   edit = (assessors) => {
