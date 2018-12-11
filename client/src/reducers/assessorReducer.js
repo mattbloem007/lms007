@@ -1,4 +1,4 @@
-import { EDIT_ASSESSOR, VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR, RECEIVE_ASSESSORS } from '../actions/actionTypes';
+import { EDIT_ASSESSOR, VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR, RECEIVE_ASSESSORS, SUCCESS } from '../actions/actionTypes';
 
 const assessorState = {
   name: "",
@@ -36,6 +36,8 @@ const assessorReducer = (state = assessorState, action) => {
       return assessorState
     case EDIT_ASSESSOR:
       return {...state, ...action.payload}
+    case SUCCESS:
+      return {...state, success: action.payload}
     default:
       return state;
   }

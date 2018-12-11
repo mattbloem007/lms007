@@ -217,13 +217,15 @@ export const validateInput = (info, errs) => {
 
     if (errors === false) {
       if (state.client.type == "add") {
-        newInfo = {...newInfo, success: true}
+      //  newInfo = {...newInfo, success: true}
         dispatch(uploadClient(newInfo))
         dispatch(resetClient())
+        dispatch(success(true))
         // dispatch(changeActiveStep("client"));
       }
       else {
-        newInfo = {...newInfo, success: true}
+      //  newInfo = {...newInfo, success: true}
+        dispatch(success(true))
         dispatch(saveEditClient(newInfo))
       }
 

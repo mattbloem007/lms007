@@ -1,10 +1,12 @@
-import {  EDIT_FACILITATOR, VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR, RECEIVE_FACILITATORS } from './actionTypes'
+import {  EDIT_FACILITATOR, VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR, RECEIVE_FACILITATORS, SUCCESS } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import _ from 'lodash'
 
 
 export const validateComplete = errs => ({ type: VALIDATE_FACILITATOR, payload: errs})
+export const success = (saved) => ({type: SUCCESS, payload: saved})
+
 
 export const Delete = (rows) => {
   return dispatch => {
@@ -116,10 +118,13 @@ export const validateInput = (info, errs) => {
 
     console.log(errors)
     if (errors == false) {
-      newInfo = {...newInfo, success:true}
+
+    //  newInfo = {...newInfo, success:true}
       if (state.facilitator.type == "add") {
         dispatch(uploadFacilitator(newInfo))
         dispatch(resetFacilitator())
+        dispatch(success(true))
+
       //  dispatch(changeActiveStep("client"))
       }
       else {

@@ -1,4 +1,4 @@
-import { EDIT_LEARNER, SAVE_COMPLETE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK, RECEIVE_FACILITATORS, RECEIVE_ASSESSORS, RECEIVE_MODERATORS, FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
+import { SUCCESS, EDIT_LEARNER, SAVE_COMPLETE, RECEIVE_CLUBS, RESET_LEARNER, UPDATE_CHECK, RECEIVE_FACILITATORS, RECEIVE_ASSESSORS, RECEIVE_MODERATORS, FETCH_LEARNERS, RECEIVE_LEARNERS, VALIDATE_LEARNER, SAVE_LEARNER, UPDATE_LEARNER, UPDATE_BATCH } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength, isAfter, isEmail } from 'validator';
 import { changeActiveStep } from './flowActions'
 import { changeActiveTable } from './tableActions'
@@ -6,6 +6,7 @@ import { months } from '../common'
 import _ from 'lodash'
 
 
+export const success = (saved) => ({type: SUCCESS, payload: saved})
 
 export const Delete = (rows) => {
   return dispatch => {
@@ -493,14 +494,17 @@ export const validateInput = (info, errs) => {
     console.log(newInfo)
     const state = getState();
     if(errors === false) {
-      newInfo = {...newInfo, success: true}
+      //newInfo = {...newInfo, success: true}
       if (state.learner.type === "add") {
         dispatch(uploadLearner(newInfo))
         dispatch(saveComplete(true))
+        dispatch(success(true))
+
       }
       else {
         dispatch(saveEditLearner(newInfo))
         dispatch(saveComplete(true))
+        dispatch(success(true))
       }
     //  dispatch(changeActiveTable("learner"))
     }

@@ -1,4 +1,4 @@
-import {  EDIT_ASSESSOR, VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR, RECEIVE_ASSESSORS } from './actionTypes'
+import {  EDIT_ASSESSOR, VALIDATE_ASSESSOR, SAVE_ASSESSOR, RESET_ASSESSOR, RECEIVE_ASSESSORS, SUCCESS } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import { changeActiveTable } from './tableActions'
@@ -6,6 +6,8 @@ import { months } from '../common'
 import _ from 'lodash'
 
 export const validateComplete = errs => ({ type: VALIDATE_ASSESSOR, payload: errs})
+export const success = (saved) => ({type: SUCCESS, payload: saved})
+
 
 export const Delete = (rows) => {
   return dispatch => {
@@ -157,11 +159,13 @@ export const validateInput = (info, errs) => {
     const state = getState();
 
     if (errors == false) {
-      newInfo = {...newInfo, success: true}
+    //  newInfo = {...newInfo, success: true}
       if (state.assessor.type == "add") {
 
         dispatch(uploadAssessor(newInfo))
         dispatch(resetAssessor())
+        dispatch(success(true))
+
       //  dispatch(changeActiveStep("client"))
       }
       else {

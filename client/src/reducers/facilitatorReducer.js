@@ -1,4 +1,4 @@
-import { EDIT_FACILITATOR, VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR, RECEIVE_FACILITATORS } from '../actions/actionTypes';
+import { EDIT_FACILITATOR, VALIDATE_FACILITATOR, SAVE_FACILITATOR, RESET_FACILITATOR, RECEIVE_FACILITATORS, SUCCESS } from '../actions/actionTypes';
 
 const facilitatorState = {
   name: "",
@@ -26,6 +26,8 @@ const facilitatorReducer = (state = facilitatorState, action) => {
       return facilitatorState
     case EDIT_FACILITATOR:
       return {...state, ...action.payload}
+    case SUCCESS:
+      return {...state, success: action.payload}
     default:
       return state;
   }
