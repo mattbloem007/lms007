@@ -13,7 +13,7 @@ import NotFound from './containers/NotFound';
 
 export default ({ childProps }) =>
   <Switch>
-    <Route exact path="/" component={Login} props={childProps} />
+    <Route exact path="/" component={App} props={childProps} />
     <Route path="/App" component={App} props={childProps} />
     <Route path="/Register" component={Register} props={childProps} />
     { /* Finally, catch all unmatched routes */ }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm, Form, Header, Modal } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -7,6 +7,14 @@ import * as flowActions from '../actions/flowActions'
 import * as learnerActions from '../actions/learnerActions';
 
 import _ from 'lodash'
+let info = {
+  national_id: null,
+  firstname: null,
+  surname: null,
+  equity: null,
+  gender: null,
+  year_attended: null
+}
 
 class AllLearnerTable extends Component {
 
@@ -15,15 +23,19 @@ class AllLearnerTable extends Component {
 
     this.state = {
                     headings: ["National ID", "First Name", "Surname", "Equity", "Gender", "Year"],
-                    allowed: ['national_id', 'firstname', 'surname', 'equity', 'gender'],
+                    filterBy: {},
                     checkedRows: [],
                     deleted: false,
-                    open: false
+                    open: false,
+                    openFilter: false,
+                    info: info
                  }
   }
 
   open = () => this.setState({ open: true })
   close = () => this.setState({ open: false })
+  openFilter = () => this.setState({ openFilter: true })
+  closeFilter = () => this.setState({ openFilter: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -71,9 +83,47 @@ class AllLearnerTable extends Component {
     }
   }
 
+  filterTable = () => {
+    let filterArr = _.pickBy(this.state.info, _.identity);
+    console.log(filterArr, this.state.info)
+    this.setState({filterBy: filterArr, openFilter: false})
+  }
+
+  reset = () => {
+    this.setState({filterBy: {}, info: info })
+  }
+
   render() {
     return(
       <Segment style={{overflow: 'auto', maxHeight: 500 }}>
+        <Button onClick={this.reset}>Reset Filters</Button>
+        <Modal
+          onOpen={this.openFilter}
+          onClose={this.filterTable}
+        trigger={<Button>Filter</Button>}>
+      <Modal.Header>Filter</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Header>Filter</Header>
+            <Form>
+              <Form.Field>
+                <Form.Input label="National ID" placeholder="Enter National ID" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} />
+                <Form.Input label="First Name" placeholder="Enter First Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, firstname: data.value}}))}} />
+                <Form.Input label="Surname" placeholder="Enter Surname" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} />
+                <Form.Input label="Equity" placeholder="Enter Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} />
+                <Form.Input label="Gender" placeholder="Enter Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}} />
+                <Form.Input label="Year Attended" placeholder="Enter Year Attended" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, year_attended: data.value}}))}} />
+              </Form.Field>
+
+            </Form>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={this.filterTable} icon labelPosition='left' primary size='small'>
+          <Icon name='filter' /> Filter
+        </Button>
+      </Modal.Actions>
+    </Modal>
 
     <Table celled selectable sortable stackable compact definition>
       <Table.Header>
@@ -87,22 +137,22 @@ class AllLearnerTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            this.props.learners.map((x, i) => {
-            return(
-              <Table.Row key={x.national_id}>
-                <Table.Cell collapsing>
-                  <Checkbox onChange={(e, {checked}) => {this.checkRow(x.national_id, checked)}}/>
-                </Table.Cell>
-                <Table.Cell>
-                  <Button onClick={() => this.edit(this.props.learners[i])} icon labelPosition='left' primary size='small'>
-                    <Icon name='edit' /> Edit
-                  </Button>
-                </Table.Cell>
-                {
-                  Object.keys(this.props.learners[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
-                }
-              </Table.Row>
-              )
+            _.filter(this.props.learners, this.state.filterBy).map((x, i) => {
+                return(
+                  <Table.Row key={x.national_id}>
+                    <Table.Cell collapsing>
+                      <Checkbox onChange={(e, {checked}) => {this.checkRow(x.national_id, checked)}}/>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Button onClick={() => this.edit(this.props.learners[i])} icon labelPosition='left' primary size='small'>
+                        <Icon name='edit' /> Edit
+                      </Button>
+                    </Table.Cell>
+                    {
+                      Object.keys(this.props.learners[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
+                    }
+                  </Table.Row>
+                  )
             })
           }
         </Table.Body>

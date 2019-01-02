@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm, Form, Header, Modal } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -7,6 +7,11 @@ import * as flowActions from '../actions/flowActions'
 import * as facilitatorActions from '../actions/facilitatorActions';
 
 import _ from 'lodash'
+let info = {
+  name: null,
+  ID: null,
+  Cell_no: null
+}
 
 class FacilitatorTable extends Component {
 
@@ -16,12 +21,17 @@ class FacilitatorTable extends Component {
     this.state = {
                     headings: ["Name", "ID", "Cell Number"],
                     checkedRows: [],
-                    open: false
+                    filterBy: {},
+                    openFilter: false,
+                    open: false,
+                    info: info
                  }
   }
 
   open = () => this.setState({ open: true })
   close = () => this.setState({ open: false })
+  openFilter = () => this.setState({ openFilter: true })
+  closeFilter = () => this.setState({ openFilter: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -69,9 +79,48 @@ class FacilitatorTable extends Component {
     }
   }
 
+  filterTable = () => {
+    let filterArr = _.pickBy(this.state.info, _.identity);
+    this.setState({filterBy: filterArr, openFilter: false})
+    console.log(this.state.filterBy, this.state.info)
+
+  }
+
+  reset = () => {
+    this.setState({filterBy: {}, info: info })
+
+  }
+
   render() {
     return(
       <Segment style={{overflow: 'auto', maxHeight: 500 }}>
+
+        <Button onClick={this.reset}>Reset Filters</Button>
+        <Modal
+          onOpen={this.openFilter}
+          onClose={this.filterTable}
+        trigger={<Button>Filter</Button>}>
+      <Modal.Header>Filter</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Header>Filter</Header>
+            <Form>
+              <Form.Field>
+                <Form.Input label="Name" placeholder="Enter Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} />
+                <Form.Input label="ID" placeholder="Enter ID" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} />
+                <Form.Input label="Cell Number" placeholder="Enter Cell Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, Cell_no: data.value}}))}} />
+
+              </Form.Field>
+
+            </Form>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={this.filterTable} icon labelPosition='left' primary size='small'>
+          <Icon name='filter' /> Filter
+        </Button>
+      </Modal.Actions>
+    </Modal>
 
     <Table celled selectable sortable stackable compact definition>
       <Table.Header>
@@ -85,7 +134,7 @@ class FacilitatorTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            this.props.facilitators.map((x, i) => {
+            _.filter(this.props.facilitators, this.state.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.ID}>
                 <Table.Cell collapsing>

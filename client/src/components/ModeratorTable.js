@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Segment, Checkbox, Confirm, Form, Header, Modal } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
@@ -8,6 +8,13 @@ import * as moderatorActions from '../actions/moderatorActions';
 
 import _ from 'lodash'
 
+let info = {
+  name: null,
+  ID: null,
+  Reg_no: null,
+  SETA: null
+}
+
 class ModeratorTable extends Component {
 
   constructor(props) {
@@ -15,13 +22,19 @@ class ModeratorTable extends Component {
 
     this.state = {
                     headings: ["Name", "ID", "Reg_no", "SETA", "Expiry Date"],
+                    filterBy: {},
                     checkedRows: [],
-                    open: false
+                    deleted: false,
+                    open: false,
+                    openFilter: false,
+                    info: info
                  }
   }
 
   open = () => this.setState({ open: true })
   close = () => this.setState({ open: false })
+  openFilter = () => this.setState({ openFilter: true })
+  closeFilter = () => this.setState({ openFilter: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -69,9 +82,47 @@ class ModeratorTable extends Component {
     }
   }
 
+  filterTable = () => {
+    let filterArr = _.pickBy(this.state.info, _.identity);
+    console.log(filterArr, this.state.info)
+    this.setState({filterBy: filterArr, openFilter: false})
+  }
+
+  reset = () => {
+    this.setState({filterBy: {}, info: info })
+
+  }
+
   render() {
     return(
       <Segment style={{overflow: 'auto', maxHeight: 500 }}>
+
+        <Button onClick={this.reset}>Reset Filters</Button>
+        <Modal
+          onOpen={this.openFilter}
+          onClose={this.filterTable}
+        trigger={<Button>Filter</Button>}>
+      <Modal.Header>Filter</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Header>Filter</Header>
+            <Form>
+              <Form.Field>
+                <Form.Input label="Name" placeholder="Enter Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, name: data.value}}))}} />
+                <Form.Input label="ID" placeholder="Enter ID" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, ID: data.value}}))}} />
+                <Form.Input label="Registration Number" placeholder="Enter Registration Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, Reg_no: data.value}}))}} />
+                <Form.Input label="SETA" placeholder="Enter SETA" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, SETA: data.value}}))}} />
+              </Form.Field>
+
+            </Form>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={this.filterTable} icon labelPosition='left' primary size='small'>
+          <Icon name='filter' /> Filter
+        </Button>
+      </Modal.Actions>
+    </Modal>
 
     <Table celled selectable sortable stackable compact definition>
       <Table.Header>
@@ -85,7 +136,7 @@ class ModeratorTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            this.props.moderators.map((x, i) => {
+            _.filter(this.props.moderators, this.props.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.ID}>
                 <Table.Cell collapsing>

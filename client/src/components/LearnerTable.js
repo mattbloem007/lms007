@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
-import { Icon, Table, Menu, Container, Button, Checkbox, Confirm } from 'semantic-ui-react'
+import { Icon, Table, Menu, Container, Button, Checkbox, Confirm, Form, Header, Modal, Segment } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
 import * as learnerActions from '../actions/learnerActions';
 
 import _ from 'lodash'
+
+let info = {
+  national_id: null,
+  firstname: null,
+  surname: null,
+  equity: null,
+  gender: null
+}
 
 class LearnerTable extends Component {
 
@@ -15,13 +23,19 @@ class LearnerTable extends Component {
     this.state = {
                     headings: ["National ID", "First Name", "Surname", "Equity", "Gender"],
                     allowed: ['national_id', 'firstname', 'surname', 'equity', 'gender'],
+                    filterBy: {},
                     checkedRows: [],
-                    open: false
+                    deleted: false,
+                    open: false,
+                    openFilter: false,
+                    info: info
                  }
   }
 
   open = () => this.setState({ open: true })
   close = () => this.setState({ open: false })
+  openFilter = () => this.setState({ openFilter: true })
+  closeFilter = () => this.setState({ openFilter: false })
 
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
@@ -58,8 +72,46 @@ class LearnerTable extends Component {
       this.props.learnerActions.fetchLearnerInfo(data.national_id);
   }
 
+  filterTable = () => {
+    let filterArr = _.pickBy(this.state.info, _.identity);
+    console.log(filterArr, this.state.info)
+    this.setState({filterBy: filterArr, openFilter: false})
+  }
+
+  reset = () => {
+    this.setState({filterBy: {}, info: info })
+  }
+
   render() {
     return(
+      <Segment style={{overflow: 'auto', maxHeight: 500 }}>
+        <Button onClick={this.reset}>Reset Filters</Button>
+        <Modal
+          onOpen={this.openFilter}
+          onClose={this.filterTable}
+        trigger={<Button>Filter</Button>}>
+      <Modal.Header>Filter</Modal.Header>
+      <Modal.Content>
+        <Modal.Description>
+          <Header>Filter</Header>
+            <Form>
+              <Form.Field>
+                <Form.Input label="National ID" placeholder="Enter National ID" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} />
+                <Form.Input label="First Name" placeholder="Enter First Name" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, firstname: data.value}}))}} />
+                <Form.Input label="Surname" placeholder="Enter Surname" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, surname: data.value}}))}} />
+                <Form.Input label="Equity" placeholder="Enter Equity" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, equity: data.value}}))}} />
+                <Form.Input label="Gender" placeholder="Enter Gender" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, gender: data.value}}))}} />
+              </Form.Field>
+            </Form>
+        </Modal.Description>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button onClick={this.filterTable} icon labelPosition='left' primary size='small'>
+          <Icon name='filter' /> Filter
+        </Button>
+      </Modal.Actions>
+    </Modal>
+
     <Table celled selectable sortable stackable compact definition>
       <Table.Header>
         <Table.Row>
@@ -71,7 +123,7 @@ class LearnerTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            this.props.batchLearners.map((x, i) => {
+            _.filter(this.props.batchLearners, this.state.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.national_id}>
                 <Table.Cell collapsing>
@@ -102,6 +154,7 @@ class LearnerTable extends Component {
       </Table.Row>
     </Table.Footer>
     </Table>
+  </Segment>
     )
   }
 
