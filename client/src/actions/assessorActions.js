@@ -148,7 +148,7 @@ export const validateInput = (info, errs) => {
     }
 
     let newInfo = {
-      name: info.name+ " " + info.surname,
+      name: info.name + " " + info.surname,
       ID: info.ID,
       Reg_no: info.Reg_no,
       SETA: info.SETA,
