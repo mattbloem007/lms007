@@ -5,6 +5,7 @@
   "dependencies": {
     "immutability-helper": "^2.7.0",
     "mysql": "^2.15.0",
+    "natives": "1.1.6",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-router": "^4.2.0",
