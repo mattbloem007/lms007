@@ -203,11 +203,11 @@ export const validateInput = (info, errs) => {
     }
     console.log(address)
     let newInfo = {
-      name: info.name,
-      telephone: info.telephone,
+      name: info.name.charAt(0).toUpperCase() + info.name.slice(1).toLowerCase(),
+      telephone: info.telephone.charAt(0).toUpperCase() + info.telephone.slice(1).toLowerCase(),
       address: address,
-      contact: info.contact,
-      municipality: info.municipality
+      contact: info.contact.charAt(0).toUpperCase() + info.contact.slice(1).toLowerCase(),
+      municipality: info.municipality.charAt(0).toUpperCase() + info.municipality.slice(1).toLowerCase()
     }
     dispatch(validateComplete(errs));
 
@@ -367,17 +367,17 @@ export const validateInput1 = (info, errs) => {
     let newInfo = {
       date:  info.date,
       enddate: info.enddate,
-      client_name: info.client_name,
-      project: info.project,
-      venue: info.venue,
-      programme_name: info.programme_name,
+      client_name: info.client_name.charAt(0).toUpperCase() + info.client_name.slice(1).toLowerCase(),
+      project: info.project.charAt(0).toUpperCase() + info.project.slice(1).toLowerCase(),
+      venue: info.venue.charAt(0).toUpperCase() + info.venue.slice(1).toLowerCase(),
+      programme_name: info.programme_name.charAt(0).toUpperCase() + info.programme_name.slice(1).toLowerCase(),
       credit: info.credit,
       facilitator: facilitators,
       assessor: assessors,
       moderator: moderators,
       assessment_date: assessment_date,
       moderator_date: moderator_date,
-      programmeType: info.programmeType,
+      programmeType: info.programmeType.charAt(0).toUpperCase() + info.programmeType.slice(1).toLowerCase(),
       us: info.us,
       qp: info.qp,
       sp: info.sp,

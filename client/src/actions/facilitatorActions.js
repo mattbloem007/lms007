@@ -108,7 +108,7 @@ export const validateInput = (info, errs) => {
       }
     }
     let newInfo = {
-      name: info.name + " " + info.surname,
+      name: info.name.charAt(0).toUpperCase() + info.name.slice(1).toLowerCase() + " " + info.surname.charAt(0).toUpperCase() + info.surname.slice(1).toLowerCase(),
       ID: info.ID,
       Cell_no: info.Cell_no,
     }
