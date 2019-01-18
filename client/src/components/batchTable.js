@@ -27,6 +27,7 @@ class BatchTable extends Component {
                     headings: ["Batch Number", "Date", "End Date", "Venue", "Client Name", "Project", "Programme", "Credit Bearing", "Facilitator", "Assessor", "Moderator", "Date Assessed", "Date Moderated", "Programme Type", ""],
                     filterBy: {},
                     checkedRows: [],
+                    batchs: this.props.batchs,
                     deleted: false,
                     open: false,
                     openFilter: false,
@@ -42,6 +43,10 @@ class BatchTable extends Component {
   componentDidMount() {
     this.props.batchActions.fetchBatch();
 
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({batchs: props.batchs})
   }
 
   addLearners = y => {
@@ -81,9 +86,15 @@ class BatchTable extends Component {
   }
 
   filterTable = () => {
+    let info = [];
     let filterArr = _.pickBy(this.state.info, _.identity);
-    console.log(filterArr, this.state.info)
-    this.setState({filterBy: filterArr, openFilter: false})
+    for (var x in filterArr) {
+      filterArr[x] = filterArr[x].toLowerCase();
+    }
+    this.props.batchs.map(learner => {
+      info.push(_.mapValues(learner, _.method('toLowerCase')))
+    })
+    this.setState({filterBy: filterArr, openFilter: false, batchs: info})
   }
 
   reset = () => {
@@ -139,14 +150,14 @@ class BatchTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            _.filter(this.props.batchs, this.state.filterBy).map((x, i) => {
+            _.filter(this.state.batchs, this.state.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.batch_no} >
                 <Table.Cell collapsing>
                   <Checkbox onChange={(e, {checked}) => {this.checkRow(x.batch_no, checked)}}/>
                 </Table.Cell>
                 {
-                  Object.keys(this.props.batchs[i]).map((y) => <Table.Cell onClick={() => this.showBatchLearners(x.batch_no, i)} key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(this.props.batchs[i]).map((y) => <Table.Cell onClick={() => this.showBatchLearners(x.batch_no, i)} key={y}>{(this.props.batchs[i])[y]}</Table.Cell>)
                 }
                 <Table.Cell>
                   <Button floated='right' icon labelPosition='left' primary size='small' onClick={() => this.addLearners(x.batch_no)}>

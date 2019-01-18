@@ -7,7 +7,7 @@ import * as flowActions from '../actions/flowActions';
 import * as tableActions from '../actions/tableActions';
 import { isEmpty, isNumeric, isLength, isAlpha, isMobilePhone, isEmail, isAfter } from 'validator';
 import { disability, days, months, countryOptions, languageOptions, courseOptions, titleOptions, yesNoOption, genderOptions, EquityOptions, idType, status, education } from '../common'
-
+import _ from 'lodash'
 
 class registerLearner extends Component {
 
@@ -63,7 +63,8 @@ class registerLearner extends Component {
                     mod: [],
                     addrCheck: false,
                     club: "",
-                    save: false
+                    save: false,
+                    idError: true
                   }
 
                 }
@@ -105,7 +106,9 @@ class registerLearner extends Component {
 
 
   validateInput = () => {
+    let arrID = [this.state.info.national_id];
     this.props.learnerActions.updateLearner(this.state.info)
+    this.props.learnerActions.updateBatchLearner(arrID)
     .then(() => {
       if (this.props.success) {
         this.setState({save: true})
@@ -135,6 +138,16 @@ class registerLearner extends Component {
     }
   }
 
+  checkID = (data) => {
+
+    if(_.find(this.props.learners, {'value': data.value}) != undefined) {
+      this.setState(prevState => ({info: {...prevState.info, national_id: data.value, idError: false}}));
+    }
+    else {
+      this.setState(prevState => ({info: {...prevState.info, national_id: data.value, idError: true}}));
+    }
+  }
+
   render() {
 
     return (
@@ -146,7 +159,8 @@ class registerLearner extends Component {
     <Form.Group>
       <Form.Group>
             <Form.Select defaultValue={this.props.id_type} label="ID Type" placeholder="ID Type" options={idType} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, id_type: data.value}}))}} error={this.props.idTypeError} />
-            <Form.Input defaultValue={this.props.national_id} label="National ID Number" name="id" placeholder="National ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} error={this.props.idError} />
+            <Form.Input defaultValue={this.props.national_id} label="National ID Number" name="id" placeholder="National ID Number" onChange={(e, data) => this.checkID(data)} error={this.props.idError} />
+            <Message color='red' hidden={this.state.info.idError} size='mini'>This learner already exists</Message>
       </Form.Group>
       </Form.Group>
       <Form.Group>
@@ -272,7 +286,9 @@ class registerLearner extends Component {
     <Form.Group>
       <Form.Group>
             <Form.Select defaultValue={this.props.id_type} label="ID Type" placeholder="ID Type" options={idType} onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, id_type: data.value}}))}} error={this.props.idTypeError} />
-            <Form.Input defaultValue={this.props.national_id} label="National ID Number" name="id" placeholder="National ID Number" onChange={(e,data)=>{this.setState(prevState => ({info: {...prevState.info, national_id: data.value}}))}} error={this.props.idError} />
+            <Form.Input defaultValue={this.props.national_id} label="National ID Number" name="id" placeholder="National ID Number" onChange={(e, data) => this.checkID(data)} error={this.props.idError} />
+            <Message color='red' hidden={this.state.info.idError} size='mini'>This learner already exists</Message>
+
       </Form.Group>
       </Form.Group>
       <Form.Group>
@@ -496,7 +512,9 @@ const mapStateToProps = state => ({
   addrCheck: state.learner.addrCheck,
   learnerInfo: state.learner.learnerInfo,
   type: state.learner.type,
-  success: state.learner.success
+  success: state.learner.success,
+  learners: state.learner.learners
+
 })
 const mapDispatchToProps = dispatch => ({
   learnerActions: bindActionCreators(learnerActions, dispatch),

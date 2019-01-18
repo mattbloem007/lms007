@@ -24,6 +24,7 @@ class ClientTable extends Component {
                     headings: ["Name", "Telephone", "Address", "Contact", "Muncipality"],
                     checkedRows: [],
                     filterBy: {},
+                    clients: this.props.clients,
                     deleted: false,
                     open: false,
                     openFilter: false,
@@ -43,6 +44,11 @@ class ClientTable extends Component {
 
   downloadExcel = () => {
     this.props.tableActions.downloadExcel(this.props.clients)
+  }
+
+  componentWillReceiveProps(props) {
+    console.log(props)
+    this.setState({clients: props.clients})
   }
 
 
@@ -81,9 +87,15 @@ class ClientTable extends Component {
   }
 
   filterTable = () => {
+    let info = [];
     let filterArr = _.pickBy(this.state.info, _.identity);
-    console.log(filterArr, this.state.info)
-    this.setState({filterBy: filterArr, openFilter: false})
+    for (var x in filterArr) {
+      filterArr[x] = filterArr[x].toLowerCase();
+    }
+    this.props.clients.map(client => {
+      info.push(_.mapValues(client, _.method('toLowerCase')))
+    })
+    this.setState({filterBy: filterArr, openFilter: false, clients: info})
   }
 
   reset = () => {
@@ -135,7 +147,7 @@ class ClientTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            _.filter(this.props.clients, this.state.filterBy).map((x, i) => {
+            _.filter(this.state.clients, this.state.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.name}>
                 <Table.Cell collapsing>
@@ -147,7 +159,7 @@ class ClientTable extends Component {
                   </Button>
                 </Table.Cell>
                 {
-                  Object.keys(this.props.clients[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(this.props.clients[i]).map((y) =><Table.Cell key={y}>{(this.props.clients[i])[y]}</Table.Cell>)
                 }
               </Table.Row>
               )

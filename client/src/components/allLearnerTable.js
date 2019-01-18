@@ -24,6 +24,7 @@ class AllLearnerTable extends Component {
     this.state = {
                     headings: ["National ID", "First Name", "Surname", "Equity", "Gender", "Year"],
                     filterBy: {},
+                    learners: this.props.learners,
                     checkedRows: [],
                     deleted: false,
                     open: false,
@@ -44,6 +45,10 @@ class AllLearnerTable extends Component {
 
   downloadExcel = () => {
     this.props.tableActions.downloadExcel(this.props.learners)
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({learners: props.learners})
   }
 
   // downloadPDF = () => {
@@ -84,9 +89,15 @@ class AllLearnerTable extends Component {
   }
 
   filterTable = () => {
+    let info = [];
     let filterArr = _.pickBy(this.state.info, _.identity);
-    console.log(filterArr, this.state.info)
-    this.setState({filterBy: filterArr, openFilter: false})
+    for (var x in filterArr) {
+      filterArr[x] = filterArr[x].toLowerCase();
+    }
+    this.props.learners.map(learner => {
+      info.push(_.mapValues(learner, _.method('toLowerCase')))
+    })
+    this.setState({filterBy: filterArr, openFilter: false, learners: info})
   }
 
   reset = () => {
@@ -137,7 +148,7 @@ class AllLearnerTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            _.filter(this.props.learners, this.state.filterBy).map((x, i) => {
+            _.filter(this.state.learners, this.state.filterBy).map((x, i) => {
                 return(
                   <Table.Row key={x.national_id}>
                     <Table.Cell collapsing>
@@ -149,7 +160,7 @@ class AllLearnerTable extends Component {
                       </Button>
                     </Table.Cell>
                     {
-                      Object.keys(this.props.learners[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
+                      Object.keys(this.props.learners[i]).map((y) =><Table.Cell key={y}>{(this.props.learners[i])[y]}</Table.Cell>)
                     }
                   </Table.Row>
                   )

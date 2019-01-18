@@ -24,6 +24,7 @@ class AssessorTable extends Component {
                     headings: ["Name", "ID", "Reg_no", "SETA", "Expiry Date"],
                     filterBy: {},
                     checkedRows: [],
+                    assessor: this.props.assessor,
                     deleted: false,
                     open: false,
                     openFilter: false,
@@ -48,6 +49,10 @@ class AssessorTable extends Component {
   // downloadPDF = () => {
   //   this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
   // }
+
+  componentWillReceiveProps(props) {
+    this.setState({assessors: props.assessors})
+  }
 
   componentDidMount() {
       this.props.assessorActions.fetchAssessors();
@@ -84,9 +89,15 @@ class AssessorTable extends Component {
   }
 
   filterTable = () => {
+    let info = [];
     let filterArr = _.pickBy(this.state.info, _.identity);
-    console.log(filterArr, this.state.info)
-    this.setState({filterBy: filterArr, openFilter: false})
+    for (var x in filterArr) {
+      filterArr[x] = filterArr[x].toLowerCase();
+    }
+    this.props.assessors.map(learner => {
+      info.push(_.mapValues(learner, _.method('toLowerCase')))
+    })
+    this.setState({filterBy: filterArr, openFilter: false, assessors: info})
   }
 
   reset = () => {
@@ -137,7 +148,7 @@ class AssessorTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            _.filter(this.props.assessors, this.state.filterBy).map((x, i) => {
+            _.filter(this.state.assessors, this.state.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.name}>
                 <Table.Cell collapsing>
@@ -149,7 +160,7 @@ class AssessorTable extends Component {
                   </Button>
                 </Table.Cell>
                 {
-                  Object.keys(this.props.assessors[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(this.props.assessors[i]).map((y) =><Table.Cell key={y}>{(this.props.assessors[i])[y]}</Table.Cell>)
                 }
               </Table.Row>
               )

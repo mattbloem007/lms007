@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as tableActions from '../actions/tableActions'
 import * as learnerActions from '../actions/learnerActions';
+import * as flowActions from '../actions/flowActions'
 
 import _ from 'lodash'
 
@@ -25,6 +26,7 @@ class LearnerTable extends Component {
                     allowed: ['national_id', 'firstname', 'surname', 'equity', 'gender'],
                     filterBy: {},
                     checkedRows: [],
+                    batchLearners: this.props.batchLearners,
                     deleted: false,
                     open: false,
                     openFilter: false,
@@ -37,9 +39,23 @@ class LearnerTable extends Component {
   openFilter = () => this.setState({ openFilter: true })
   closeFilter = () => this.setState({ openFilter: false })
 
+  componentWillReceiveProps(props) {
+    console.log(props)
+    this.setState({batchLearners: props.batchLearners})
+  }
+
+
   back = () => {
     this.props.tableActions.changeActiveTable("batch")
     this.props.tableActions.clearBatchLearners()
+  }
+
+  edit = (learners) => {
+    console.log(learners)
+    this.props.learnerActions.fetchLearnerInfo(learners.national_id)
+    .then(() => {
+      this.props.tableActions.changeActiveTable("rLearner");
+    })
   }
 
   downloadPDF = () => {
@@ -73,9 +89,15 @@ class LearnerTable extends Component {
   }
 
   filterTable = () => {
+    let info = [];
     let filterArr = _.pickBy(this.state.info, _.identity);
-    console.log(filterArr, this.state.info)
-    this.setState({filterBy: filterArr, openFilter: false})
+    for (var x in filterArr) {
+      filterArr[x] = filterArr[x].toLowerCase();
+    }
+    this.props.batchLearners.map(learner => {
+      info.push(_.mapValues(learner, _.method('toLowerCase')))
+    })
+    this.setState({filterBy: filterArr, openFilter: false, batchLearners: info})
   }
 
   reset = () => {
@@ -116,6 +138,8 @@ class LearnerTable extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
+          <Table.HeaderCell />
+
           {
             this.state.headings.map((head) => <Table.HeaderCell key={head}>{head}</Table.HeaderCell>)
           }
@@ -123,14 +147,19 @@ class LearnerTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            _.filter(this.props.batchLearners, this.state.filterBy).map((x, i) => {
+            _.filter(this.state.batchLearners, this.state.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.national_id}>
                 <Table.Cell collapsing>
                   <Checkbox onChange={(e, {checked}) => {this.checkRow(x.national_id, checked)}}/>
                 </Table.Cell>
+                <Table.Cell>
+                  <Button onClick={() => this.edit(this.props.batchLearners[i])} icon labelPosition='left' primary size='small'>
+                    <Icon name='edit' /> Edit
+                  </Button>
+                </Table.Cell>
                 {
-                  Object.keys(_.pick(this.props.batchLearners[i], this.state.allowed)).map((y) =><Table.Cell onClick={() => this.showLearnerInfo(x)} key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(_.pick(this.props.batchLearners[i], this.state.allowed)).map((y) =><Table.Cell onClick={() => this.showLearnerInfo(x)} key={y}>{(this.props.batchLearners[i])[y]}</Table.Cell>)
                 }
               </Table.Row>
               )
@@ -162,11 +191,13 @@ class LearnerTable extends Component {
 const mapStateToProps = state => ({
   batch: state.table.batch,
   batchs: state.batch.batchs,
-  batchLearners: state.table.batchLearners
+  batchLearners: state.table.batchLearners,
+
 
 })
 const mapDispatchToProps = dispatch => ({
   learnerActions: bindActionCreators(learnerActions, dispatch),
+  flowActions: bindActionCreators(flowActions, dispatch),
   tableActions: bindActionCreators(tableActions, dispatch)
 })
 

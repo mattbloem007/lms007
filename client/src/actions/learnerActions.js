@@ -192,7 +192,7 @@ export function receiveInfo(json) {
   let learnersArr = [];
   let sorted = _.orderBy(json.express, ['surname'],['asc']);
   for (const key of Object.keys(sorted)) {
-    learnersArr = [...learnersArr, Object.assign({text: sorted[key].national_id + "-" + sorted[key].firstname + " " + sorted[key].surname, value: sorted[key].national_id+ "-" + sorted[key].firstname + " " + sorted[key].surname })]
+    learnersArr = [...learnersArr, Object.assign({text: sorted[key].national_id + "-" + sorted[key].firstname + " " + sorted[key].surname, value: sorted[key].national_id })]
   }
   console.log(learnersArr)
 //  learnersArr = [...learnersArr, ...learnerObj]
@@ -666,7 +666,7 @@ export function receiveClubs(json) {
   let clientsArr = [];
   let sorted = _.orderBy(json.express, ['clube_name'],['asc']);
   for (const key of Object.keys(sorted)) {
-    clientsArr = [...clientsArr, Object.assign({text: sorted[key].club_name, value: sorted[key].club_name})]
+    clientsArr = [...clientsArr, Object.assign({text: sorted[key].club_name, value: key})]
   }
   console.log(clientsArr)
 

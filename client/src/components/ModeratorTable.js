@@ -24,6 +24,7 @@ class ModeratorTable extends Component {
                     headings: ["Name", "ID", "Reg_no", "SETA", "Expiry Date"],
                     filterBy: {},
                     checkedRows: [],
+                    moderators: this.props.moderators,
                     deleted: false,
                     open: false,
                     openFilter: false,
@@ -48,6 +49,10 @@ class ModeratorTable extends Component {
   // downloadPDF = () => {
   //   this.props.tableActions.downloadPDF(this.props.batch, this.props.batchs, this.props.batchLearners)
   // }
+
+  componentWillReceiveProps(props) {
+    this.setState({moderators: props.moderators})
+  }
 
   componentDidMount() {
       this.props.moderatorActions.fetchModerators();
@@ -83,9 +88,15 @@ class ModeratorTable extends Component {
   }
 
   filterTable = () => {
+    let info = [];
     let filterArr = _.pickBy(this.state.info, _.identity);
-    console.log(filterArr, this.state.info)
-    this.setState({filterBy: filterArr, openFilter: false})
+    for (var x in filterArr) {
+      filterArr[x] = filterArr[x].toLowerCase();
+    }
+    this.props.moderators.map(learner => {
+      info.push(_.mapValues(learner, _.method('toLowerCase')))
+    })
+    this.setState({filterBy: filterArr, openFilter: false, moderators: info})
   }
 
   reset = () => {
@@ -136,7 +147,7 @@ class ModeratorTable extends Component {
       </Table.Header>
         <Table.Body>
           {
-            _.filter(this.props.moderators, this.props.filterBy).map((x, i) => {
+            _.filter(this.state.moderators, this.props.filterBy).map((x, i) => {
             return(
               <Table.Row key={x.ID}>
                 <Table.Cell collapsing>
@@ -148,7 +159,7 @@ class ModeratorTable extends Component {
                   </Button>
                 </Table.Cell>
                 {
-                  Object.keys(this.props.moderators[i]).map((y) =><Table.Cell key={y}>{x[y]}</Table.Cell>)
+                  Object.keys(this.props.moderators[i]).map((y) =><Table.Cell key={y}>{(this.props.moderators[i])[y]}</Table.Cell>)
                 }
               </Table.Row>
               )
