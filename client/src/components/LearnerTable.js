@@ -52,7 +52,7 @@ class LearnerTable extends Component {
 
   edit = (learners) => {
     console.log(learners)
-    this.props.learnerActions.fetchLearnerInfo(learners.national_id)
+    this.props.learnerActions.fetchLearnerInfo(learners.national_id, "l")
     .then(() => {
       this.props.tableActions.changeActiveTable("rLearner");
     })

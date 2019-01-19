@@ -107,8 +107,8 @@ class registerLearner extends Component {
 
   validateInput = () => {
     let arrID = [this.state.info.national_id];
-    this.props.learnerActions.updateLearner(this.state.info)
     this.props.learnerActions.updateBatchLearner(arrID)
+    this.props.learnerActions.updateLearner(this.state.info)
     .then(() => {
       if (this.props.success) {
         this.setState({save: true})
@@ -131,10 +131,16 @@ class registerLearner extends Component {
     this.props.learnerActions.updateLearner(this.state.info)
     if (this.props.type == "add") {
       this.props.tableActions.changeActiveTable("learnerTable")
+      this.props.flowActions.changeActiveStep("client")
 
     }
-    else {
+    else if (this.props.type == "edit-t"){
       this.props.flowActions.changeActiveStep("Learners")
+      this.props.flowActions.changeActiveStep("client")
+    }
+    else if (this.props.type == "edit-l") {
+      this.props.tableActions.changeActiveTable("learnerTable")
+      this.props.flowActions.changeActiveStep("client")
     }
   }
 

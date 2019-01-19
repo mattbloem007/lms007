@@ -71,7 +71,7 @@ class AllLearnerTable extends Component {
 
   edit = (learners) => {
     console.log(learners)
-    this.props.learnerActions.fetchLearnerInfo(learners.national_id)
+    this.props.learnerActions.fetchLearnerInfo(learners.national_id, "t")
     .then(() => {
       this.props.flowActions.changeActiveStep("rLearner");
     })

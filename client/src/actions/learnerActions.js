@@ -95,13 +95,14 @@ export const edit = (learner) => ({type: EDIT_LEARNER, payload: learner})
 
 export const resetLearnerState = () => ({ type: RESET_LEARNER })
 export const saveComplete = (saved) => ({ type: SAVE_COMPLETE, payload: saved })
-export const loadLearner = json => {
+export const loadLearner = (json, t) => {
   return dispatch => {
     let homeAddr = [];
     let strAddr = [];
+    let type = "edit-" + t;
     let addr = json.express[0].homeaddr.split(", ");
     let addr2 = json.express[0].postaddr.split(", ");
-    let newInfo = {...json.express[0], type: "edit"};
+    let newInfo = {...json.express[0], type: type};
 
     switch (addr.length) {
       case 2:
@@ -601,7 +602,7 @@ export const uploadLearner = (info) => {
 //   }
 // }
 
-export const fetchLearnerInfo = (ID) => {
+export const fetchLearnerInfo = (ID, type) => {
 
   return dispatch => {
     return fetch('/api/learnerInfo', {
@@ -612,7 +613,7 @@ export const fetchLearnerInfo = (ID) => {
     .then(res =>  res.json())
     .then(json => {
       console.log(json)
-      dispatch(loadLearner(json))
+      dispatch(loadLearner(json, type))
     });
   }
 }
