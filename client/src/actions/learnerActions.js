@@ -103,7 +103,7 @@ export const loadLearner = (json, t) => {
     let addr = json.express[0].homeaddr.split(", ");
     let addr2 = json.express[0].postaddr.split(", ");
     let newInfo = {...json.express[0], type: type};
-
+    
     switch (addr.length) {
       case 2:
       newInfo = {...newInfo,
@@ -176,9 +176,10 @@ export const loadLearner = (json, t) => {
     //   strAddr[i] = json.express[0].postaddr.split(", ")[i];
     // }
     let dob = new Date(json.express[0].dob);
-
     dispatch(edit({
       ...newInfo,
+      strAddress: newInfo.homeaddr,
+      postAddress: newInfo.postaddr,
       day: dob.getDate().toString(),
       month:months[dob.getMonth()].text,
       year: dob.getFullYear().toString(),
