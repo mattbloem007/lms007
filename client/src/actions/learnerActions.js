@@ -103,7 +103,7 @@ export const loadLearner = (json, t) => {
     let addr = json.express[0].homeaddr.split(", ");
     let addr2 = json.express[0].postaddr.split(", ");
     let newInfo = {...json.express[0], type: type};
-    
+
     switch (addr.length) {
       case 2:
       newInfo = {...newInfo,
@@ -266,6 +266,7 @@ export const updateLearner = (info) => {
 export const updateBatchLearner = (info) => {
   return (dispatch, getState) => {
     let newInfo = {};
+    console.log(info)
     for(var key in info) {
       if (info[key] !== "") {
         newInfo = {...newInfo, [key]: info[key]}
