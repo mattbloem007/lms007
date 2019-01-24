@@ -256,6 +256,13 @@ export const validateInput = (info, errs) => {
 export const validateInput1 = (info, errs) => {
   return (dispatch, getState) => {
     console.log(info)
+    if(isEmpty((info.batch_no).toString())) {
+      errs = {...errs, batchError: true}
+    }
+    else {
+      errs = {...errs, batchError: false}
+    }
+
     if (isEmpty(info.project)) {
       errs = {...errs, projectError: true}
     }
@@ -391,6 +398,7 @@ export const validateInput1 = (info, errs) => {
     }
 
     let newInfo = {
+      batch_no: info.batch_no,
       date:  info.date,
       enddate: info.enddate,
       client_name: info.client_name.charAt(0).toUpperCase() + info.client_name.slice(1).toLowerCase(),

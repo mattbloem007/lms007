@@ -57,6 +57,7 @@ class Client extends Component {
       this.state = {
           success: false,
           save: false,
+          batch_no: "",
           day: "",
           month: "",
           year: "",
@@ -200,6 +201,7 @@ class Client extends Component {
   render() {
     return(
       <Form success={this.state.save}>
+        <Form.Input defaultValue={this.props.batch_no} label="Batch Number" placeholder="Enter Batch Number" onChange={(e,{value})=>{this.setState({batch_no: value})}} error={this.props.batchError}/>
         <Form.Input defaultValue={this.props.project} label="Project Name" placeholder="Enter Project Name" onChange={(e,{value})=>{this.setState({project: value})}} error={this.props.projectError}/>
         <Form.Field>
           <label>Training Start Date</label>
@@ -319,6 +321,8 @@ const mapStateToProps = state => ({
   yearError: state.client.yearError,
   monthError: state.client.monthError,
   clientError: state.client.clientError,
+  batchError: state.client.batchError,
+  batch_no: state.batch.batch_no,
   day: state.batch.day,
   month: state.batch.month,
   year: state.batch.year,

@@ -1,6 +1,7 @@
 import { EDIT_BATCH, SAVE_BATCH, UPDATE_BATCH, RECEIVE_BATCH, RELOAD } from '../actions/actionTypes';
 
 const batchState = {
+  batch_no: "",
   date: "",
   client_name: "",
   project: "",

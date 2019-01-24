@@ -503,6 +503,7 @@ export const validateInput = (info, errs) => {
         dispatch(uploadLearner(newInfo))
         dispatch(saveComplete(true))
         dispatch(success(true))
+        dispatch(updateBatchLearner({learnerIDs: [info.national_id]}))
 
       }
       else {
