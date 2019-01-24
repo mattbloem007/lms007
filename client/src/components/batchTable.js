@@ -49,6 +49,14 @@ class BatchTable extends Component {
     this.setState({batchs: props.batchs})
   }
 
+  edit = (learners) => {
+    console.log(learners)
+    this.props.batchActions.editBatch(learners)
+    .then(() => {
+      this.props.tableActions.changeActiveTable("client");
+    })
+  }
+
   addLearners = y => {
     console.log(y)
     this.props.tableActions.addLearners("learner", y.toString())
@@ -143,6 +151,7 @@ class BatchTable extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell />
+          <Table.HeaderCell />
           {
             this.state.headings.map((head) => <Table.HeaderCell key={head}>{head}</Table.HeaderCell>)
           }
@@ -155,6 +164,11 @@ class BatchTable extends Component {
               <Table.Row key={x.batch_no} >
                 <Table.Cell collapsing>
                   <Checkbox onChange={(e, {checked}) => {this.checkRow(x.batch_no, checked)}}/>
+                </Table.Cell>
+                <Table.Cell>
+                  <Button onClick={() => this.edit(this.props.batchs[i])} icon labelPosition='left' primary size='small'>
+                    <Icon name='edit' /> Edit
+                  </Button>
                 </Table.Cell>
                 {
                   Object.keys(this.props.batchs[i]).map((y) => <Table.Cell onClick={() => this.showBatchLearners(x.batch_no, i)} key={y}>{(this.props.batchs[i])[y]}</Table.Cell>)

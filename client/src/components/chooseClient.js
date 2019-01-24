@@ -6,6 +6,8 @@ import * as clientActions from '../actions/clientActions';
 import * as programmeActions from '../actions/programmeActions'
 import * as flowActions from '../actions/flowActions';
 import * as learnerActions from '../actions/learnerActions';
+import * as tableActions from '../actions/tableActions'
+
 import { days, months } from '../common';
 import _ from 'lodash';
 
@@ -118,6 +120,9 @@ class Client extends Component {
       console.log("SUCCESS?" + this.props.success)
       if (this.props.success) {
         this.setState({...initState, save: true})
+      }
+      if(this.props.type == "edit-c") {
+        this.props.tableActions.changeActiveTable("batch")
       }
       this.props.clientActions.reload(true)
       .then(() => {
@@ -349,12 +354,14 @@ const mapStateToProps = state => ({
   creditStatus: state.programme.creditStatus,
   programmeType: state.batch.programmeType,
   success: state.client.success,
-  saved: state.client.saved
+  saved: state.client.saved,
+  type: state.batch.type
 })
 const mapDispatchToProps = dispatch => ({
   clientActions: bindActionCreators(clientActions, dispatch),
   programmeActions: bindActionCreators(programmeActions, dispatch),
   learnerActions: bindActionCreators(learnerActions, dispatch),
+  tableActions: bindActionCreators(tableActions, dispatch),
   flowActions: bindActionCreators(flowActions, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Client);

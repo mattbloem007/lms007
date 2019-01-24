@@ -1,4 +1,4 @@
-import { EDIT_CLIENT, RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, SUCCESS, RESET_CLIENT } from './actionTypes'
+import { EDIT_BATCH, EDIT_CLIENT, RECEIVE_QP, RECEIVE_SC, RECEIVE_QPM, RECEIVE_US, RECEIVE_SP, RECEIVE_SPM, FETCH_CLIENTS, RECEIVE_CLIENTS, VALIDATE_CLIENT, SAVE_CLIENT, UPDATE_CLIENT, UPDATE_BATCH, RELOAD, SUCCESS, RESET_CLIENT } from './actionTypes'
 import { isEmpty, isNumeric, isAlpha, isMobilePhone, isLength } from 'validator';
 import { changeActiveStep } from './flowActions'
 import _ from 'lodash'
@@ -6,6 +6,24 @@ import _ from 'lodash'
 // export const receiveInfo = json => (console.log(json)
 // { type: RECEIVE, payload: json }
 // );
+
+
+
+export const saveEditBatch = (info) => {
+  return dispatch => {
+    return fetch("/data/lms_batchEdit",{
+         method: 'POST',
+         body: JSON.stringify(info),
+         headers: {"Content-Type": "application/json"}
+       })
+       .then(function(response){
+         return response.json()
+       }).then(function(body){
+         console.log(body);
+     });
+  }
+}
+
 
 export const Delete = (rows) => {
   return dispatch => {
@@ -230,6 +248,7 @@ export const validateInput = (info, errs) => {
       }
 
 
+
     }
   }
 }
@@ -303,36 +322,43 @@ export const validateInput1 = (info, errs) => {
       }
     }
 
+    const state = getState()
     let facilitators = "";
     let moderators = "";
     let assessors = "";
-    for (let i = 0; i < info.facilitator.length; i++) {
-      if (i == info.facilitator.length - 1) {
-        facilitators = facilitators + info.facilitator[i]
-      }
-      else {
-        facilitators = facilitators + info.facilitator[i] + ", ";
+    
+    if (state.batch.type != "edit-c") {
 
+      for (let i = 0; i < info.facilitator.length; i++) {
+        if (i == info.facilitator.length - 1) {
+          facilitators = facilitators + info.facilitator[i]
+        }
+        else {
+          facilitators = facilitators + info.facilitator[i] + ", ";
+
+        }
+      }
+      for (let i = 0; i < info.assessor.length; i++) {
+        if (i == info.assessor.length - 1) {
+          assessors = assessors + info.assessor[i]
+        }
+        else {
+          assessors = assessors + info.assessor[i] + ", ";
+
+        }
+      }
+      for (let i = 0; i < info.moderator.length; i++) {
+        if (i == info.moderator.length - 1) {
+          moderators = moderators + info.moderator[i]
+        }
+        else {
+          moderators = moderators + info.moderator[i] + ", ";
+
+        }
       }
     }
-    for (let i = 0; i < info.assessor.length; i++) {
-      if (i == info.assessor.length - 1) {
-        assessors = assessors + info.assessor[i]
-      }
-      else {
-        assessors = assessors + info.assessor[i] + ", ";
 
-      }
-    }
-    for (let i = 0; i < info.moderator.length; i++) {
-      if (i == info.moderator.length - 1) {
-        moderators = moderators + info.moderator[i]
-      }
-      else {
-        moderators = moderators + info.moderator[i] + ", ";
 
-      }
-    }
     let assessment_date = "";
     let moderator_date = "";
     let qmodules = "";
@@ -390,11 +416,16 @@ export const validateInput1 = (info, errs) => {
 
 
     if (errors == false) {
+      if (state.batch.type == "edit-c") {
+          dispatch(success(true))
+          dispatch(saveEditBatch(newInfo))
+      }
+      else {
         dispatch(uploadBatch(newInfo))
+      }
         if (info.save == true) {
             dispatch(success(true))
             //dispatch(reload(true))
-
         }
     }
 

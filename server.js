@@ -918,6 +918,27 @@ app.post('/data/lms_clientEdit', function(req, res) {
   });
 });
 
+app.post('/data/lms_batchEdit', function(req, res) {
+  pool.getConnection(function(err, connection) {
+    if (err) throw err; // not connected
+    // Use the connection
+    var jsondata = req.body;
+    console.log(jsondata);
+    var values = [];
+    for(var i in jsondata){
+          values.push(jsondata[i]);
+    }
+    console.log(values)
+      connection.query("REPLACE INTO `lms_batch`(`date`,`end_date`,`client_name`,`project`,`venue`,`programme`,`credit`,`facilitator`,`assessor`,`moderator`,`assessment_date`,`moderator_date`,`programmeType`,`unitstd`,`qualification`,`skills_programme`,`short_courses`,`q_modules`,`sp_modules`) VALUES (?)", [values], function(err, result){
+        if(err) console.log(err);
+
+        console.log("1 record inserted");
+          });
+
+      res.send({ express: req.body });
+  });
+});
+
 app.post('/data/lms_facilitatorEdit', function(req, res) {
   pool.getConnection(function(err, connection) {
     if (err) throw err; // not connected

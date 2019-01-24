@@ -1,4 +1,36 @@
-import { FETCH_BATCH, RECEIVE_BATCH, DELETE } from './actionTypes'
+import { FETCH_BATCH, RECEIVE_BATCH, DELETE, EDIT_BATCH } from './actionTypes'
+import { months } from '../common'
+
+export const editBatch = (batch) => {
+  return dispatch => {
+    let adate = new Date(batch.assessment_date)
+    let date = new Date(batch.date)
+    let end_date = new Date(batch.end_date)
+    let mdate = new Date(batch.moderator_date)
+    let newInfo = {...batch,
+                  programme_name: batch.programme,
+                  type: "edit-c",
+                  aday: adate.getDate().toString(),
+                  amonth: months[adate.getMonth()].text,
+                  ayear: adate.getFullYear().toString(),
+                  day: date.getDate().toString(),
+                  month: months[date.getMonth()].text,
+                  year: date.getFullYear().toString(),
+                  endday: end_date.getDate().toString(),
+                  endmonth: months[end_date.getMonth()].text,
+                  endyear: end_date.getFullYear().toString(),
+                  mday: mdate.getDate().toString(),
+                  mmonth: months[mdate.getMonth()].text,
+                  myear: mdate.getFullYear().toString()
+                };
+
+        console.log(newInfo)
+        dispatch(edit(newInfo))
+    return Promise.resolve()
+  }
+}
+
+export const edit = (batch) => ({type: EDIT_BATCH, payload: batch})
 
 export function receiveInfo(json) {
   console.log("BATCH: ", json.express);

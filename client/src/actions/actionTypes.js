@@ -64,3 +64,4 @@ export const EDIT_FACILITATOR = 'EDIT_FACILITATOR';
 export const EDIT_MODERATOR = 'EDIT_MODERATOR';
 export const EDIT_ASSESSOR = 'EDIT_ASSESSOR';
 export const EDIT_LEARNER = 'EDIT_LEARNER';
+export const EDIT_BATCH = 'EDIT_BATCH';
