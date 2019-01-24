@@ -326,7 +326,7 @@ export const validateInput1 = (info, errs) => {
     let facilitators = "";
     let moderators = "";
     let assessors = "";
-    
+
     if (state.batch.type != "edit-c") {
 
       for (let i = 0; i < info.facilitator.length; i++) {
@@ -414,14 +414,15 @@ export const validateInput1 = (info, errs) => {
     }
     dispatch(validateComplete(errs));
 
+    console.log(state.batch.type, errors)
 
     if (errors == false) {
-      if (state.batch.type == "edit-c") {
-          dispatch(success(true))
-          dispatch(saveEditBatch(newInfo))
-      }
-      else {
+      if (state.batch.type == undefined) {
         dispatch(uploadBatch(newInfo))
+      }
+      else if (state.batch.type == "edit-c"){
+        dispatch(success(true))
+        dispatch(saveEditBatch(newInfo))
       }
         if (info.save == true) {
             dispatch(success(true))

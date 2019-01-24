@@ -106,8 +106,9 @@ class registerLearner extends Component {
 
 
   validateInput = () => {
-    let arrID = [this.props.national_id];
-    this.props.learnerActions.updateBatchLearner(arrID)
+    let arrID = [this.props.national_id]
+    let objID = {learnerIDs: arrID};
+    this.props.learnerActions.updateBatchLearner(objID)
     this.props.learnerActions.updateLearner(this.state.info)
     .then(() => {
       if (this.props.success) {

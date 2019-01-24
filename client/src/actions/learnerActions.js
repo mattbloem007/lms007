@@ -272,6 +272,7 @@ export const updateBatchLearner = (info) => {
         newInfo = {...newInfo, [key]: info[key]}
       }
     }
+
     console.log(newInfo)
     dispatch(updateBatch(newInfo))
     const state = getState();

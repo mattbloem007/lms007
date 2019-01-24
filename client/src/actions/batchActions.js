@@ -7,21 +7,35 @@ export const editBatch = (batch) => {
     let date = new Date(batch.date)
     let end_date = new Date(batch.end_date)
     let mdate = new Date(batch.moderator_date)
+    let abool = false;
+    let ebool = false;
+    let mbool = false;
+
+    if (adate == "Invalid Date") {
+      abool = true;
+    }
+    if (end_date == "Invalid Date") {
+      ebool = true;
+    }
+    if (mdate == "Invalid Date") {
+      mbool = true;
+    }
+
     let newInfo = {...batch,
                   programme_name: batch.programme,
                   type: "edit-c",
-                  aday: adate.getDate().toString(),
-                  amonth: months[adate.getMonth()].text,
-                  ayear: adate.getFullYear().toString(),
+                  aday: abool ? "" : adate.getDate().toString(),
+                  amonth: abool ? "" : months[adate.getMonth()].text,
+                  ayear: abool ? "" : adate.getFullYear().toString(),
                   day: date.getDate().toString(),
                   month: months[date.getMonth()].text,
                   year: date.getFullYear().toString(),
-                  endday: end_date.getDate().toString(),
-                  endmonth: months[end_date.getMonth()].text,
-                  endyear: end_date.getFullYear().toString(),
-                  mday: mdate.getDate().toString(),
-                  mmonth: months[mdate.getMonth()].text,
-                  myear: mdate.getFullYear().toString()
+                  endday: ebool ? "" : end_date.getDate().toString(),
+                  endmonth: ebool ? "" : months[end_date.getMonth()].text,
+                  endyear: ebool ? "" : end_date.getFullYear().toString(),
+                  mday: mbool ? "" : mdate.getDate().toString(),
+                  mmonth: mbool ? "" : months[mdate.getMonth()].text,
+                  myear: mbool ? "" : mdate.getFullYear().toString()
                 };
 
         console.log(newInfo)
