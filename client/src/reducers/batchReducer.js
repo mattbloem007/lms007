@@ -35,7 +35,8 @@ const batchState = {
   learnerIDs: [],
   saved: false,
   success: false,
-  batchs: []
+  batchs: [],
+  type: ""
 }
 
 const batchReducer = (state = batchState, action) => {

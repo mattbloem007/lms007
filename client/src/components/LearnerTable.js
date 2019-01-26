@@ -30,7 +30,8 @@ class LearnerTable extends Component {
                     deleted: false,
                     open: false,
                     openFilter: false,
-                    info: info
+                    info: info,
+                    refresh: false
                  }
   }
 
@@ -68,6 +69,9 @@ class LearnerTable extends Component {
     .then(() => {
       this.close()
       this.forceUpdate();
+      console.log(this.state.refresh)
+      this.setState({refresh: true})
+      console.log(this.state.refresh)
       this.props.tableActions.fetchBatchLearnerIDs(this.props.batch)
     })
   }

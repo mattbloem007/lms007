@@ -425,7 +425,7 @@ export const validateInput1 = (info, errs) => {
     console.log(state.batch.type, errors)
 
     if (errors == false) {
-      if (state.batch.type == undefined) {
+      if (state.batch.type == "") {
         dispatch(uploadBatch(newInfo))
       }
       else if (state.batch.type == "edit-c"){
